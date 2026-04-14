@@ -116,6 +116,7 @@ Motor de exchange funcional end-to-end: validación de saldo, cálculo correcto 
 | Cache de precios en `Rails.cache` (memory store) | Simple, sin infra extra (Redis), suficiente para prueba con TTL corto | — Pending |
 | Service objects para lógica de negocio | Controllers delgados, testeable en unidades aisladas, alinea con "clean architecture" | — Pending |
 | Frontend: Vite + TypeScript strict | Build tool moderno, DX superior, tipado estricto para robustez | — Pending |
+| Frontend: antd como design system (sin Tailwind) | Componentes completos (Table, Form, Select, etc.) ahorran tiempo; el core de la evaluación es exchange engine, no hand-craft de UI | — Pending |
 | Cero `any` / `unknown` en todo el código | Tipado estricto garantiza correctness, alinea con reglas globales del usuario | — Pending |
 | Zod para validación y schemas | Runtime type safety en responses de API + inferencia estática con `z.infer` | — Pending |
 | TanStack Query para data fetching | Estado de servidor, cache, loading/error states out-of-the-box | — Pending |
