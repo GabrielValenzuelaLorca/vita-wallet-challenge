@@ -5,7 +5,7 @@ RSpec.describe PriceService do
   let(:expected_prices) { StubPriceClient::STUB_PRICES }
 
   before do
-    Rails.cache.clear
+    described_class.clear_cache!
   end
 
   describe ".fetch_prices" do
@@ -19,11 +19,9 @@ RSpec.describe PriceService do
 
     context "cache behavior" do
       let(:spy_client) { instance_double(StubPriceClient) }
-      let(:memory_store) { ActiveSupport::Cache::MemoryStore.new }
 
       before do
         allow(spy_client).to receive(:fetch_prices).and_return(expected_prices)
-        allow(Rails).to receive(:cache).and_return(memory_store)
       end
 
       it "calls the client on first invocation" do

@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { Layout, Typography, Spin, Card, Space } from "antd";
-import { Link } from "react-router-dom";
+import { Typography, Spin, Card, Space } from "antd";
 import { useExchange } from "@/hooks/useExchange";
 import { ExchangeForm } from "./components/ExchangeForm";
 import { ExchangeResult } from "./components/ExchangeResult";
@@ -14,7 +13,6 @@ const CURRENCIES: readonly Currency[] = [
   "USDT",
 ] as const;
 
-const { Content } = Layout;
 const { Title } = Typography;
 
 export function ExchangePage() {
@@ -59,46 +57,41 @@ export function ExchangePage() {
   const isDataLoading = isPricesLoading || isBalancesLoading;
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Content style={{ padding: 24 }}>
-        <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-          <Title level={2}>Exchange</Title>
-          <Link to="/">Back to Dashboard</Link>
-          {isDataLoading && !showResult && (
-            <div style={{ textAlign: "center", padding: 24 }}>
-              <Spin size="large" />
-            </div>
-          )}
-          {showResult ? (
-            <Card>
-              <ExchangeResult
-                transaction={result}
-                error={error}
-                onNewExchange={handleNewExchange}
-              />
-            </Card>
-          ) : (
-            !isDataLoading && (
-              <Card>
-                <ExchangeForm
-                  currencies={CURRENCIES}
-                  balances={balances}
-                  sourceCurrency={sourceCurrency}
-                  targetCurrency={targetCurrency}
-                  amount={amount}
-                  estimate={estimate}
-                  isPricesLoading={isPricesLoading}
-                  isSubmitting={isSubmitting}
-                  onSourceCurrencyChange={setSourceCurrency}
-                  onTargetCurrencyChange={setTargetCurrency}
-                  onAmountChange={setAmount}
-                  onSubmit={handleSubmit}
-                />
-              </Card>
-            )
-          )}
-        </Space>
-      </Content>
-    </Layout>
+    <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+      <Title level={2}>Exchange</Title>
+      {isDataLoading && !showResult && (
+        <div style={{ textAlign: "center", padding: 24 }}>
+          <Spin size="large" />
+        </div>
+      )}
+      {showResult ? (
+        <Card>
+          <ExchangeResult
+            transaction={result}
+            error={error}
+            onNewExchange={handleNewExchange}
+          />
+        </Card>
+      ) : (
+        !isDataLoading && (
+          <Card>
+            <ExchangeForm
+              currencies={CURRENCIES}
+              balances={balances}
+              sourceCurrency={sourceCurrency}
+              targetCurrency={targetCurrency}
+              amount={amount}
+              estimate={estimate}
+              isPricesLoading={isPricesLoading}
+              isSubmitting={isSubmitting}
+              onSourceCurrencyChange={setSourceCurrency}
+              onTargetCurrencyChange={setTargetCurrency}
+              onAmountChange={setAmount}
+              onSubmit={handleSubmit}
+            />
+          </Card>
+        )
+      )}
+    </Space>
   );
 }

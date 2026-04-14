@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AppLayout } from "@/components/AppLayout";
 import { LoginPage } from "@/pages/Login/LoginPage";
 import { DashboardPage } from "@/pages/Dashboard/DashboardPage";
 import { ExchangePage } from "@/pages/Exchange/ExchangePage";
@@ -14,29 +15,16 @@ export function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route
-            path="/"
             element={
               <ProtectedRoute>
-                <DashboardPage />
+                <AppLayout />
               </ProtectedRoute>
             }
-          />
-          <Route
-            path="/exchange"
-            element={
-              <ProtectedRoute>
-                <ExchangePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/history"
-            element={
-              <ProtectedRoute>
-                <HistoryPage />
-              </ProtectedRoute>
-            }
-          />
+          >
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/exchange" element={<ExchangePage />} />
+            <Route path="/history" element={<HistoryPage />} />
+          </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
