@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Authentication** - Backend auth (register, login, JWT) + frontend auth (login page, session persistence, protected routes) (completed 2026-04-14)
 - [x] **Phase 3: Wallets & Crypto Prices** - Balance endpoints, price service with external API client/stub/cache, frontend dashboard (completed 2026-04-14)
 - [x] **Phase 4: Exchange Engine** - Core exchange logic with BigDecimal precision, atomic transactions, state machine, and full test coverage (completed 2026-04-14)
-- [ ] **Phase 5: Transaction History & Exchange UI** - History endpoints with pagination/filters, exchange page UI, history page UI
+- [x] **Phase 5: Transaction History & Exchange UI** - History endpoints with pagination/filters, exchange page UI, history page UI (completed 2026-04-14)
 - [ ] **Phase 6: Coverage, Polish & Documentation** - Coverage thresholds enforced, remaining edge-case tests, README, video
 
 ## Phase Details
@@ -98,8 +98,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Backend TransactionsController (GET /transactions with pagination + status filter) + RSpec request specs
-- [ ] 05-02-PLAN.md — Frontend Exchange page + History page + all frontend tests (schemas, services, hooks, page components)
+- [x] 05-01-PLAN.md — Backend TransactionsController (GET /transactions with pagination + status filter) + RSpec request specs
+- [x] 05-02-PLAN.md — Frontend Exchange page + History page + all frontend tests (schemas, services, hooks, page components)
 
 ### Phase 6: Coverage, Polish & Documentation
 **Goal**: Both repos meet the 90% coverage threshold, the README documents everything the evaluator needs, and the video is recorded
@@ -127,5 +127,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. Authentication | 2/2 | Complete    | 2026-04-14 |
 | 3. Wallets & Crypto Prices | 2/2 | Complete    | 2026-04-14 |
 | 4. Exchange Engine | 0/1 | Complete    | 2026-04-14 |
-| 5. Transaction History & Exchange UI | 0/2 | Not started | - |
+| 5. Transaction History & Exchange UI | 2/2 | Complete   | 2026-04-14 |
 | 6. Coverage, Polish & Documentation | 0/2 | Not started | - |

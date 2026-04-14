@@ -52,11 +52,11 @@
 - [x] **UI-01**: Pagina de Login con formulario, validacion, manejo de errores del backend
 - [x] **UI-02**: Persistencia de sesion: usuario autenticado se mantiene logueado tras refresh
 - [x] **UI-03**: Pagina Dashboard muestra todos los balances del usuario con formato adecuado por moneda
-- [ ] **UI-04**: Pagina Exchange con formulario: seleccionar moneda origen, moneda destino, monto
-- [ ] **UI-05**: Pagina Exchange muestra monto estimado en tiempo real antes de confirmar
-- [ ] **UI-06**: Pagina Exchange confirma la operacion y muestra resultado (exito/rechazo)
-- [ ] **UI-07**: Pagina Historial muestra lista paginada de transacciones
-- [ ] **UI-08**: Pagina Historial incluye filtro por estado
+- [x] **UI-04**: Pagina Exchange con formulario: seleccionar moneda origen, moneda destino, monto
+- [x] **UI-05**: Pagina Exchange muestra monto estimado en tiempo real antes de confirmar
+- [x] **UI-06**: Pagina Exchange confirma la operacion y muestra resultado (exito/rechazo)
+- [x] **UI-07**: Pagina Historial muestra lista paginada de transacciones
+- [x] **UI-08**: Pagina Historial incluye filtro por estado
 - [x] **UI-09**: Todas las paginas tienen loading states y error states consistentes
 - [x] **UI-10**: Navegacion entre paginas autenticadas con ruta protegida (redirige a login si no hay sesion)
 
@@ -106,7 +106,7 @@
 - [x] **TEST-11**: Tests de **todos** los service objects (clientes HTTP, parseo Zod, manejo de errores)
 - [x] **TEST-12**: Tests de **todos** los schemas Zod -- inputs validos/invalidos, mensajes de error
 - [x] **TEST-13**: Tests de componentes clave: Login form, Exchange form, Balances display, Transaction history list, filtros
-- [ ] **TEST-14**: Tests de flujos de pagina: login exitoso/fallido, exchange exitoso/rechazado, carga de historial con filtro
+- [x] **TEST-14**: Tests de flujos de pagina: login exitoso/fallido, exchange exitoso/rechazado, carga de historial con filtro
 - [x] **TEST-15**: Tests cubren loading states y error states (React Query `isLoading`, `isError`, `error`)
 - [x] **TEST-16**: Tests de routing protegido -- usuario no autenticado redirigido a login
 - [x] **TEST-17**: Vitest configurado con coverage (`v8` provider) y umbral `>=90%` lineas totales -- el build falla bajo ese umbral
@@ -185,11 +185,11 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | UI-01 | Phase 2 | Complete |
 | UI-02 | Phase 2 | Complete |
 | UI-03 | Phase 3 | Complete |
-| UI-04 | Phase 5 | Pending |
-| UI-05 | Phase 5 | Pending |
-| UI-06 | Phase 5 | Pending |
-| UI-07 | Phase 5 | Pending |
-| UI-08 | Phase 5 | Pending |
+| UI-04 | Phase 5 | Complete |
+| UI-05 | Phase 5 | Complete |
+| UI-06 | Phase 5 | Complete |
+| UI-07 | Phase 5 | Complete |
+| UI-08 | Phase 5 | Complete |
 | UI-09 | Phase 2 | Complete |
 | UI-10 | Phase 2 | Complete |
 | ARCH-01 | Phase 1 | Complete |
@@ -225,7 +225,7 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | TEST-11 | Phase 3 | Complete |
 | TEST-12 | Phase 3 | Complete |
 | TEST-13 | Phase 2, Phase 5 | Complete |
-| TEST-14 | Phase 5 | Pending |
+| TEST-14 | Phase 5 | Complete |
 | TEST-15 | Phase 3, Phase 5 | Complete |
 | TEST-16 | Phase 2 | Complete |
 | TEST-17 | Phase 1 | Complete |

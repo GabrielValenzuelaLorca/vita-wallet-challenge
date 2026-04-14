@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-04-14T22:31:10Z"
+last_updated: "2026-04-14T22:40:22Z"
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -22,19 +22,19 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 
 ## Current Position
 
-Phase: 5 of 6 (Transaction History & Exchange UI) -- IN PROGRESS
-Plan: 1 of 2 in current phase -- COMPLETE
-Status: Plan 05-01 complete, ready for Plan 05-02
-Last activity: 2026-04-14 -- Completed 05-01-PLAN.md
+Phase: 5 of 6 (Transaction History & Exchange UI) -- COMPLETE
+Plan: 2 of 2 in current phase -- COMPLETE
+Status: Phase 5 complete, ready for Phase 6 (Coverage, Polish & Documentation)
+Last activity: 2026-04-14 -- Completed 05-02-PLAN.md
 
-Progress: [████████░░] 82%
+Progress: [█████████░] 91%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 3.3min
-- Total execution time: 0.50 hours
+- Total plans completed: 10
+- Average duration: 3.5min
+- Total execution time: 0.58 hours
 
 **By Phase:**
 
@@ -44,10 +44,10 @@ Progress: [████████░░] 82%
 | 02 | 2 | 6min | 3min |
 | 03 | 2 | 6min | 3min |
 | 04 | 1 | 4min | 4min |
-| 05 | 1 | 2min | 2min |
+| 05 | 2 | 7min | 3.5min |
 
 **Recent Trend:**
-- Last 5 plans: 4min, 3min, 3min, 4min, 2min
+- Last 5 plans: 3min, 3min, 4min, 2min, 5min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -99,6 +99,14 @@ Recent decisions affecting current work:
 - Status filter validation runs before query so invalid status never touches the DB (422 early return)
 - Transaction history ordered by created_at:desc (not id:desc) to be resilient to future PK migrations
 - Pagination total count computed from filtered scope so meta reflects the active status filter
+- Service layer translates camelCase options to snake_case query keys so hooks/pages never touch snake_case
+- useExchange hook owns three-tier estimate lookup (direct/inverse/cross-rate via USD) mirroring backend ExchangeService semantics
+- useMutation typed with explicit generics so onError binds to Error (avoids `unknown` param per zero-any/unknown rule)
+- exchangeApi validates request payload before POSTing so invalid currencies fail client-side without network round-trip
+- useTransactions setStatusFilter always resets page to 1 (standard UX for filter-narrowing)
+- formatAmount helper duplicated locally in ExchangeForm and TransactionTable instead of shared to avoid cross-component coupling
+- Typed vi.fn<Fn>() + getter-based module mocks pattern established for test-layer zero any/unknown compliance
+- Back to Dashboard Link targets `/` (actual dashboard route) not `/dashboard` (non-existent route per App.tsx)
 
 ### Pending Todos
 
@@ -112,5 +120,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-14
-Stopped at: Completed 05-01-PLAN.md (Transaction history API)
+Stopped at: Completed 05-02-PLAN.md (Frontend Exchange and History UI)
 Resume file: None
