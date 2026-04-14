@@ -1,12 +1,22 @@
 class ExchangeController < ApplicationController
   before_action :authenticate_user!
 
+  rescue_from ActionController::ParameterMissing do |exception|
+    render_error(code: "invalid_params", message: exception.message)
+  end
+
   def create
+    permitted = exchange_params
+
+    unless permitted[:source_currency].present? && permitted[:target_currency].present? && permitted[:amount].present?
+      return render_error(code: "invalid_params", message: "source_currency, target_currency, and amount are required")
+    end
+
     result = ExchangeService.execute(
       user: current_user,
-      source_currency: exchange_params[:source_currency],
-      target_currency: exchange_params[:target_currency],
-      source_amount: exchange_params[:amount]
+      source_currency: permitted[:source_currency],
+      target_currency: permitted[:target_currency],
+      source_amount: permitted[:amount]
     )
 
     if result[:success]
