@@ -9,28 +9,28 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 
 ## Current Position
 
-Phase: 1 of 6 (Project Scaffolding & Foundation)
-Plan: 2 of 3 in current phase
-Status: Executing
-Last activity: 2026-04-14 -- Completed 01-02-PLAN.md
+Phase: 1 of 6 (Project Scaffolding & Foundation) -- COMPLETE
+Plan: 3 of 3 in current phase
+Status: Phase Complete
+Last activity: 2026-04-14 -- Completed 01-03-PLAN.md
 
-Progress: [██░░░░░░░░] 12%
+Progress: [██░░░░░░░░] 18%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 4.5min
-- Total execution time: 0.15 hours
+- Total plans completed: 3
+- Average duration: 4min
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01 | 2 | 9min | 4.5min |
+| 01 | 3 | 12min | 4min |
 
 **Recent Trend:**
-- Last 5 plans: 4min, 5min
+- Last 5 plans: 4min, 5min, 3min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -53,6 +53,10 @@ Recent decisions affecting current work:
 - Separated AuthContext types into authTypes.ts for react-refresh compatibility
 - Used fetch-based httpClient (not axios) for lighter HTTP calls
 - Lazy initializer for localStorage token read (avoid setState in useEffect)
+- SimpleCov loaded first in spec_helper.rb for accurate coverage
+- fixture_path (singular) for Rails 7.0 compatibility
+- Separate vitest.config.ts from vite.config.ts for test/build separation
+- MemoryRouter in tests for deterministic route control
 
 ### Pending Todos
 
@@ -66,5 +70,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-14
-Stopped at: Completed 01-02-PLAN.md
+Stopped at: Completed 01-03-PLAN.md (Phase 1 complete)
 Resume file: None

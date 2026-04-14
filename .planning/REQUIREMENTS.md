@@ -97,7 +97,7 @@
 - [ ] **TEST-05**: Request specs cubren autenticacion -- 401 sin token, 401 token invalido/expirado, 200 con token valido
 - [ ] **TEST-06**: Model specs -- validaciones de `User`, `Wallet`, `Transaction` (presencia, formato, unicidad, precision decimal)
 - [ ] **TEST-07**: Serializers specs -- shape de respuesta correcto, campos sensibles excluidos (password_digest)
-- [ ] **TEST-08**: SimpleCov configurado con umbral `>=90%` lineas totales -- el build falla bajo ese umbral
+- [x] **TEST-08**: SimpleCov configurado con umbral `>=90%` lineas totales -- el build falla bajo ese umbral
 - [ ] **TEST-09**: Specs de integracion del flujo completo exchange (happy path end-to-end backend)
 
 #### Frontend (Vitest + React Testing Library + MSW)
@@ -109,7 +109,7 @@
 - [ ] **TEST-14**: Tests de flujos de pagina: login exitoso/fallido, exchange exitoso/rechazado, carga de historial con filtro
 - [ ] **TEST-15**: Tests cubren loading states y error states (React Query `isLoading`, `isError`, `error`)
 - [ ] **TEST-16**: Tests de routing protegido -- usuario no autenticado redirigido a login
-- [ ] **TEST-17**: Vitest configurado con coverage (`v8` provider) y umbral `>=90%` lineas totales -- el build falla bajo ese umbral
+- [x] **TEST-17**: Vitest configurado con coverage (`v8` provider) y umbral `>=90%` lineas totales -- el build falla bajo ese umbral
 - [ ] **TEST-18**: Todos los mocks y fixtures en tests son **tipados**, sin `any` ni `unknown` ni casts forzados
 
 ### Documentation & Delivery
@@ -219,7 +219,7 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | TEST-05 | Phase 2 | Pending |
 | TEST-06 | Phase 2, Phase 3 | Pending |
 | TEST-07 | Phase 3 | Pending |
-| TEST-08 | Phase 1 | Pending |
+| TEST-08 | Phase 1 | Complete |
 | TEST-09 | Phase 4 | Pending |
 | TEST-10 | Phase 2, Phase 5 | Pending |
 | TEST-11 | Phase 3 | Pending |
@@ -228,7 +228,7 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | TEST-14 | Phase 5 | Pending |
 | TEST-15 | Phase 3, Phase 5 | Pending |
 | TEST-16 | Phase 2 | Pending |
-| TEST-17 | Phase 1 | Pending |
+| TEST-17 | Phase 1 | Complete |
 | TEST-18 | Phase 2 | Pending |
 | DOC-01 | Phase 6 | Pending |
 | DOC-02 | Phase 6 | Pending |
