@@ -5,10 +5,10 @@ milestone_name: milestone
 status: unknown
 last_updated: "2026-04-14T22:02:08.247Z"
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  total_phases: 4
+  completed_phases: 4
+  total_plans: 8
+  completed_plans: 8
 ---
 
 # Project State
@@ -22,19 +22,19 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 
 ## Current Position
 
-Phase: 3 of 6 (Wallets & Crypto Prices) -- COMPLETE
-Plan: 2 of 2 in current phase -- COMPLETE
-Status: Phase 03 complete, ready for Phase 04
-Last activity: 2026-04-14 -- Completed 03-02-PLAN.md
+Phase: 4 of 6 (Exchange Engine) -- COMPLETE
+Plan: 1 of 1 in current phase -- COMPLETE
+Status: Phase 04 complete, ready for Phase 05
+Last activity: 2026-04-14 -- Completed 04-01-PLAN.md
 
-Progress: [████████░░] 50%
+Progress: [█████████░] 67%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 3min
-- Total execution time: 0.40 hours
+- Total plans completed: 8
+- Average duration: 3.5min
+- Total execution time: 0.47 hours
 
 **By Phase:**
 
@@ -43,9 +43,10 @@ Progress: [████████░░] 50%
 | 01 | 3 | 12min | 4min |
 | 02 | 2 | 6min | 3min |
 | 03 | 2 | 6min | 3min |
+| 04 | 1 | 4min | 4min |
 
 **Recent Trend:**
-- Last 5 plans: 3min, 2min, 4min, 3min, 3min
+- Last 5 plans: 2min, 4min, 3min, 3min, 4min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -89,6 +90,10 @@ Recent decisions affecting current work:
 - CLP formatted with 0 decimal places (Chilean peso has no cents)
 - usePrices hook created but not consumed by Dashboard -- reserved for Exchange page
 - Per-test QueryClient wrapper in hook tests for isolation
+- PriceClient::ApiError rescue outside transaction block to persist rejected transaction record
+- Cross-rate: fiat-to-fiat via USDC prices, crypto-to-crypto via USD
+- DB decimal precision (scale 8) truncates BigDecimal -- tests compare against persisted values
+- ParameterMissing rescue in ExchangeController for graceful missing-params handling
 
 ### Pending Todos
 
@@ -102,5 +107,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-14
-Stopped at: Completed 03-02-PLAN.md (Frontend dashboard)
+Stopped at: Completed 04-01-PLAN.md (Exchange engine)
 Resume file: None

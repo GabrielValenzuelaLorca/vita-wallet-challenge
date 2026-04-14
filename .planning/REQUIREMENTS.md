@@ -31,14 +31,14 @@
 
 ### Exchange (Core)
 
-- [ ] **EXCH-01**: Endpoint autenticado permite intercambiar fiat -> crypto (ej: USD -> BTC)
-- [ ] **EXCH-02**: Endpoint autenticado permite intercambiar crypto -> fiat (ej: BTC -> USD)
-- [ ] **EXCH-03**: Pre-validacion de saldo suficiente antes de ejecutar la operacion
-- [ ] **EXCH-04**: Calculo del monto recibido usa `BigDecimal`, nunca `Float`; precision monetaria preservada
-- [ ] **EXCH-05**: La transaccion es atomica: debito y credito ocurren dentro de `ActiveRecord::Base.transaction`
-- [ ] **EXCH-06**: Cada operacion crea un registro `Transaction` con estado `pending` -> `completed` o `rejected`
-- [ ] **EXCH-07**: Transaccion rechazada incluye `rejection_reason` (ej: "insufficient_balance", "price_fetch_failed")
-- [ ] **EXCH-08**: Cotizacion (exchange rate) usada en el calculo se persiste en la transaccion para auditoria
+- [x] **EXCH-01**: Endpoint autenticado permite intercambiar fiat -> crypto (ej: USD -> BTC)
+- [x] **EXCH-02**: Endpoint autenticado permite intercambiar crypto -> fiat (ej: BTC -> USD)
+- [x] **EXCH-03**: Pre-validacion de saldo suficiente antes de ejecutar la operacion
+- [x] **EXCH-04**: Calculo del monto recibido usa `BigDecimal`, nunca `Float`; precision monetaria preservada
+- [x] **EXCH-05**: La transaccion es atomica: debito y credito ocurren dentro de `ActiveRecord::Base.transaction`
+- [x] **EXCH-06**: Cada operacion crea un registro `Transaction` con estado `pending` -> `completed` o `rejected`
+- [x] **EXCH-07**: Transaccion rechazada incluye `rejection_reason` (ej: "insufficient_balance", "price_fetch_failed")
+- [x] **EXCH-08**: Cotizacion (exchange rate) usada en el calculo se persiste en la transaccion para auditoria
 
 ### Transaction History
 
@@ -83,22 +83,22 @@
 - [x] **BE-02**: Controllers delgados -- solo routing, auth, serializacion de request/response
 - [x] **BE-03**: Logica de negocio compleja vive en service objects (`ExchangeService`, `PriceService`, `AuthService`)
 - [x] **BE-04**: Serializers dedicados para shape consistente de respuestas
-- [ ] **BE-05**: Transacciones DB explicitas en operaciones multi-step (exchange)
+- [x] **BE-05**: Transacciones DB explicitas en operaciones multi-step (exchange)
 - [x] **BE-06**: Middleware de autenticacion JWT aplicado a endpoints protegidos
 
 ### Testing -- Target >=90% coverage en ambos repos
 
 #### Backend (RSpec + SimpleCov)
 
-- [ ] **TEST-01**: `ExchangeService` -- happy path fiat->crypto, crypto->fiat, saldo insuficiente, error de precios, transaccion rechazada, rollback en fallo
+- [x] **TEST-01**: `ExchangeService` -- happy path fiat->crypto, crypto->fiat, saldo insuficiente, error de precios, transaccion rechazada, rollback en fallo
 - [x] **TEST-02**: `AuthService` / sesiones -- credenciales validas, invalidas, JWT generation, JWT expirado, JWT invalido, `has_secure_password` match
 - [x] **TEST-03**: `PriceService` -- cache hit, cache miss, TTL, error de API externa (timeout, 5xx, respuesta invalida), fallback
-- [ ] **TEST-04**: Request specs para endpoints criticos -- `POST /auth/login`, `GET /balances`, `POST /exchange`, `GET /transactions`
+- [x] **TEST-04**: Request specs para endpoints criticos -- `POST /auth/login`, `GET /balances`, `POST /exchange`, `GET /transactions`
 - [x] **TEST-05**: Request specs cubren autenticacion -- 401 sin token, 401 token invalido/expirado, 200 con token valido
 - [x] **TEST-06**: Model specs -- validaciones de `User`, `Wallet`, `Transaction` (presencia, formato, unicidad, precision decimal)
 - [x] **TEST-07**: Serializers specs -- shape de respuesta correcto, campos sensibles excluidos (password_digest)
 - [x] **TEST-08**: SimpleCov configurado con umbral `>=90%` lineas totales -- el build falla bajo ese umbral
-- [ ] **TEST-09**: Specs de integracion del flujo completo exchange (happy path end-to-end backend)
+- [x] **TEST-09**: Specs de integracion del flujo completo exchange (happy path end-to-end backend)
 
 #### Frontend (Vitest + React Testing Library + MSW)
 
@@ -170,14 +170,14 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | PRIC-03 | Phase 3 | Complete |
 | PRIC-04 | Phase 3 | Complete |
 | PRIC-05 | Phase 3 | Complete |
-| EXCH-01 | Phase 4 | Pending |
-| EXCH-02 | Phase 4 | Pending |
-| EXCH-03 | Phase 4 | Pending |
-| EXCH-04 | Phase 4 | Pending |
-| EXCH-05 | Phase 4 | Pending |
-| EXCH-06 | Phase 4 | Pending |
-| EXCH-07 | Phase 4 | Pending |
-| EXCH-08 | Phase 4 | Pending |
+| EXCH-01 | Phase 4 | Complete |
+| EXCH-02 | Phase 4 | Complete |
+| EXCH-03 | Phase 4 | Complete |
+| EXCH-04 | Phase 4 | Complete |
+| EXCH-05 | Phase 4 | Complete |
+| EXCH-06 | Phase 4 | Complete |
+| EXCH-07 | Phase 4 | Complete |
+| EXCH-08 | Phase 4 | Complete |
 | HIST-01 | Phase 5 | Pending |
 | HIST-02 | Phase 5 | Pending |
 | HIST-03 | Phase 5 | Pending |
@@ -210,17 +210,17 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | BE-02 | Phase 2 | Complete |
 | BE-03 | Phase 2 | Complete |
 | BE-04 | Phase 1 | Complete |
-| BE-05 | Phase 4 | Pending |
+| BE-05 | Phase 4 | Complete |
 | BE-06 | Phase 2 | Complete |
-| TEST-01 | Phase 4 | Pending |
+| TEST-01 | Phase 4 | Complete |
 | TEST-02 | Phase 2 | Complete |
 | TEST-03 | Phase 3 | Complete |
-| TEST-04 | Phase 4, Phase 5 | Pending |
+| TEST-04 | Phase 4, Phase 5 | Complete |
 | TEST-05 | Phase 2 | Complete |
 | TEST-06 | Phase 2, Phase 3 | Complete |
 | TEST-07 | Phase 3 | Complete |
 | TEST-08 | Phase 1 | Complete |
-| TEST-09 | Phase 4 | Pending |
+| TEST-09 | Phase 4 | Complete |
 | TEST-10 | Phase 2, Phase 5 | Complete |
 | TEST-11 | Phase 3 | Complete |
 | TEST-12 | Phase 3 | Complete |
