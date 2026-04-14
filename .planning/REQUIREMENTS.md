@@ -17,17 +17,17 @@
 ### Wallets & Balances
 
 - [x] **WALL-01**: Cada usuario tiene balances en 5 monedas: USD, CLP, BTC, USDC, USDT
-- [ ] **WALL-02**: Endpoint autenticado retorna los balances actuales del usuario
+- [x] **WALL-02**: Endpoint autenticado retorna los balances actuales del usuario
 - [x] **WALL-03**: Balances se persisten con precision decimal adecuada (`BigDecimal` en Ruby, `DECIMAL` en PostgreSQL)
 - [x] **WALL-04**: Existen seeds con usuarios de prueba y balances iniciales razonables para demo
 
 ### Crypto Prices
 
-- [ ] **PRIC-01**: Endpoint backend expone precios consultando `api.stage.vitawallet.io/api/prices_quote`
-- [ ] **PRIC-02**: Service client del endpoint externo esta abstraido detras de un service object con interfaz estable
-- [ ] **PRIC-03**: Precios se cachean en `Rails.cache` con TTL corto (30-60s) para reducir llamadas al externo
-- [ ] **PRIC-04**: Manejo robusto de errores de API externa: timeout, 5xx, formato invalido -> respuesta controlada al cliente
-- [ ] **PRIC-05**: Stub/fake del cliente disponible para desarrollo mientras se habilita whitelist
+- [x] **PRIC-01**: Endpoint backend expone precios consultando `api.stage.vitawallet.io/api/prices_quote`
+- [x] **PRIC-02**: Service client del endpoint externo esta abstraido detras de un service object con interfaz estable
+- [x] **PRIC-03**: Precios se cachean en `Rails.cache` con TTL corto (30-60s) para reducir llamadas al externo
+- [x] **PRIC-04**: Manejo robusto de errores de API externa: timeout, 5xx, formato invalido -> respuesta controlada al cliente
+- [x] **PRIC-05**: Stub/fake del cliente disponible para desarrollo mientras se habilita whitelist
 
 ### Exchange (Core)
 
@@ -51,7 +51,7 @@
 
 - [x] **UI-01**: Pagina de Login con formulario, validacion, manejo de errores del backend
 - [x] **UI-02**: Persistencia de sesion: usuario autenticado se mantiene logueado tras refresh
-- [ ] **UI-03**: Pagina Dashboard muestra todos los balances del usuario con formato adecuado por moneda
+- [x] **UI-03**: Pagina Dashboard muestra todos los balances del usuario con formato adecuado por moneda
 - [ ] **UI-04**: Pagina Exchange con formulario: seleccionar moneda origen, moneda destino, monto
 - [ ] **UI-05**: Pagina Exchange muestra monto estimado en tiempo real antes de confirmar
 - [ ] **UI-06**: Pagina Exchange confirma la operacion y muestra resultado (exito/rechazo)
@@ -92,22 +92,22 @@
 
 - [ ] **TEST-01**: `ExchangeService` -- happy path fiat->crypto, crypto->fiat, saldo insuficiente, error de precios, transaccion rechazada, rollback en fallo
 - [x] **TEST-02**: `AuthService` / sesiones -- credenciales validas, invalidas, JWT generation, JWT expirado, JWT invalido, `has_secure_password` match
-- [ ] **TEST-03**: `PriceService` -- cache hit, cache miss, TTL, error de API externa (timeout, 5xx, respuesta invalida), fallback
+- [x] **TEST-03**: `PriceService` -- cache hit, cache miss, TTL, error de API externa (timeout, 5xx, respuesta invalida), fallback
 - [ ] **TEST-04**: Request specs para endpoints criticos -- `POST /auth/login`, `GET /balances`, `POST /exchange`, `GET /transactions`
 - [x] **TEST-05**: Request specs cubren autenticacion -- 401 sin token, 401 token invalido/expirado, 200 con token valido
 - [x] **TEST-06**: Model specs -- validaciones de `User`, `Wallet`, `Transaction` (presencia, formato, unicidad, precision decimal)
-- [ ] **TEST-07**: Serializers specs -- shape de respuesta correcto, campos sensibles excluidos (password_digest)
+- [x] **TEST-07**: Serializers specs -- shape de respuesta correcto, campos sensibles excluidos (password_digest)
 - [x] **TEST-08**: SimpleCov configurado con umbral `>=90%` lineas totales -- el build falla bajo ese umbral
 - [ ] **TEST-09**: Specs de integracion del flujo completo exchange (happy path end-to-end backend)
 
 #### Frontend (Vitest + React Testing Library + MSW)
 
 - [x] **TEST-10**: Tests de **todos** los custom hooks (fetch, estado, calculos) -- mocks de API con MSW o fakes tipados
-- [ ] **TEST-11**: Tests de **todos** los service objects (clientes HTTP, parseo Zod, manejo de errores)
-- [ ] **TEST-12**: Tests de **todos** los schemas Zod -- inputs validos/invalidos, mensajes de error
+- [x] **TEST-11**: Tests de **todos** los service objects (clientes HTTP, parseo Zod, manejo de errores)
+- [x] **TEST-12**: Tests de **todos** los schemas Zod -- inputs validos/invalidos, mensajes de error
 - [x] **TEST-13**: Tests de componentes clave: Login form, Exchange form, Balances display, Transaction history list, filtros
 - [ ] **TEST-14**: Tests de flujos de pagina: login exitoso/fallido, exchange exitoso/rechazado, carga de historial con filtro
-- [ ] **TEST-15**: Tests cubren loading states y error states (React Query `isLoading`, `isError`, `error`)
+- [x] **TEST-15**: Tests cubren loading states y error states (React Query `isLoading`, `isError`, `error`)
 - [x] **TEST-16**: Tests de routing protegido -- usuario no autenticado redirigido a login
 - [x] **TEST-17**: Vitest configurado con coverage (`v8` provider) y umbral `>=90%` lineas totales -- el build falla bajo ese umbral
 - [x] **TEST-18**: Todos los mocks y fixtures en tests son **tipados**, sin `any` ni `unknown` ni casts forzados
@@ -162,14 +162,14 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | AUTH-05 | Phase 2 | Complete |
 | AUTH-06 | Phase 2 | Complete |
 | WALL-01 | Phase 1 | Complete |
-| WALL-02 | Phase 3 | Pending |
+| WALL-02 | Phase 3 | Complete |
 | WALL-03 | Phase 1 | Complete |
 | WALL-04 | Phase 1 | Complete |
-| PRIC-01 | Phase 3 | Pending |
-| PRIC-02 | Phase 3 | Pending |
-| PRIC-03 | Phase 3 | Pending |
-| PRIC-04 | Phase 3 | Pending |
-| PRIC-05 | Phase 3 | Pending |
+| PRIC-01 | Phase 3 | Complete |
+| PRIC-02 | Phase 3 | Complete |
+| PRIC-03 | Phase 3 | Complete |
+| PRIC-04 | Phase 3 | Complete |
+| PRIC-05 | Phase 3 | Complete |
 | EXCH-01 | Phase 4 | Pending |
 | EXCH-02 | Phase 4 | Pending |
 | EXCH-03 | Phase 4 | Pending |
@@ -184,7 +184,7 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | HIST-04 | Phase 5 | Pending |
 | UI-01 | Phase 2 | Complete |
 | UI-02 | Phase 2 | Complete |
-| UI-03 | Phase 3 | Pending |
+| UI-03 | Phase 3 | Complete |
 | UI-04 | Phase 5 | Pending |
 | UI-05 | Phase 5 | Pending |
 | UI-06 | Phase 5 | Pending |
@@ -214,19 +214,19 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | BE-06 | Phase 2 | Complete |
 | TEST-01 | Phase 4 | Pending |
 | TEST-02 | Phase 2 | Complete |
-| TEST-03 | Phase 3 | Pending |
+| TEST-03 | Phase 3 | Complete |
 | TEST-04 | Phase 4, Phase 5 | Pending |
 | TEST-05 | Phase 2 | Complete |
 | TEST-06 | Phase 2, Phase 3 | Complete |
-| TEST-07 | Phase 3 | Pending |
+| TEST-07 | Phase 3 | Complete |
 | TEST-08 | Phase 1 | Complete |
 | TEST-09 | Phase 4 | Pending |
 | TEST-10 | Phase 2, Phase 5 | Complete |
-| TEST-11 | Phase 3 | Pending |
-| TEST-12 | Phase 3 | Pending |
+| TEST-11 | Phase 3 | Complete |
+| TEST-12 | Phase 3 | Complete |
 | TEST-13 | Phase 2, Phase 5 | Complete |
 | TEST-14 | Phase 5 | Pending |
-| TEST-15 | Phase 3, Phase 5 | Pending |
+| TEST-15 | Phase 3, Phase 5 | Complete |
 | TEST-16 | Phase 2 | Complete |
 | TEST-17 | Phase 1 | Complete |
 | TEST-18 | Phase 2 | Complete |

@@ -5,10 +5,10 @@ milestone_name: milestone
 status: unknown
 last_updated: "2026-04-14T21:46:25.439Z"
 progress:
-  total_phases: 2
+  total_phases: 3
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 7
+  completed_plans: 7
 ---
 
 # Project State
@@ -22,19 +22,19 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 
 ## Current Position
 
-Phase: 2 of 6 (Authentication) -- COMPLETE
+Phase: 3 of 6 (Wallets & Crypto Prices) -- COMPLETE
 Plan: 2 of 2 in current phase -- COMPLETE
-Status: Phase 2 Complete (all plans)
-Last activity: 2026-04-14 -- Completed 02-02-PLAN.md
+Status: Phase 03 complete, ready for Phase 04
+Last activity: 2026-04-14 -- Completed 03-02-PLAN.md
 
-Progress: [█████░░░░░] 33%
+Progress: [████████░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 4min
-- Total execution time: 0.30 hours
+- Total plans completed: 7
+- Average duration: 3min
+- Total execution time: 0.40 hours
 
 **By Phase:**
 
@@ -42,9 +42,10 @@ Progress: [█████░░░░░] 33%
 |-------|-------|-------|----------|
 | 01 | 3 | 12min | 4min |
 | 02 | 2 | 6min | 3min |
+| 03 | 2 | 6min | 3min |
 
 **Recent Trend:**
-- Last 5 plans: 4min, 5min, 3min, 2min, 4min
+- Last 5 plans: 3min, 2min, 4min, 3min, 3min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -80,6 +81,14 @@ Recent decisions affecting current work:
 - isAuthenticated requires both token and user (not just token) to prevent stale-token flash
 - antd v6 Alert uses title prop instead of deprecated message prop
 - Composition pattern: hooks carry logic, components render only
+- Injectable client pattern: services accept optional client, default from Rails.application.config
+- after_initialize block for price_client initializer to avoid autoload timing issues
+- MemoryStore stub in cache specs since test env uses null_store
+- antd Statistic receives pre-formatted string for full currency formatting control
+- BTC trailing zeros trimmed for cleaner display (0.05 BTC not 0.05000000 BTC)
+- CLP formatted with 0 decimal places (Chilean peso has no cents)
+- usePrices hook created but not consumed by Dashboard -- reserved for Exchange page
+- Per-test QueryClient wrapper in hook tests for isolation
 
 ### Pending Todos
 
@@ -93,5 +102,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-14
-Stopped at: Completed 02-02-PLAN.md (Phase 2 authentication complete - all plans)
+Stopped at: Completed 03-02-PLAN.md (Frontend dashboard)
 Resume file: None
