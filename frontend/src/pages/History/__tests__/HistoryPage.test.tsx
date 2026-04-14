@@ -145,14 +145,14 @@ describe("HistoryPage", () => {
     });
   });
 
-  it("shows empty table footer when there are no transactions", async () => {
+  it("shows empty state when there are no transactions", async () => {
     getTransactionsMock.mockResolvedValue({
       data: [],
       meta: { page: 1, per_page: 20, total: 0 },
     });
     render(<HistoryPage />);
     await waitFor(() => {
-      expect(screen.getByText(/Total: 0 transactions/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/no data/i).length).toBeGreaterThan(0);
     });
   });
 });
