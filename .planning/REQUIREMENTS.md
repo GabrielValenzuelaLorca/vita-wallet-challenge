@@ -62,20 +62,20 @@
 
 ### Frontend Architecture & Stack
 
-- [ ] **ARCH-01**: Estructura `src/pages/<PageName>/` -- cada pagina es un directorio con el componente Page y su subdirectorio `components/` para componentes propios
-- [ ] **ARCH-02**: Directorio `src/components/` al mismo nivel que `pages/` para componentes transversales reutilizables
-- [ ] **ARCH-03**: Directorio `src/hooks/` con custom hooks que cargan toda la logica (fetch, estado, side effects, validaciones)
-- [ ] **ARCH-04**: Directorio `src/services/` con clientes HTTP y abstracciones de API
+- [x] **ARCH-01**: Estructura `src/pages/<PageName>/` -- cada pagina es un directorio con el componente Page y su subdirectorio `components/` para componentes propios
+- [x] **ARCH-02**: Directorio `src/components/` al mismo nivel que `pages/` para componentes transversales reutilizables
+- [x] **ARCH-03**: Directorio `src/hooks/` con custom hooks que cargan toda la logica (fetch, estado, side effects, validaciones)
+- [x] **ARCH-04**: Directorio `src/services/` con clientes HTTP y abstracciones de API
 - [ ] **ARCH-05**: Componentes usan composition pattern (children, slots, compound components donde aplique)
 - [ ] **ARCH-06**: Componentes solo manejan render/UI; la logica vive en hooks (maxima testeabilidad)
-- [ ] **ARCH-07**: Manejo de estado de servidor con TanStack Query (React Query) -- cache, invalidacion, loading/error states out-of-the-box
-- [ ] **ARCH-08**: Estado global cliente minimo con Context API (AuthContext, y quizas UI context si aplica)
-- [ ] **ARCH-09**: Build tool **Vite** con plugin React + TypeScript
-- [ ] **ARCH-10**: TypeScript **strict mode** (`strict: true`, `noImplicitAny`, `strictNullChecks`)
-- [ ] **ARCH-11**: **Cero `any` y cero `unknown`** en todo el codigo (src, tests, mocks) -- enforced por regla ESLint (`@typescript-eslint/no-explicit-any` como error)
-- [ ] **ARCH-12**: **Zod** para validacion de schemas: validacion de respuestas del API, validacion de forms, inferencia de tipos desde schemas (`z.infer`)
-- [ ] **ARCH-13**: Cliente HTTP (axios o fetch) tipado con generics, sin `any` -- capa services encapsula llamadas y parsea con Zod
-- [ ] **ARCH-14**: Todos los hooks personalizados tienen tipos de entrada y salida explicitos
+- [x] **ARCH-07**: Manejo de estado de servidor con TanStack Query (React Query) -- cache, invalidacion, loading/error states out-of-the-box
+- [x] **ARCH-08**: Estado global cliente minimo con Context API (AuthContext, y quizas UI context si aplica)
+- [x] **ARCH-09**: Build tool **Vite** con plugin React + TypeScript
+- [x] **ARCH-10**: TypeScript **strict mode** (`strict: true`, `noImplicitAny`, `strictNullChecks`)
+- [x] **ARCH-11**: **Cero `any` y cero `unknown`** en todo el codigo (src, tests, mocks) -- enforced por regla ESLint (`@typescript-eslint/no-explicit-any` como error)
+- [x] **ARCH-12**: **Zod** para validacion de schemas: validacion de respuestas del API, validacion de forms, inferencia de tipos desde schemas (`z.infer`)
+- [x] **ARCH-13**: Cliente HTTP (axios o fetch) tipado con generics, sin `any` -- capa services encapsula llamadas y parsea con Zod
+- [x] **ARCH-14**: Todos los hooks personalizados tienen tipos de entrada y salida explicitos
 
 ### Backend Architecture
 
@@ -192,20 +192,20 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | UI-08 | Phase 5 | Pending |
 | UI-09 | Phase 2 | Pending |
 | UI-10 | Phase 2 | Pending |
-| ARCH-01 | Phase 1 | Pending |
-| ARCH-02 | Phase 1 | Pending |
-| ARCH-03 | Phase 1 | Pending |
-| ARCH-04 | Phase 1 | Pending |
+| ARCH-01 | Phase 1 | Complete |
+| ARCH-02 | Phase 1 | Complete |
+| ARCH-03 | Phase 1 | Complete |
+| ARCH-04 | Phase 1 | Complete |
 | ARCH-05 | Phase 2 | Pending |
 | ARCH-06 | Phase 2 | Pending |
-| ARCH-07 | Phase 1 | Pending |
-| ARCH-08 | Phase 1 | Pending |
-| ARCH-09 | Phase 1 | Pending |
-| ARCH-10 | Phase 1 | Pending |
-| ARCH-11 | Phase 1 | Pending |
-| ARCH-12 | Phase 1 | Pending |
-| ARCH-13 | Phase 1 | Pending |
-| ARCH-14 | Phase 1 | Pending |
+| ARCH-07 | Phase 1 | Complete |
+| ARCH-08 | Phase 1 | Complete |
+| ARCH-09 | Phase 1 | Complete |
+| ARCH-10 | Phase 1 | Complete |
+| ARCH-11 | Phase 1 | Complete |
+| ARCH-12 | Phase 1 | Complete |
+| ARCH-13 | Phase 1 | Complete |
+| ARCH-14 | Phase 1 | Complete |
 | BE-01 | Phase 1 | Complete |
 | BE-02 | Phase 2 | Pending |
 | BE-03 | Phase 2 | Pending |
