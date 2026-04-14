@@ -34,9 +34,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Rails API-only backend setup, DB schema (users/wallets/transactions), seeds, serializer base
-- [ ] 01-02-PLAN.md — Vite React TS frontend setup with antd, directory structure, typed HTTP client, AuthContext shell
-- [ ] 01-03-PLAN.md — Test infrastructure: RSpec + SimpleCov (backend), Vitest + v8 coverage (frontend), sample tests
+- [x] 01-01-PLAN.md — Rails API-only backend setup, DB schema (users/wallets/transactions), seeds, serializer base
+- [x] 01-02-PLAN.md — Vite React TS frontend setup with antd, directory structure, typed HTTP client, AuthContext shell
+- [x] 01-03-PLAN.md — Test infrastructure: RSpec + SimpleCov (backend), Vitest + v8 coverage (frontend), sample tests
 
 ### Phase 2: Authentication
 **Goal**: Users can securely register, log in, and maintain sessions; all subsequent endpoints can be protected by JWT middleware
@@ -48,12 +48,11 @@ Plans:
   3. Frontend login page submits credentials, stores JWT in secure storage, and the user remains logged in after page refresh
   4. Frontend redirects unauthenticated users to login; logged-in users can log out and the token is cleared
   5. RSpec covers auth service (valid/invalid credentials, JWT generation/expiration) and request specs cover 401/200 flows; frontend tests cover login hook, auth context, and protected route redirect
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
-- [ ] 02-03: TBD
+- [ ] 02-01-PLAN.md — Backend auth: JwtService, AuthService, AuthController (register/login/me), JWT middleware, RSpec tests
+- [ ] 02-02-PLAN.md — Frontend auth: Login page with antd Form, AuthContext real implementation, session persistence, protected routes, Vitest tests
 
 ### Phase 3: Wallets & Crypto Prices
 **Goal**: Authenticated users can view their multi-currency balances and the system can fetch/cache/stub crypto prices from the external API
@@ -128,8 +127,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Project Scaffolding & Foundation | 1/3 | Complete    | 2026-04-14 |
-| 2. Authentication | 0/3 | Not started | - |
+| 1. Project Scaffolding & Foundation | 3/3 | Complete    | 2026-04-14 |
+| 2. Authentication | 0/2 | Not started | - |
 | 3. Wallets & Crypto Prices | 0/3 | Not started | - |
 | 4. Exchange Engine | 0/3 | Not started | - |
 | 5. Transaction History & Exchange UI | 0/3 | Not started | - |
