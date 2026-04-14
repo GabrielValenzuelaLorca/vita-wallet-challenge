@@ -21,8 +21,9 @@ export function LoginForm({
       {errorMessage !== null && (
         <Alert
           type="error"
-          message={errorMessage}
+          title={errorMessage}
           showIcon
+          closable={false}
           style={{ marginBottom: 16 }}
         />
       )}
