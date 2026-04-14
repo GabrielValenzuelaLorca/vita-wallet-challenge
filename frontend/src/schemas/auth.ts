@@ -13,5 +13,12 @@ export const authResponseSchema = apiEnvelopeSchema(
   }),
 );
 
+export const meResponseSchema = apiEnvelopeSchema(
+  z.object({
+    user: authUserSchema,
+  }),
+);
+
 export type AuthUserSchema = z.infer<typeof authUserSchema>;
 export type AuthResponseSchema = z.infer<typeof authResponseSchema>;
+export type MeResponseSchema = z.infer<typeof meResponseSchema>;

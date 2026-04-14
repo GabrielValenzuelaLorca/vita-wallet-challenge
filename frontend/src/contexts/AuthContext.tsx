@@ -1,5 +1,6 @@
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, useCallback, type ReactNode } from "react";
 import type { AuthUser, LoginCredentials } from "@/types/auth";
+import { authApi } from "@/services/api";
 import { AuthContext } from "./authTypes";
 
 const TOKEN_KEY = "auth_token";
@@ -11,20 +12,60 @@ function getStoredToken(): string | null {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(getStoredToken);
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(getStoredToken() !== null);
 
-  const isAuthenticated = token !== null;
+  const isAuthenticated = token !== null && user !== null;
 
-  const login = async (_credentials: LoginCredentials): Promise<void> => {
-    // Shell -- real API integration comes in Phase 2
-    throw new Error("Not implemented: login will be connected in Phase 2");
-  };
+  useEffect(() => {
+    if (token === null) {
+      setIsLoading(false);
+      return;
+    }
 
-  const logout = () => {
+    let cancelled = false;
+
+    async function validateSession() {
+      try {
+        const response = await authApi.me();
+        if (!cancelled) {
+          setUser(response.data.user);
+        }
+      } catch {
+        if (!cancelled) {
+          setToken(null);
+          setUser(null);
+          localStorage.removeItem(TOKEN_KEY);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    validateSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const login = useCallback(
+    async (credentials: LoginCredentials): Promise<void> => {
+      const response = await authApi.login(credentials);
+      const { token: newToken, user: newUser } = response.data;
+      localStorage.setItem(TOKEN_KEY, newToken);
+      setToken(newToken);
+      setUser(newUser);
+    },
+    [],
+  );
+
+  const logout = useCallback(() => {
     setUser(null);
     setToken(null);
     localStorage.removeItem(TOKEN_KEY);
-  };
+  }, []);
 
   return (
     <AuthContext.Provider
