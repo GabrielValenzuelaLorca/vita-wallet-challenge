@@ -77,13 +77,25 @@ Motor de exchange funcional end-to-end: validación de saldo, cálculo correcto 
 - **Estructura**: Monorepo con `/backend` y `/frontend` en la raíz — un solo README, un solo clone, commits atómicos cross-stack
 - **Auth**: `has_secure_password` (bcrypt) + JWT manual — demuestra Rails puro sin Devise, demuestra criterio para JWT sin devise-jwt
 - **Precisión monetaria**: `BigDecimal` en todo cálculo de dinero — nunca `Float` para evitar errores de redondeo
+- **Stack frontend**:
+  - **Vite** como build tool (dev server rápido, HMR, build optimizado)
+  - **TypeScript strict mode** (`strict: true`, `noImplicitAny`, `strictNullChecks`)
+  - **Cero `any` y cero `unknown`** en todo el código (src + tests) — enforced por ESLint como error
+  - **Zod** para schemas y validación: validación de responses de API (runtime type safety), validación de forms, inferencia de tipos con `z.infer`
+  - **TanStack Query (React Query)** para manejo de estado de servidor — cache, invalidación, loading/error states
+  - Context API para estado global cliente mínimo (AuthContext)
 - **Arquitectura frontend** (decisión del usuario):
   - `src/pages/<PageName>/` — cada página es un directorio con el componente Page + subdirectorio `components/` para componentes propios de esa página
   - `src/components/` — componentes transversales reutilizables al mismo nivel que `pages/`
   - `src/hooks/` — custom hooks que cargan **toda la lógica posible** (fetch, estado, side effects, validaciones)
-  - `src/services/` — clientes HTTP, abstracciones de API, capa de datos
+  - `src/services/` — clientes HTTP tipados con generics, parseo de responses con Zod
   - Composition pattern en todos los componentes (children props, slots, compound components donde aplique)
   - Componentes **solo** manejan render/UI; la lógica vive en hooks → máxima testeabilidad y legibilidad
+- **Testing — objetivo ≥90% coverage en ambos repos**:
+  - Backend: RSpec + SimpleCov con umbral 90% (build falla si baja)
+  - Frontend: Vitest (provider `v8`) con umbral 90% (build falla si baja)
+  - Cobertura de hooks, services, schemas Zod, componentes clave y flujos de página
+  - **Todos los mocks y fixtures tipados** (sin `any`/`unknown`/casts forzados)
 - **Arquitectura backend** (decisión del usuario):
   - Rails MVC idiomático + mejores prácticas para API-only
   - Controllers delgados: solo routing, auth, serialización de request/response
@@ -103,9 +115,14 @@ Motor de exchange funcional end-to-end: validación de saldo, cálculo correcto 
 | `BigDecimal` en todo cálculo monetario | Precisión decimal correcta, sin errores de `Float`; requisito explícito del PDF | — Pending |
 | Cache de precios en `Rails.cache` (memory store) | Simple, sin infra extra (Redis), suficiente para prueba con TTL corto | — Pending |
 | Service objects para lógica de negocio | Controllers delgados, testeable en unidades aisladas, alinea con "clean architecture" | — Pending |
+| Frontend: Vite + TypeScript strict | Build tool moderno, DX superior, tipado estricto para robustez | — Pending |
+| Cero `any` / `unknown` en todo el código | Tipado estricto garantiza correctness, alinea con reglas globales del usuario | — Pending |
+| Zod para validación y schemas | Runtime type safety en responses de API + inferencia estática con `z.infer` | — Pending |
+| TanStack Query para data fetching | Estado de servidor, cache, loading/error states out-of-the-box | — Pending |
 | Frontend: hooks cargan toda la lógica, componentes solo UI | Máxima testeabilidad (hooks testeables sin DOM), separación clara de responsabilidades | — Pending |
 | Estructura `pages/<Page>/components/` + `components/` global | Escala bien, localiza componentes por alcance (propio de página vs transversal) | — Pending |
 | Composition pattern en todos los componentes | Flexibilidad, evita prop drilling, alinea con React idiomático moderno | — Pending |
+| Coverage ≥90% en ambos repos (SimpleCov + Vitest v8) | Robustez del entregable; job-critical; builds fallan bajo el umbral | — Pending |
 | Postergar Figma al final | Funcional > estético dado el plazo; si sobra tiempo se aplica, si no se menciona en README | — Pending |
 | Saltar bonus (Docker, CI/CD, Deploy, Swagger) | Tiempo insuficiente; proteger el core de la prueba | — Pending |
 | Stub del cliente de precios mientras se habilita whitelist | Permite avanzar sin bloqueo; se reemplaza cuando el acceso esté listo | — Pending |
