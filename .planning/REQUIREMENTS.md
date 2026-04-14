@@ -16,10 +16,10 @@
 
 ### Wallets & Balances
 
-- [ ] **WALL-01**: Cada usuario tiene balances en 5 monedas: USD, CLP, BTC, USDC, USDT
+- [x] **WALL-01**: Cada usuario tiene balances en 5 monedas: USD, CLP, BTC, USDC, USDT
 - [ ] **WALL-02**: Endpoint autenticado retorna los balances actuales del usuario
-- [ ] **WALL-03**: Balances se persisten con precision decimal adecuada (`BigDecimal` en Ruby, `DECIMAL` en PostgreSQL)
-- [ ] **WALL-04**: Existen seeds con usuarios de prueba y balances iniciales razonables para demo
+- [x] **WALL-03**: Balances se persisten con precision decimal adecuada (`BigDecimal` en Ruby, `DECIMAL` en PostgreSQL)
+- [x] **WALL-04**: Existen seeds con usuarios de prueba y balances iniciales razonables para demo
 
 ### Crypto Prices
 
@@ -79,10 +79,10 @@
 
 ### Backend Architecture
 
-- [ ] **BE-01**: Rails API-only con PostgreSQL
+- [x] **BE-01**: Rails API-only con PostgreSQL
 - [ ] **BE-02**: Controllers delgados -- solo routing, auth, serializacion de request/response
 - [ ] **BE-03**: Logica de negocio compleja vive en service objects (`ExchangeService`, `PriceService`, `AuthService`)
-- [ ] **BE-04**: Serializers dedicados para shape consistente de respuestas
+- [x] **BE-04**: Serializers dedicados para shape consistente de respuestas
 - [ ] **BE-05**: Transacciones DB explicitas en operaciones multi-step (exchange)
 - [ ] **BE-06**: Middleware de autenticacion JWT aplicado a endpoints protegidos
 
@@ -161,10 +161,10 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | AUTH-04 | Phase 2 | Pending |
 | AUTH-05 | Phase 2 | Pending |
 | AUTH-06 | Phase 2 | Pending |
-| WALL-01 | Phase 1 | Pending |
+| WALL-01 | Phase 1 | Complete |
 | WALL-02 | Phase 3 | Pending |
-| WALL-03 | Phase 1 | Pending |
-| WALL-04 | Phase 1 | Pending |
+| WALL-03 | Phase 1 | Complete |
+| WALL-04 | Phase 1 | Complete |
 | PRIC-01 | Phase 3 | Pending |
 | PRIC-02 | Phase 3 | Pending |
 | PRIC-03 | Phase 3 | Pending |
@@ -206,10 +206,10 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | ARCH-12 | Phase 1 | Pending |
 | ARCH-13 | Phase 1 | Pending |
 | ARCH-14 | Phase 1 | Pending |
-| BE-01 | Phase 1 | Pending |
+| BE-01 | Phase 1 | Complete |
 | BE-02 | Phase 2 | Pending |
 | BE-03 | Phase 2 | Pending |
-| BE-04 | Phase 1 | Pending |
+| BE-04 | Phase 1 | Complete |
 | BE-05 | Phase 4 | Pending |
 | BE-06 | Phase 2 | Pending |
 | TEST-01 | Phase 4 | Pending |
