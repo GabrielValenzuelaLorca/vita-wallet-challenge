@@ -1,8 +1,7 @@
 require "simplecov"
 SimpleCov.start "rails" do
   enable_coverage :branch
-  # TODO: Raise to 90/80 in Phase 6 when full coverage is achieved
-  minimum_coverage 20
+  minimum_coverage 90
   add_filter "/spec/"
   add_filter "/config/"
   add_filter "/db/"
