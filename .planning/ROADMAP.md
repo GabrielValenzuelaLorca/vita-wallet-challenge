@@ -127,5 +127,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. Authentication | 2/2 | Complete    | 2026-04-14 |
 | 3. Wallets & Crypto Prices | 2/2 | Complete    | 2026-04-14 |
 | 4. Exchange Engine | 0/1 | Complete    | 2026-04-14 |
-| 5. Transaction History & Exchange UI | 2/2 | Complete   | 2026-04-14 |
+| 5. Transaction History & Exchange UI | 2/2 | Complete    | 2026-04-14 |
 | 6. Coverage, Polish & Documentation | 0/2 | Not started | - |
