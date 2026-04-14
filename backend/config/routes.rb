@@ -7,4 +7,5 @@ Rails.application.routes.draw do
 
   get "balances", to: "wallets#index"
   get "prices", to: "prices#index"
+  post "exchange", to: "exchange#create"
 end
