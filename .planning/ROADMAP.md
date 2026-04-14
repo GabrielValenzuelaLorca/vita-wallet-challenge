@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Wallets & Crypto Prices** - Balance endpoints, price service with external API client/stub/cache, frontend dashboard (completed 2026-04-14)
 - [x] **Phase 4: Exchange Engine** - Core exchange logic with BigDecimal precision, atomic transactions, state machine, and full test coverage (completed 2026-04-14)
 - [x] **Phase 5: Transaction History & Exchange UI** - History endpoints with pagination/filters, exchange page UI, history page UI (completed 2026-04-14)
-- [ ] **Phase 6: Coverage, Polish & Documentation** - Coverage thresholds enforced, remaining edge-case tests, README, video
+- [x] **Phase 6: Coverage, Polish & Documentation** - Coverage thresholds enforced, remaining edge-case tests, README, video (completed 2026-04-14)
 
 ## Phase Details
 
@@ -128,4 +128,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Wallets & Crypto Prices | 2/2 | Complete    | 2026-04-14 |
 | 4. Exchange Engine | 0/1 | Complete    | 2026-04-14 |
 | 5. Transaction History & Exchange UI | 2/2 | Complete    | 2026-04-14 |
-| 6. Coverage, Polish & Documentation | 0/2 | Not started | - |
+| 6. Coverage, Polish & Documentation | 0/2 | Complete    | 2026-04-14 |
