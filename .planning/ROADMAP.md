@@ -95,12 +95,11 @@ Plans:
   3. Frontend history page shows a paginated list of transactions with all relevant fields (date, currencies, amounts, state, rejection reason) and a working state filter
   4. All frontend pages have consistent loading and error states
   5. Frontend tests cover exchange form flow (success/rejection), history list with pagination/filter, and all custom hooks involved; backend request specs cover GET /transactions with pagination and filter params
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
-- [ ] 05-03: TBD
+- [ ] 05-01-PLAN.md — Backend TransactionsController (GET /transactions with pagination + status filter) + RSpec request specs
+- [ ] 05-02-PLAN.md — Frontend Exchange page + History page + all frontend tests (schemas, services, hooks, page components)
 
 ### Phase 6: Coverage, Polish & Documentation
 **Goal**: Both repos meet the 90% coverage threshold, the README documents everything the evaluator needs, and the video is recorded
@@ -128,5 +127,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. Authentication | 2/2 | Complete    | 2026-04-14 |
 | 3. Wallets & Crypto Prices | 2/2 | Complete    | 2026-04-14 |
 | 4. Exchange Engine | 0/1 | Complete    | 2026-04-14 |
-| 5. Transaction History & Exchange UI | 0/3 | Not started | - |
+| 5. Transaction History & Exchange UI | 0/2 | Not started | - |
 | 6. Coverage, Polish & Documentation | 0/2 | Not started | - |

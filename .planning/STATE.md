@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-04-14T22:13:15.210Z"
+status: in_progress
+last_updated: "2026-04-14T22:31:10Z"
 progress:
-  total_phases: 4
+  total_phases: 6
   completed_phases: 4
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 11
+  completed_plans: 9
 ---
 
 # Project State
@@ -22,19 +22,19 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 
 ## Current Position
 
-Phase: 4 of 6 (Exchange Engine) -- COMPLETE
-Plan: 1 of 1 in current phase -- COMPLETE
-Status: Phase 04 complete, ready for Phase 05
-Last activity: 2026-04-14 -- Completed 04-01-PLAN.md
+Phase: 5 of 6 (Transaction History & Exchange UI) -- IN PROGRESS
+Plan: 1 of 2 in current phase -- COMPLETE
+Status: Plan 05-01 complete, ready for Plan 05-02
+Last activity: 2026-04-14 -- Completed 05-01-PLAN.md
 
-Progress: [█████████░] 67%
+Progress: [████████░░] 82%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 3.5min
-- Total execution time: 0.47 hours
+- Total plans completed: 9
+- Average duration: 3.3min
+- Total execution time: 0.50 hours
 
 **By Phase:**
 
@@ -44,9 +44,10 @@ Progress: [█████████░] 67%
 | 02 | 2 | 6min | 3min |
 | 03 | 2 | 6min | 3min |
 | 04 | 1 | 4min | 4min |
+| 05 | 1 | 2min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 2min, 4min, 3min, 3min, 4min
+- Last 5 plans: 4min, 3min, 3min, 4min, 2min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -94,6 +95,10 @@ Recent decisions affecting current work:
 - Cross-rate: fiat-to-fiat via USDC prices, crypto-to-crypto via USD
 - DB decimal precision (scale 8) truncates BigDecimal -- tests compare against persisted values
 - ParameterMissing rescue in ExchangeController for graceful missing-params handling
+- GET /transactions uses manual limit/offset pagination instead of kaminari/pagy to keep dependencies minimal
+- Status filter validation runs before query so invalid status never touches the DB (422 early return)
+- Transaction history ordered by created_at:desc (not id:desc) to be resilient to future PK migrations
+- Pagination total count computed from filtered scope so meta reflects the active status filter
 
 ### Pending Todos
 
@@ -107,5 +112,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-14
-Stopped at: Completed 04-01-PLAN.md (Exchange engine)
+Stopped at: Completed 05-01-PLAN.md (Transaction history API)
 Resume file: None

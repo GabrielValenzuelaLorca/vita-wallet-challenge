@@ -42,10 +42,10 @@
 
 ### Transaction History
 
-- [ ] **HIST-01**: Endpoint autenticado lista las transacciones del usuario
-- [ ] **HIST-02**: Listado soporta paginacion (ej: `page` y `per_page` en query params)
-- [ ] **HIST-03**: Listado soporta filtro por estado (`pending`, `completed`, `rejected`)
-- [ ] **HIST-04**: Respuesta incluye todos los campos necesarios para mostrar: fechas, montos, monedas, estado, razon de rechazo si aplica
+- [x] **HIST-01**: Endpoint autenticado lista las transacciones del usuario
+- [x] **HIST-02**: Listado soporta paginacion (ej: `page` y `per_page` en query params)
+- [x] **HIST-03**: Listado soporta filtro por estado (`pending`, `completed`, `rejected`)
+- [x] **HIST-04**: Respuesta incluye todos los campos necesarios para mostrar: fechas, montos, monedas, estado, razon de rechazo si aplica
 
 ### Frontend UI
 
@@ -178,10 +178,10 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | EXCH-06 | Phase 4 | Complete |
 | EXCH-07 | Phase 4 | Complete |
 | EXCH-08 | Phase 4 | Complete |
-| HIST-01 | Phase 5 | Pending |
-| HIST-02 | Phase 5 | Pending |
-| HIST-03 | Phase 5 | Pending |
-| HIST-04 | Phase 5 | Pending |
+| HIST-01 | Phase 5 | Complete |
+| HIST-02 | Phase 5 | Complete |
+| HIST-03 | Phase 5 | Complete |
+| HIST-04 | Phase 5 | Complete |
 | UI-01 | Phase 2 | Complete |
 | UI-02 | Phase 2 | Complete |
 | UI-03 | Phase 3 | Complete |
