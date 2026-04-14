@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-04-14T21:17:07.328Z"
+status: in-progress
+last_updated: "2026-04-14T21:33:17Z"
 progress:
-  total_phases: 1
+  total_phases: 6
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 4
+  completed_plans: 4
 ---
 
 # Project State
@@ -22,28 +22,29 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 
 ## Current Position
 
-Phase: 1 of 6 (Project Scaffolding & Foundation) -- COMPLETE
-Plan: 3 of 3 in current phase
-Status: Phase Complete
-Last activity: 2026-04-14 -- Completed 01-03-PLAN.md
+Phase: 2 of 6 (Authentication) -- IN PROGRESS
+Plan: 1 of 1 in current phase -- COMPLETE
+Status: Phase 2 Complete
+Last activity: 2026-04-14 -- Completed 02-01-PLAN.md
 
-Progress: [██░░░░░░░░] 18%
+Progress: [████░░░░░░] 25%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 4min
-- Total execution time: 0.2 hours
+- Total execution time: 0.23 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 3 | 12min | 4min |
+| 02 | 1 | 2min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 4min, 5min, 3min
+- Last 5 plans: 4min, 5min, 3min, 2min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -70,6 +71,10 @@ Recent decisions affecting current work:
 - fixture_path (singular) for Rails 7.0 compatibility
 - Separate vitest.config.ts from vite.config.ts for test/build separation
 - MemoryRouter in tests for deterministic route control
+- Flat auth routes under /auth/ (not namespaced) for simplicity
+- GET /auth/me as protected endpoint for session restoration and testability
+- JwtService returns nil on any decode failure for uniform error handling
+- Service objects pattern: class methods on PORO, thin controllers delegate to services
 
 ### Pending Todos
 
@@ -83,5 +88,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-14
-Stopped at: Completed 01-03-PLAN.md (Phase 1 complete)
+Stopped at: Completed 02-01-PLAN.md (Phase 2 authentication complete)
 Resume file: None

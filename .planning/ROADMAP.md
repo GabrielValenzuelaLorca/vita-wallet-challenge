@@ -51,7 +51,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Backend auth: JwtService, AuthService, AuthController (register/login/me), JWT middleware, RSpec tests
+- [x] 02-01-PLAN.md — Backend auth: JwtService, AuthService, AuthController (register/login/me), JWT middleware, RSpec tests
 - [ ] 02-02-PLAN.md — Frontend auth: Login page with antd Form, AuthContext real implementation, session persistence, protected routes, Vitest tests
 
 ### Phase 3: Wallets & Crypto Prices
@@ -128,7 +128,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Project Scaffolding & Foundation | 3/3 | Complete    | 2026-04-14 |
-| 2. Authentication | 0/2 | Not started | - |
+| 2. Authentication | 1/2 | In progress | - |
 | 3. Wallets & Crypto Prices | 0/3 | Not started | - |
 | 4. Exchange Engine | 0/3 | Not started | - |
 | 5. Transaction History & Exchange UI | 0/3 | Not started | - |

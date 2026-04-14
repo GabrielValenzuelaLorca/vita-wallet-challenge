@@ -7,10 +7,10 @@
 
 ### Authentication
 
-- [ ] **AUTH-01**: Usuario puede registrarse con email y password (backend + seed opcional desde frontend)
-- [ ] **AUTH-02**: Usuario puede hacer login con email y password y recibe un JWT valido
-- [ ] **AUTH-03**: Endpoints protegidos rechazan requests sin JWT o con JWT invalido/expirado
-- [ ] **AUTH-04**: Password se persiste usando `has_secure_password` (bcrypt), nunca en texto plano
+- [x] **AUTH-01**: Usuario puede registrarse con email y password (backend + seed opcional desde frontend)
+- [x] **AUTH-02**: Usuario puede hacer login con email y password y recibe un JWT valido
+- [x] **AUTH-03**: Endpoints protegidos rechazan requests sin JWT o con JWT invalido/expirado
+- [x] **AUTH-04**: Password se persiste usando `has_secure_password` (bcrypt), nunca en texto plano
 - [ ] **AUTH-05**: Sesion frontend persiste tras refresh del navegador (JWT guardado en storage seguro)
 - [ ] **AUTH-06**: Usuario puede cerrar sesion desde la UI y el token se invalida localmente
 
@@ -80,22 +80,22 @@
 ### Backend Architecture
 
 - [x] **BE-01**: Rails API-only con PostgreSQL
-- [ ] **BE-02**: Controllers delgados -- solo routing, auth, serializacion de request/response
-- [ ] **BE-03**: Logica de negocio compleja vive en service objects (`ExchangeService`, `PriceService`, `AuthService`)
+- [x] **BE-02**: Controllers delgados -- solo routing, auth, serializacion de request/response
+- [x] **BE-03**: Logica de negocio compleja vive en service objects (`ExchangeService`, `PriceService`, `AuthService`)
 - [x] **BE-04**: Serializers dedicados para shape consistente de respuestas
 - [ ] **BE-05**: Transacciones DB explicitas en operaciones multi-step (exchange)
-- [ ] **BE-06**: Middleware de autenticacion JWT aplicado a endpoints protegidos
+- [x] **BE-06**: Middleware de autenticacion JWT aplicado a endpoints protegidos
 
 ### Testing -- Target >=90% coverage en ambos repos
 
 #### Backend (RSpec + SimpleCov)
 
 - [ ] **TEST-01**: `ExchangeService` -- happy path fiat->crypto, crypto->fiat, saldo insuficiente, error de precios, transaccion rechazada, rollback en fallo
-- [ ] **TEST-02**: `AuthService` / sesiones -- credenciales validas, invalidas, JWT generation, JWT expirado, JWT invalido, `has_secure_password` match
+- [x] **TEST-02**: `AuthService` / sesiones -- credenciales validas, invalidas, JWT generation, JWT expirado, JWT invalido, `has_secure_password` match
 - [ ] **TEST-03**: `PriceService` -- cache hit, cache miss, TTL, error de API externa (timeout, 5xx, respuesta invalida), fallback
 - [ ] **TEST-04**: Request specs para endpoints criticos -- `POST /auth/login`, `GET /balances`, `POST /exchange`, `GET /transactions`
-- [ ] **TEST-05**: Request specs cubren autenticacion -- 401 sin token, 401 token invalido/expirado, 200 con token valido
-- [ ] **TEST-06**: Model specs -- validaciones de `User`, `Wallet`, `Transaction` (presencia, formato, unicidad, precision decimal)
+- [x] **TEST-05**: Request specs cubren autenticacion -- 401 sin token, 401 token invalido/expirado, 200 con token valido
+- [x] **TEST-06**: Model specs -- validaciones de `User`, `Wallet`, `Transaction` (presencia, formato, unicidad, precision decimal)
 - [ ] **TEST-07**: Serializers specs -- shape de respuesta correcto, campos sensibles excluidos (password_digest)
 - [x] **TEST-08**: SimpleCov configurado con umbral `>=90%` lineas totales -- el build falla bajo ese umbral
 - [ ] **TEST-09**: Specs de integracion del flujo completo exchange (happy path end-to-end backend)
@@ -155,10 +155,10 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
-| AUTH-03 | Phase 2 | Pending |
-| AUTH-04 | Phase 2 | Pending |
+| AUTH-01 | Phase 2 | Complete |
+| AUTH-02 | Phase 2 | Complete |
+| AUTH-03 | Phase 2 | Complete |
+| AUTH-04 | Phase 2 | Complete |
 | AUTH-05 | Phase 2 | Pending |
 | AUTH-06 | Phase 2 | Pending |
 | WALL-01 | Phase 1 | Complete |
@@ -207,17 +207,17 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | ARCH-13 | Phase 1 | Complete |
 | ARCH-14 | Phase 1 | Complete |
 | BE-01 | Phase 1 | Complete |
-| BE-02 | Phase 2 | Pending |
-| BE-03 | Phase 2 | Pending |
+| BE-02 | Phase 2 | Complete |
+| BE-03 | Phase 2 | Complete |
 | BE-04 | Phase 1 | Complete |
 | BE-05 | Phase 4 | Pending |
-| BE-06 | Phase 2 | Pending |
+| BE-06 | Phase 2 | Complete |
 | TEST-01 | Phase 4 | Pending |
-| TEST-02 | Phase 2 | Pending |
+| TEST-02 | Phase 2 | Complete |
 | TEST-03 | Phase 3 | Pending |
 | TEST-04 | Phase 4, Phase 5 | Pending |
-| TEST-05 | Phase 2 | Pending |
-| TEST-06 | Phase 2, Phase 3 | Pending |
+| TEST-05 | Phase 2 | Complete |
+| TEST-06 | Phase 2, Phase 3 | Complete |
 | TEST-07 | Phase 3 | Pending |
 | TEST-08 | Phase 1 | Complete |
 | TEST-09 | Phase 4 | Pending |
