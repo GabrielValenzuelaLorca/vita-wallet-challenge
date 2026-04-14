@@ -64,12 +64,11 @@ Plans:
   3. Prices are cached in Rails.cache with a short TTL; repeated calls within TTL do not hit the external API
   4. When the external API is unavailable (timeout, 5xx, invalid response), the backend returns a controlled error response instead of crashing
   5. Frontend dashboard page displays all balances formatted by currency type, with loading and error states; frontend tests cover the balances hook, price service, Zod schemas, and loading/error states
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
-- [ ] 03-03: TBD
+- [ ] 03-01-PLAN.md — Backend: WalletsController, PriceService with cache, PriceClient + StubPriceClient, error handling, RSpec tests
+- [ ] 03-02-PLAN.md — Frontend: Dashboard page with balance cards, walletApi/priceApi services, Zod schemas, TanStack Query hooks, Vitest tests
 
 ### Phase 4: Exchange Engine
 **Goal**: The core exchange engine performs fiat-to-crypto and crypto-to-fiat exchanges with BigDecimal precision, atomic DB transactions, and a clear state machine -- this is the heart of the application
@@ -129,7 +128,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Project Scaffolding & Foundation | 3/3 | Complete    | 2026-04-14 |
 | 2. Authentication | 2/2 | Complete    | 2026-04-14 |
-| 3. Wallets & Crypto Prices | 0/3 | Not started | - |
+| 3. Wallets & Crypto Prices | 0/2 | Not started | - |
 | 4. Exchange Engine | 0/3 | Not started | - |
 | 5. Transaction History & Exchange UI | 0/3 | Not started | - |
 | 6. Coverage, Polish & Documentation | 0/2 | Not started | - |
