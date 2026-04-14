@@ -167,8 +167,10 @@ RSpec.describe "Exchange endpoints", type: :request do
 
           expect(usd_wallet.balance).to eq(BigDecimal("900"))
 
-          btc_price_in_usd = BigDecimal("67432.50")
-          expected_btc_received = (BigDecimal("100") / btc_price_in_usd).round(8)
+          # StubPriceClient: btc.usd_sell = BTC per 1 USD.
+          # fiat → crypto: target = source_amount * sell_rate
+          btc_per_usd = BigDecimal(StubPriceClient::STUB_PRICES["btc"]["usd_sell"])
+          expected_btc_received = (BigDecimal("100") * btc_per_usd).round(8)
           expect(btc_wallet.balance).to eq(BigDecimal("0.05") + expected_btc_received)
 
           # Verify Transaction record

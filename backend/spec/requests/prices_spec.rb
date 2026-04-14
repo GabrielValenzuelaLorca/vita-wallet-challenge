@@ -37,20 +37,20 @@ RSpec.describe "Prices endpoints", type: :request do
         expect(body["data"]).to be_a(Hash)
       end
 
-      it "includes BTC prices" do
+      it "includes BTC prices with sell/buy rates per fiat" do
         get "/prices", headers: headers
 
         body = JSON.parse(response.body)
-        expect(body["data"]).to have_key("BTC")
-        expect(body["data"]["BTC"]).to have_key("USD")
+        expect(body["data"]).to have_key("btc")
+        expect(body["data"]["btc"]).to have_key("usd_sell")
       end
 
       it "includes USDC and USDT prices" do
         get "/prices", headers: headers
 
         body = JSON.parse(response.body)
-        expect(body["data"]).to have_key("USDC")
-        expect(body["data"]).to have_key("USDT")
+        expect(body["data"]).to have_key("usdc")
+        expect(body["data"]).to have_key("usdt")
       end
     end
 

@@ -62,8 +62,20 @@ vi.mock("@/services/httpClient", () => ({
 
 const pricesResponse: PricesResponseSchema = {
   data: {
-    BTC: { USD: "65000.00", CLP: "55000000" },
-    USDC: { USD: "1.00" },
+    btc: {
+      usd_sell: "0.00001538461538", // 1 / 65000
+      usd_buy: "0.00001538461538",
+      clp_sell: "0.00000001818181818",
+      clp_buy: "0.00000001818181818",
+    },
+    usdc: {
+      usd_sell: "1.0",
+      usd_buy: "1.0",
+    },
+    usdt: {
+      usd_sell: "1.0",
+      usd_buy: "1.0",
+    },
   },
 };
 

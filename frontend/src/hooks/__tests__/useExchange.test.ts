@@ -75,10 +75,28 @@ function createWrapper() {
   };
 }
 
+// Vita Wallet API format: prices[<crypto>]["<fiat>_sell"] = crypto per 1 fiat.
+// Here: 1 USD → 0.00001538461538 BTC (i.e., 1 BTC ≈ 65000 USD).
 const pricesResponse: PricesResponseSchema = {
   data: {
-    BTC: { USD: "65000.00", CLP: "55000000" },
-    USDC: { USD: "1.00" },
+    btc: {
+      usd_sell: "0.00001538461538", // 1 / 65000
+      usd_buy: "0.00001538461538",
+      clp_sell: "0.00000001818181818", // 1 / 55000000
+      clp_buy: "0.00000001818181818",
+    },
+    usdc: {
+      usd_sell: "1.0",
+      usd_buy: "1.0",
+      clp_sell: "0.00094339622641",
+      clp_buy: "0.00094339622641",
+    },
+    usdt: {
+      usd_sell: "1.0",
+      usd_buy: "1.0",
+      clp_sell: "0.00094339622641",
+      clp_buy: "0.00094339622641",
+    },
   },
 };
 
@@ -110,7 +128,7 @@ describe("useExchange", () => {
     getBalancesMock.mockResolvedValue(balancesResponse);
   });
 
-  it("calculates estimate USD -> BTC via inverse rate", async () => {
+  it("calculates estimate USD -> BTC via fiat-to-crypto sell rate", async () => {
     const { result } = renderHook(() => useExchange(), {
       wrapper: createWrapper(),
     });
@@ -119,11 +137,11 @@ describe("useExchange", () => {
     const estimate = result.current.calculateEstimate("USD", "BTC", "650");
     expect(estimate).not.toBeNull();
     const numericEstimate = parseFloat(estimate ?? "0");
-    // 650 USD at BTC/USD = 65000 -> 0.01 BTC
+    // 650 USD * (1/65000 BTC per USD) = 0.01 BTC
     expect(numericEstimate).toBeCloseTo(0.01, 6);
   });
 
-  it("calculates estimate BTC -> USD via direct rate", async () => {
+  it("calculates estimate BTC -> USD via crypto-to-fiat inverse sell rate", async () => {
     const { result } = renderHook(() => useExchange(), {
       wrapper: createWrapper(),
     });
@@ -132,7 +150,7 @@ describe("useExchange", () => {
     const estimate = result.current.calculateEstimate("BTC", "USD", "0.01");
     expect(estimate).not.toBeNull();
     const numericEstimate = parseFloat(estimate ?? "0");
-    // 0.01 BTC at 65000 USD/BTC -> 650
+    // 0.01 BTC / (1/65000 BTC per USD) = 650 USD
     expect(numericEstimate).toBeCloseTo(650, 2);
   });
 

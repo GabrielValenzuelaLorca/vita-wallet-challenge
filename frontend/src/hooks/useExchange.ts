@@ -30,6 +30,9 @@ interface UseExchangeReturn {
   isBalancesLoading: boolean;
 }
 
+const FIAT_CURRENCIES: readonly Currency[] = ["USD", "CLP"];
+const CRYPTO_CURRENCIES: readonly Currency[] = ["BTC", "USDC", "USDT"];
+
 function parseNumeric(value: string | undefined): number | null {
   if (value === undefined) {
     return null;
@@ -38,19 +41,24 @@ function parseNumeric(value: string | undefined): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function computeRateToUsd(
+function isFiat(currency: Currency): boolean {
+  return FIAT_CURRENCIES.includes(currency);
+}
+
+function isCrypto(currency: Currency): boolean {
+  return CRYPTO_CURRENCIES.includes(currency);
+}
+
+// Retrieves the sell rate `prices[<crypto>]["<fiat>_sell"]` using lowercase
+// keys. The value represents "amount of <crypto> per 1 unit of <fiat>".
+function getSellRate(
   prices: PricesData,
-  currency: Currency,
+  crypto: Currency,
+  fiat: Currency,
 ): number | null {
-  const direct = parseNumeric(prices[currency]?.USD);
-  if (direct !== null) {
-    return direct;
-  }
-  const inverse = parseNumeric(prices.USD?.[currency]);
-  if (inverse !== null && inverse > 0) {
-    return 1 / inverse;
-  }
-  return null;
+  const cryptoKey = crypto.toLowerCase();
+  const fiatKey = fiat.toLowerCase();
+  return parseNumeric(prices[cryptoKey]?.[`${fiatKey}_sell`]);
 }
 
 export function useExchange(): UseExchangeReturn {
@@ -117,27 +125,59 @@ export function useExchange(): UseExchangeReturn {
         return null;
       }
 
-      // Direct lookup: is source priced against target?
-      const directSourceToTarget = parseNumeric(
-        prices[sourceCurrency]?.[targetCurrency],
-      );
-      if (directSourceToTarget !== null) {
-        return (parsedAmount * directSourceToTarget).toFixed(8);
+      const sourceIsFiat = isFiat(sourceCurrency);
+      const sourceIsCrypto = isCrypto(sourceCurrency);
+      const targetIsFiat = isFiat(targetCurrency);
+      const targetIsCrypto = isCrypto(targetCurrency);
+
+      // fiat → crypto: target = amount * (crypto per 1 fiat)
+      if (sourceIsFiat && targetIsCrypto) {
+        const rate = getSellRate(prices, targetCurrency, sourceCurrency);
+        if (rate === null) return null;
+        return (parsedAmount * rate).toFixed(8);
       }
 
-      // Inverse lookup: is target priced against source?
-      const inverseTargetToSource = parseNumeric(
-        prices[targetCurrency]?.[sourceCurrency],
-      );
-      if (inverseTargetToSource !== null && inverseTargetToSource > 0) {
-        return (parsedAmount / inverseTargetToSource).toFixed(8);
+      // crypto → fiat: target = amount / (crypto per 1 fiat)
+      if (sourceIsCrypto && targetIsFiat) {
+        const rate = getSellRate(prices, sourceCurrency, targetCurrency);
+        if (rate === null || rate === 0) return null;
+        return (parsedAmount / rate).toFixed(8);
       }
 
-      // Cross-rate via USD
-      const sourceToUsd = computeRateToUsd(prices, sourceCurrency);
-      const targetToUsd = computeRateToUsd(prices, targetCurrency);
-      if (sourceToUsd !== null && targetToUsd !== null && targetToUsd > 0) {
-        return ((parsedAmount * sourceToUsd) / targetToUsd).toFixed(8);
+      // crypto → crypto: pivot via USD
+      if (sourceIsCrypto && targetIsCrypto) {
+        const sourceCryptoPerUsd = getSellRate(prices, sourceCurrency, "USD");
+        const targetCryptoPerUsd = getSellRate(prices, targetCurrency, "USD");
+        if (
+          sourceCryptoPerUsd === null ||
+          targetCryptoPerUsd === null ||
+          sourceCryptoPerUsd === 0
+        ) {
+          return null;
+        }
+        const sourceInUsd = parsedAmount / sourceCryptoPerUsd;
+        return (sourceInUsd * targetCryptoPerUsd).toFixed(8);
+      }
+
+      // fiat → fiat: pivot via USDC (1:1 with USD)
+      if (sourceIsFiat && targetIsFiat) {
+        const usdcPerSource =
+          sourceCurrency === "USD"
+            ? 1
+            : getSellRate(prices, "USDC", sourceCurrency);
+        const usdcPerTarget =
+          targetCurrency === "USD"
+            ? 1
+            : getSellRate(prices, "USDC", targetCurrency);
+        if (
+          usdcPerSource === null ||
+          usdcPerTarget === null ||
+          usdcPerTarget === 0
+        ) {
+          return null;
+        }
+        const sourceInUsd = parsedAmount * usdcPerSource;
+        return (sourceInUsd / usdcPerTarget).toFixed(8);
       }
 
       return null;

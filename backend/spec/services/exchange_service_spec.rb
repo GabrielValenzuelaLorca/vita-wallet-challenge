@@ -33,8 +33,10 @@ RSpec.describe ExchangeService do
 
       it "credits the target wallet with the correct target amount" do
         result
-        btc_price_in_usd = BigDecimal("67432.50")
-        expected_btc = (BigDecimal("10") / btc_price_in_usd).round(8)
+        # StubPriceClient: btc.usd_sell = "0.00001333333333" (BTC per 1 USD).
+        # fiat → crypto: target = source_amount * sell_rate
+        btc_per_usd = BigDecimal(stub_prices["btc"]["usd_sell"])
+        expected_btc = (BigDecimal("10") * btc_per_usd).round(8)
         target_wallet = user.wallets.find_by!(currency: "BTC").reload
         expect(target_wallet.balance).to eq(BigDecimal("100") + expected_btc)
       end
@@ -73,9 +75,11 @@ RSpec.describe ExchangeService do
         expect(result[:transaction].status).to eq("completed")
       end
 
-      it "calculates target_amount as source * price" do
-        btc_price_in_usd = BigDecimal("67432.50")
-        expected_usd = BigDecimal("0.001") * btc_price_in_usd
+      it "calculates target_amount as source / sell_rate" do
+        # crypto → fiat: target = source_amount / sell_rate
+        # sell_rate = btc.usd_sell = BTC per 1 USD
+        btc_per_usd = BigDecimal(stub_prices["btc"]["usd_sell"])
+        expected_usd = (BigDecimal("0.001") / btc_per_usd).round(8)
 
         expect(result[:transaction].target_amount).to eq(expected_usd)
       end
@@ -112,10 +116,13 @@ RSpec.describe ExchangeService do
       end
 
       it "calculates cross-rate through USD" do
-        btc_in_usd = BigDecimal("67432.50")
-        usdc_in_usd = BigDecimal("1.00")
-        source_in_usd = BigDecimal("0.001") * btc_in_usd
-        expected_usdc = source_in_usd / usdc_in_usd
+        # BTC → USDC: pivot through USD.
+        # source_in_usd = BTC / btc.usd_sell
+        # target_in_usdc = source_in_usd * usdc.usd_sell
+        btc_per_usd = BigDecimal(stub_prices["btc"]["usd_sell"])
+        usdc_per_usd = BigDecimal(stub_prices["usdc"]["usd_sell"])
+        source_in_usd = BigDecimal("0.001") / btc_per_usd
+        expected_usdc = (source_in_usd * usdc_per_usd).round(8)
 
         expect(result[:transaction].target_amount).to eq(expected_usdc)
       end
@@ -143,8 +150,11 @@ RSpec.describe ExchangeService do
       end
 
       it "calculates cross-rate through USDC" do
-        usdc_clp = BigDecimal("925.00")
-        expected_clp = BigDecimal("10") * usdc_clp
+        # USD → CLP: pivot through USDC.
+        # source is already USD (source_in_usd = 10 USD).
+        # target_in_clp = source_in_usd / usdc.clp_sell (USDC per 1 CLP → invert to CLP per 1 USDC)
+        usdc_per_clp = BigDecimal(stub_prices["usdc"]["clp_sell"])
+        expected_clp = (BigDecimal("10") / usdc_per_clp).round(8)
 
         expect(result[:transaction].target_amount).to eq(expected_clp)
       end
@@ -292,8 +302,10 @@ RSpec.describe ExchangeService do
 
       it "produces target_amount matching manual BigDecimal calculation (DB precision)" do
         source_amount = BigDecimal("100")
-        btc_price_in_usd = BigDecimal("67432.50")
-        expected_target = (source_amount / btc_price_in_usd).round(8)
+        # StubPriceClient: btc.usd_sell = BTC per 1 USD.
+        # fiat → crypto: target = source * sell_rate
+        btc_per_usd = BigDecimal(stub_prices["btc"]["usd_sell"])
+        expected_target = (source_amount * btc_per_usd).round(8)
 
         result = described_class.execute(
           user: user, source_currency: "USD", target_currency: "BTC", source_amount: "100"

@@ -34,9 +34,12 @@ describe("usePrices", () => {
   it("returns prices object on successful fetch", async () => {
     const mockResponse: PricesResponseSchema = {
       data: {
-        BTC: { USD: "67432.50", CLP: "62500000.00" },
-        USDC: { USD: "1.00" },
-        USDT: { USD: "1.00" },
+        btc: {
+          usd_sell: "0.00001333333333",
+          clp_sell: "0.00000001257862",
+        },
+        usdc: { usd_sell: "1.0", clp_sell: "0.00094339622641" },
+        usdt: { usd_sell: "1.0" },
       },
     };
     mockGetPrices.mockResolvedValue(mockResponse);
@@ -50,7 +53,7 @@ describe("usePrices", () => {
     });
 
     expect(result.current.prices).not.toBeNull();
-    expect(result.current.prices?.BTC.USD).toBe("67432.50");
+    expect(result.current.prices?.btc.usd_sell).toBe("0.00001333333333");
     expect(result.current.isError).toBe(false);
   });
 

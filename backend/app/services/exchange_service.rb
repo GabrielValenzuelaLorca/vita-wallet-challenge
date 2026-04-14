@@ -89,24 +89,63 @@ class ExchangeService
         error_code: "price_fetch_failed", error_message: "Could not fetch exchange rates" }
     end
 
+    # Calculates the amount of target currency received when exchanging
+    # `source_amount` of source currency.
+    #
+    # Prices follow the Vita Wallet API format:
+    #   prices[<crypto>]["<fiat>_sell"] = amount of <crypto> per 1 unit of <fiat>
+    #
+    # Derivations per direction:
+    # - fiat → crypto (e.g. USD → BTC):
+    #     target_amount = source_amount * prices["btc"]["usd_sell"]
+    #     (multiply fiat by "BTC per 1 USD")
+    # - crypto → fiat (e.g. BTC → USD):
+    #     target_amount = source_amount / prices["btc"]["usd_sell"]
+    #     (divide crypto by "BTC per 1 USD" to get USD)
+    # - fiat → fiat (USD ↔ CLP): pivot through USDC (stable 1:1 with USD).
+    # - crypto → crypto (e.g. BTC → USDT): pivot through USD.
     def calculate_target_amount(source_currency:, target_currency:, source_amount:, prices:)
       source_is_fiat = fiat_currency?(source_currency)
       target_is_fiat = fiat_currency?(target_currency)
 
       if source_is_fiat && !target_is_fiat
-        price_of_crypto_in_fiat = BigDecimal(prices[target_currency][source_currency])
-        source_amount / price_of_crypto_in_fiat
+        crypto_per_fiat = fetch_sell_rate(prices, crypto: target_currency, fiat: source_currency)
+        source_amount * crypto_per_fiat
       elsif !source_is_fiat && target_is_fiat
-        price_of_crypto_in_fiat = BigDecimal(prices[source_currency][target_currency])
-        source_amount * price_of_crypto_in_fiat
+        crypto_per_fiat = fetch_sell_rate(prices, crypto: source_currency, fiat: target_currency)
+        source_amount / crypto_per_fiat
       elsif source_is_fiat && target_is_fiat
-        source_in_usd = source_currency == "USD" ? source_amount : source_amount / BigDecimal(prices["USDC"][source_currency])
-        target_currency == "USD" ? source_in_usd : source_in_usd * BigDecimal(prices["USDC"][target_currency])
+        source_in_usd =
+          if source_currency == "USD"
+            source_amount
+          else
+            usdc_per_source = fetch_sell_rate(prices, crypto: "USDC", fiat: source_currency)
+            source_amount * usdc_per_source
+          end
+
+        if target_currency == "USD"
+          source_in_usd
+        else
+          usdc_per_target = fetch_sell_rate(prices, crypto: "USDC", fiat: target_currency)
+          source_in_usd / usdc_per_target
+        end
       else
-        source_in_usd = source_amount * BigDecimal(prices[source_currency]["USD"])
-        price_of_target_in_usd = BigDecimal(prices[target_currency]["USD"])
-        source_in_usd / price_of_target_in_usd
+        # crypto → crypto: pivot through USD.
+        crypto_source_per_usd = fetch_sell_rate(prices, crypto: source_currency, fiat: "USD")
+        crypto_target_per_usd = fetch_sell_rate(prices, crypto: target_currency, fiat: "USD")
+        source_in_usd = source_amount / crypto_source_per_usd
+        source_in_usd * crypto_target_per_usd
       end
+    end
+
+    def fetch_sell_rate(prices, crypto:, fiat:)
+      crypto_data = prices[crypto.downcase] || prices[crypto]
+      raise PriceClient::ApiError.new("Missing price for #{crypto}", code: :invalid_response) unless crypto_data
+
+      rate = crypto_data["#{fiat.downcase}_sell"]
+      raise PriceClient::ApiError.new("Missing #{fiat} sell rate for #{crypto}", code: :invalid_response) if rate.nil?
+
+      BigDecimal(rate.to_s)
     end
 
     def fiat_currency?(currency)

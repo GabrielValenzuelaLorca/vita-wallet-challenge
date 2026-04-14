@@ -31,9 +31,12 @@ describe("priceApi", () => {
     it("calls httpClient.get and returns parsed prices", async () => {
       const mockResponse: PricesResponseSchema = {
         data: {
-          BTC: { USD: "67432.50", CLP: "62500000.00" },
-          USDC: { USD: "1.00", CLP: "925.00" },
-          USDT: { USD: "1.00", CLP: "925.00" },
+          btc: {
+            usd_sell: "0.00001333333333",
+            clp_sell: "0.00000001257862",
+          },
+          usdc: { usd_sell: "1.0", clp_sell: "0.00094339622641" },
+          usdt: { usd_sell: "1.0", clp_sell: "0.00094339622641" },
         },
       };
       mockedGet.mockResolvedValue(mockResponse);
@@ -41,8 +44,8 @@ describe("priceApi", () => {
       const result = await priceApi.getPrices();
 
       expect(mockedGet).toHaveBeenCalledWith("/prices");
-      expect(result.data.BTC.USD).toBe("67432.50");
-      expect(result.data.USDC.CLP).toBe("925.00");
+      expect(result.data.btc.usd_sell).toBe("0.00001333333333");
+      expect(result.data.usdc.clp_sell).toBe("0.00094339622641");
     });
 
     it("propagates ApiRequestError on 503 service unavailable", async () => {
