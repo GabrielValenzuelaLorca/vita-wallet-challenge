@@ -11,8 +11,8 @@
 - [x] **AUTH-02**: Usuario puede hacer login con email y password y recibe un JWT valido
 - [x] **AUTH-03**: Endpoints protegidos rechazan requests sin JWT o con JWT invalido/expirado
 - [x] **AUTH-04**: Password se persiste usando `has_secure_password` (bcrypt), nunca en texto plano
-- [ ] **AUTH-05**: Sesion frontend persiste tras refresh del navegador (JWT guardado en storage seguro)
-- [ ] **AUTH-06**: Usuario puede cerrar sesion desde la UI y el token se invalida localmente
+- [x] **AUTH-05**: Sesion frontend persiste tras refresh del navegador (JWT guardado en storage seguro)
+- [x] **AUTH-06**: Usuario puede cerrar sesion desde la UI y el token se invalida localmente
 
 ### Wallets & Balances
 
@@ -49,16 +49,16 @@
 
 ### Frontend UI
 
-- [ ] **UI-01**: Pagina de Login con formulario, validacion, manejo de errores del backend
-- [ ] **UI-02**: Persistencia de sesion: usuario autenticado se mantiene logueado tras refresh
+- [x] **UI-01**: Pagina de Login con formulario, validacion, manejo de errores del backend
+- [x] **UI-02**: Persistencia de sesion: usuario autenticado se mantiene logueado tras refresh
 - [ ] **UI-03**: Pagina Dashboard muestra todos los balances del usuario con formato adecuado por moneda
 - [ ] **UI-04**: Pagina Exchange con formulario: seleccionar moneda origen, moneda destino, monto
 - [ ] **UI-05**: Pagina Exchange muestra monto estimado en tiempo real antes de confirmar
 - [ ] **UI-06**: Pagina Exchange confirma la operacion y muestra resultado (exito/rechazo)
 - [ ] **UI-07**: Pagina Historial muestra lista paginada de transacciones
 - [ ] **UI-08**: Pagina Historial incluye filtro por estado
-- [ ] **UI-09**: Todas las paginas tienen loading states y error states consistentes
-- [ ] **UI-10**: Navegacion entre paginas autenticadas con ruta protegida (redirige a login si no hay sesion)
+- [x] **UI-09**: Todas las paginas tienen loading states y error states consistentes
+- [x] **UI-10**: Navegacion entre paginas autenticadas con ruta protegida (redirige a login si no hay sesion)
 
 ### Frontend Architecture & Stack
 
@@ -66,8 +66,8 @@
 - [x] **ARCH-02**: Directorio `src/components/` al mismo nivel que `pages/` para componentes transversales reutilizables
 - [x] **ARCH-03**: Directorio `src/hooks/` con custom hooks que cargan toda la logica (fetch, estado, side effects, validaciones)
 - [x] **ARCH-04**: Directorio `src/services/` con clientes HTTP y abstracciones de API
-- [ ] **ARCH-05**: Componentes usan composition pattern (children, slots, compound components donde aplique)
-- [ ] **ARCH-06**: Componentes solo manejan render/UI; la logica vive en hooks (maxima testeabilidad)
+- [x] **ARCH-05**: Componentes usan composition pattern (children, slots, compound components donde aplique)
+- [x] **ARCH-06**: Componentes solo manejan render/UI; la logica vive en hooks (maxima testeabilidad)
 - [x] **ARCH-07**: Manejo de estado de servidor con TanStack Query (React Query) -- cache, invalidacion, loading/error states out-of-the-box
 - [x] **ARCH-08**: Estado global cliente minimo con Context API (AuthContext, y quizas UI context si aplica)
 - [x] **ARCH-09**: Build tool **Vite** con plugin React + TypeScript
@@ -102,15 +102,15 @@
 
 #### Frontend (Vitest + React Testing Library + MSW)
 
-- [ ] **TEST-10**: Tests de **todos** los custom hooks (fetch, estado, calculos) -- mocks de API con MSW o fakes tipados
+- [x] **TEST-10**: Tests de **todos** los custom hooks (fetch, estado, calculos) -- mocks de API con MSW o fakes tipados
 - [ ] **TEST-11**: Tests de **todos** los service objects (clientes HTTP, parseo Zod, manejo de errores)
 - [ ] **TEST-12**: Tests de **todos** los schemas Zod -- inputs validos/invalidos, mensajes de error
-- [ ] **TEST-13**: Tests de componentes clave: Login form, Exchange form, Balances display, Transaction history list, filtros
+- [x] **TEST-13**: Tests de componentes clave: Login form, Exchange form, Balances display, Transaction history list, filtros
 - [ ] **TEST-14**: Tests de flujos de pagina: login exitoso/fallido, exchange exitoso/rechazado, carga de historial con filtro
 - [ ] **TEST-15**: Tests cubren loading states y error states (React Query `isLoading`, `isError`, `error`)
-- [ ] **TEST-16**: Tests de routing protegido -- usuario no autenticado redirigido a login
+- [x] **TEST-16**: Tests de routing protegido -- usuario no autenticado redirigido a login
 - [x] **TEST-17**: Vitest configurado con coverage (`v8` provider) y umbral `>=90%` lineas totales -- el build falla bajo ese umbral
-- [ ] **TEST-18**: Todos los mocks y fixtures en tests son **tipados**, sin `any` ni `unknown` ni casts forzados
+- [x] **TEST-18**: Todos los mocks y fixtures en tests son **tipados**, sin `any` ni `unknown` ni casts forzados
 
 ### Documentation & Delivery
 
@@ -159,8 +159,8 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | AUTH-02 | Phase 2 | Complete |
 | AUTH-03 | Phase 2 | Complete |
 | AUTH-04 | Phase 2 | Complete |
-| AUTH-05 | Phase 2 | Pending |
-| AUTH-06 | Phase 2 | Pending |
+| AUTH-05 | Phase 2 | Complete |
+| AUTH-06 | Phase 2 | Complete |
 | WALL-01 | Phase 1 | Complete |
 | WALL-02 | Phase 3 | Pending |
 | WALL-03 | Phase 1 | Complete |
@@ -182,22 +182,22 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | HIST-02 | Phase 5 | Pending |
 | HIST-03 | Phase 5 | Pending |
 | HIST-04 | Phase 5 | Pending |
-| UI-01 | Phase 2 | Pending |
-| UI-02 | Phase 2 | Pending |
+| UI-01 | Phase 2 | Complete |
+| UI-02 | Phase 2 | Complete |
 | UI-03 | Phase 3 | Pending |
 | UI-04 | Phase 5 | Pending |
 | UI-05 | Phase 5 | Pending |
 | UI-06 | Phase 5 | Pending |
 | UI-07 | Phase 5 | Pending |
 | UI-08 | Phase 5 | Pending |
-| UI-09 | Phase 2 | Pending |
-| UI-10 | Phase 2 | Pending |
+| UI-09 | Phase 2 | Complete |
+| UI-10 | Phase 2 | Complete |
 | ARCH-01 | Phase 1 | Complete |
 | ARCH-02 | Phase 1 | Complete |
 | ARCH-03 | Phase 1 | Complete |
 | ARCH-04 | Phase 1 | Complete |
-| ARCH-05 | Phase 2 | Pending |
-| ARCH-06 | Phase 2 | Pending |
+| ARCH-05 | Phase 2 | Complete |
+| ARCH-06 | Phase 2 | Complete |
 | ARCH-07 | Phase 1 | Complete |
 | ARCH-08 | Phase 1 | Complete |
 | ARCH-09 | Phase 1 | Complete |
@@ -221,15 +221,15 @@ Descartados explicitamente por plazo; se mencionan en README como posibles mejor
 | TEST-07 | Phase 3 | Pending |
 | TEST-08 | Phase 1 | Complete |
 | TEST-09 | Phase 4 | Pending |
-| TEST-10 | Phase 2, Phase 5 | Pending |
+| TEST-10 | Phase 2, Phase 5 | Complete |
 | TEST-11 | Phase 3 | Pending |
 | TEST-12 | Phase 3 | Pending |
-| TEST-13 | Phase 2, Phase 5 | Pending |
+| TEST-13 | Phase 2, Phase 5 | Complete |
 | TEST-14 | Phase 5 | Pending |
 | TEST-15 | Phase 3, Phase 5 | Pending |
-| TEST-16 | Phase 2 | Pending |
+| TEST-16 | Phase 2 | Complete |
 | TEST-17 | Phase 1 | Complete |
-| TEST-18 | Phase 2 | Pending |
+| TEST-18 | Phase 2 | Complete |
 | DOC-01 | Phase 6 | Pending |
 | DOC-02 | Phase 6 | Pending |
 | DOC-03 | Phase 6 | Pending |

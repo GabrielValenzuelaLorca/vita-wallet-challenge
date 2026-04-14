@@ -6,9 +6,9 @@ status: in-progress
 last_updated: "2026-04-14T21:33:17Z"
 progress:
   total_phases: 6
-  completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
+  completed_phases: 2
+  total_plans: 5
+  completed_plans: 5
 ---
 
 # Project State
@@ -22,29 +22,29 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 
 ## Current Position
 
-Phase: 2 of 6 (Authentication) -- IN PROGRESS
-Plan: 1 of 1 in current phase -- COMPLETE
-Status: Phase 2 Complete
-Last activity: 2026-04-14 -- Completed 02-01-PLAN.md
+Phase: 2 of 6 (Authentication) -- COMPLETE
+Plan: 2 of 2 in current phase -- COMPLETE
+Status: Phase 2 Complete (all plans)
+Last activity: 2026-04-14 -- Completed 02-02-PLAN.md
 
-Progress: [████░░░░░░] 25%
+Progress: [█████░░░░░] 33%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 4min
-- Total execution time: 0.23 hours
+- Total execution time: 0.30 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 3 | 12min | 4min |
-| 02 | 1 | 2min | 2min |
+| 02 | 2 | 6min | 3min |
 
 **Recent Trend:**
-- Last 5 plans: 4min, 5min, 3min, 2min
+- Last 5 plans: 4min, 5min, 3min, 2min, 4min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -75,6 +75,11 @@ Recent decisions affecting current work:
 - GET /auth/me as protected endpoint for session restoration and testability
 - JwtService returns nil on any decode failure for uniform error handling
 - Service objects pattern: class methods on PORO, thin controllers delegate to services
+- useLoginForm hook encapsulates all form logic per ARCH-06, LoginForm is pure UI
+- AuthContext validates stored token on mount via GET /auth/me for session restoration
+- isAuthenticated requires both token and user (not just token) to prevent stale-token flash
+- antd v6 Alert uses title prop instead of deprecated message prop
+- Composition pattern: hooks carry logic, components render only
 
 ### Pending Todos
 
@@ -88,5 +93,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-14
-Stopped at: Completed 02-01-PLAN.md (Phase 2 authentication complete)
+Stopped at: Completed 02-02-PLAN.md (Phase 2 authentication complete - all plans)
 Resume file: None

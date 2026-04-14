@@ -13,7 +13,7 @@ This roadmap delivers a fullstack multi-currency wallet with a functional exchan
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Project Scaffolding & Foundation** - Rails API-only + Vite React TS project setup, DB schema, seeds, test infrastructure (completed 2026-04-14)
-- [ ] **Phase 2: Authentication** - Backend auth (register, login, JWT) + frontend auth (login page, session persistence, protected routes)
+- [x] **Phase 2: Authentication** - Backend auth (register, login, JWT) + frontend auth (login page, session persistence, protected routes) (completed 2026-04-14)
 - [ ] **Phase 3: Wallets & Crypto Prices** - Balance endpoints, price service with external API client/stub/cache, frontend dashboard
 - [ ] **Phase 4: Exchange Engine** - Core exchange logic with BigDecimal precision, atomic transactions, state machine, and full test coverage
 - [ ] **Phase 5: Transaction History & Exchange UI** - History endpoints with pagination/filters, exchange page UI, history page UI
@@ -52,7 +52,7 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — Backend auth: JwtService, AuthService, AuthController (register/login/me), JWT middleware, RSpec tests
-- [ ] 02-02-PLAN.md — Frontend auth: Login page with antd Form, AuthContext real implementation, session persistence, protected routes, Vitest tests
+- [x] 02-02-PLAN.md — Frontend auth: Login page with antd Form, AuthContext real implementation, session persistence, protected routes, Vitest tests
 
 ### Phase 3: Wallets & Crypto Prices
 **Goal**: Authenticated users can view their multi-currency balances and the system can fetch/cache/stub crypto prices from the external API
@@ -128,7 +128,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Project Scaffolding & Foundation | 3/3 | Complete    | 2026-04-14 |
-| 2. Authentication | 1/2 | In progress | - |
+| 2. Authentication | 2/2 | Complete    | 2026-04-14 |
 | 3. Wallets & Crypto Prices | 0/3 | Not started | - |
 | 4. Exchange Engine | 0/3 | Not started | - |
 | 5. Transaction History & Exchange UI | 0/3 | Not started | - |
