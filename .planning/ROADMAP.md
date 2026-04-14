@@ -31,12 +31,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Frontend directory structure exists: `src/pages/`, `src/components/`, `src/hooks/`, `src/services/` with a typed HTTP client and AuthContext shell
   4. Database has `users`, `wallets`, and `transactions` tables with correct decimal precision columns, and seeds create demo users with balances in all 5 currencies
   5. RSpec + SimpleCov and Vitest + v8 coverage are configured with 90% thresholds (a sample test passes in each repo)
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md — Rails API-only backend setup, DB schema (users/wallets/transactions), seeds, serializer base
+- [ ] 01-02-PLAN.md — Vite React TS frontend setup with antd, directory structure, typed HTTP client, AuthContext shell
+- [ ] 01-03-PLAN.md — Test infrastructure: RSpec + SimpleCov (backend), Vitest + v8 coverage (frontend), sample tests
 
 ### Phase 2: Authentication
 **Goal**: Users can securely register, log in, and maintain sessions; all subsequent endpoints can be protected by JWT middleware
@@ -128,7 +128,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Project Scaffolding & Foundation | 0/3 | Not started | - |
+| 1. Project Scaffolding & Foundation | 0/3 | Planning complete | - |
 | 2. Authentication | 0/3 | Not started | - |
 | 3. Wallets & Crypto Prices | 0/3 | Not started | - |
 | 4. Exchange Engine | 0/3 | Not started | - |
