@@ -67,8 +67,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Backend: WalletsController, PriceService with cache, PriceClient + StubPriceClient, error handling, RSpec tests
-- [ ] 03-02-PLAN.md — Frontend: Dashboard page with balance cards, walletApi/priceApi services, Zod schemas, TanStack Query hooks, Vitest tests
+- [x] 03-01-PLAN.md — Backend: WalletsController, PriceService with cache, PriceClient + StubPriceClient, error handling, RSpec tests
+- [x] 03-02-PLAN.md — Frontend: Dashboard page with balance cards, walletApi/priceApi services, Zod schemas, TanStack Query hooks, Vitest tests
 
 ### Phase 4: Exchange Engine
 **Goal**: The core exchange engine performs fiat-to-crypto and crypto-to-fiat exchanges with BigDecimal precision, atomic DB transactions, and a clear state machine -- this is the heart of the application
@@ -80,12 +80,10 @@ Plans:
   3. Exchange creates a Transaction record that transitions from `pending` to `completed` (success) or `rejected` (failure), and rejected transactions include a `rejection_reason`
   4. Insufficient balance is caught before execution and results in a rejected transaction with reason "insufficient_balance"; price fetch failure results in rejection with reason "price_fetch_failed"
   5. The exchange rate used for the calculation is persisted on the Transaction record for auditability; RSpec covers happy path (fiat-to-crypto, crypto-to-fiat), insufficient balance, price error, rollback on failure, and a full integration test of the exchange flow
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
-- [ ] 04-03: TBD
+- [ ] 04-01-PLAN.md — ExchangeService + ExchangeController + TransactionSerializer + comprehensive RSpec test suite
 
 ### Phase 5: Transaction History & Exchange UI
 **Goal**: Users can execute exchanges from the frontend and view their full transaction history with pagination and filters
@@ -128,7 +126,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Project Scaffolding & Foundation | 3/3 | Complete    | 2026-04-14 |
 | 2. Authentication | 2/2 | Complete    | 2026-04-14 |
-| 3. Wallets & Crypto Prices | 0/2 | Complete    | 2026-04-14 |
-| 4. Exchange Engine | 0/3 | Not started | - |
+| 3. Wallets & Crypto Prices | 2/2 | Complete    | 2026-04-14 |
+| 4. Exchange Engine | 0/1 | Not started | - |
 | 5. Transaction History & Exchange UI | 0/3 | Not started | - |
 | 6. Coverage, Polish & Documentation | 0/2 | Not started | - |
