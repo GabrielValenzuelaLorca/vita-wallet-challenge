@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe PriceClient do
   subject(:client) { described_class.new }
 
-  let(:api_url) { PriceClient::API_URL }
+  let(:api_url) { PriceClient::DEFAULT_API_URL }
 
   describe "#fetch_prices" do
     context "when API returns valid Vita Wallet format" do

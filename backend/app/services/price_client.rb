@@ -18,7 +18,11 @@ require "openssl"
 # The client filters to only the cryptos/fiats the app actually supports
 # and strips any extra keys (valid_until, days, etc.) from the payload.
 class PriceClient
-  API_URL = "https://api.stage.vitawallet.io/api/prices_quote"
+  DEFAULT_API_URL = "https://api.stage.vitawallet.io/api/prices_quote".freeze
+
+  def self.api_url
+    ENV.fetch("PRICE_API_URL", DEFAULT_API_URL)
+  end
 
   SUPPORTED_CRYPTOS = %w[btc usdc usdt].freeze
   SUPPORTED_FIATS = %w[usd clp].freeze
@@ -33,7 +37,7 @@ class PriceClient
   end
 
   def fetch_prices
-    uri = URI(API_URL)
+    uri = URI(self.class.api_url)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.open_timeout = timeout_seconds

@@ -52,5 +52,7 @@ if demo_user.transactions.count < sample_transactions.length
   end
 end
 
-puts "Seeded #{User.count} users with #{Wallet.count / User.count} wallets each"
+user_count = User.count
+wallets_per_user = user_count.zero? ? 0 : Wallet.count / user_count
+puts "Seeded #{user_count} users with #{wallets_per_user} wallets each"
 puts "Seeded #{demo_user.transactions.count} transactions for demo user"
