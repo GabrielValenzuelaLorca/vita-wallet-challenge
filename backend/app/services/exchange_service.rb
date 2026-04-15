@@ -49,8 +49,8 @@ class ExchangeService
             user: user, source_currency: source_currency, target_currency: target_currency,
             source_amount: source_amount_decimal, rejection_reason: "insufficient_balance"
           )
-          return { success: false, transaction: transaction,
-                   error_code: "insufficient_balance", error_message: "Insufficient balance in #{source_currency} wallet" }
+          next { success: false, transaction: transaction,
+                 error_code: "insufficient_balance", error_message: "Insufficient balance in #{source_currency} wallet" }
         end
 
         result = RateCalculator.call(
