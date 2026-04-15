@@ -31,19 +31,19 @@ RSpec.describe "Auth endpoints", type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
 
         body = JSON.parse(response.body)
-        expect(body.dig("error", "code")).to eq("validation_error")
+        expect(body.dig("error", "code")).to eq("validation_failed")
         expect(body.dig("error", "message")).to be_present
       end
     end
 
     context "with missing password" do
-      it "returns 422 with error envelope" do
+      it "returns 422 with invalid_params error envelope" do
         post "/auth/register", params: { email: "nopass@example.com" }
 
         expect(response).to have_http_status(:unprocessable_entity)
 
         body = JSON.parse(response.body)
-        expect(body.dig("error", "code")).to eq("validation_error")
+        expect(body.dig("error", "code")).to eq("invalid_params")
       end
     end
   end

@@ -13,9 +13,8 @@ RSpec.describe Wallet, type: :model do
 
   describe "decimal precision" do
     it "stores balance with 8 decimal places" do
-      Rails.application.load_seed unless User.exists?(email: "demo@vitawallet.com")
-      wallet = Wallet.find_by!(currency: "BTC", user: User.find_by!(email: "demo@vitawallet.com"))
-      expect(wallet.balance).to eq(BigDecimal("0.05"))
+      wallet = create(:wallet, :btc, balance: BigDecimal("0.05000000"))
+      expect(wallet.reload.balance).to eq(BigDecimal("0.05"))
       expect(wallet.balance).to be_a(BigDecimal)
     end
   end

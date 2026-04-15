@@ -11,10 +11,12 @@ RSpec.describe JwtService do
     end
 
     it "includes iat in the payload" do
-      token = described_class.encode(user_id: user_id)
-      payload = described_class.decode(token: token)
-      expect(payload).to have_key("iat")
-      expect(payload["iat"]).to be_within(2).of(Time.now.to_i)
+      freeze_time do
+        token = described_class.encode(user_id: user_id)
+        payload = described_class.decode(token: token)
+        expect(payload).to have_key("iat")
+        expect(payload["iat"]).to eq(Time.now.to_i)
+      end
     end
   end
 

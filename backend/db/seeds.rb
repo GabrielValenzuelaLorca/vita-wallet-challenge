@@ -46,7 +46,7 @@ sample_transactions = [
     exchange_rate: BigDecimal("1") }
 ]
 
-if demo_user.transactions.where(kind: %w[recharge deposit transfer]).empty?
+if demo_user.transactions.count < sample_transactions.length
   sample_transactions.each do |attrs|
     demo_user.transactions.create!(attrs.merge(status: "completed"))
   end

@@ -5,8 +5,6 @@ class AuthController < ApplicationController
     result = AuthService.register(email: auth_params[:email], password: auth_params[:password])
     serialized_user = UserSerializer.new(result[:user]).as_json
     render_success(data: { token: result[:token], user: serialized_user }, status: :created)
-  rescue ActiveRecord::RecordInvalid => error
-    render_error(code: "validation_error", message: error.record.errors.full_messages.join(", "), status: :unprocessable_entity)
   end
 
   def login
@@ -27,6 +25,8 @@ class AuthController < ApplicationController
   private
 
   def auth_params
+    params.require(:email)
+    params.require(:password)
     params.permit(:email, :password)
   end
 end

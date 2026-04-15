@@ -14,8 +14,6 @@ class PriceService
       CACHE_STORE.fetch(CACHE_KEY, expires_in: CACHE_TTL) do
         price_client.fetch_prices
       end
-    rescue PriceClient::ApiError
-      raise
     end
 
     # Exposed for tests and manual invalidation.
