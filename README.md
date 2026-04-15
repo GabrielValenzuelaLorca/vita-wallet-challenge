@@ -296,7 +296,7 @@ Fuera del alcance de esta prueba técnica, pero documentados como mejoras natura
 
 ### Features adicionales
 - **Notificaciones** in-app o email tras un exchange
-- **Multi-idioma / i18n** (actualmente hardcoded en inglés/español mixto)
+- **Multi-idioma / i18n formal** con `react-i18next` + Rails `I18n` (actualmente la UI está en español con strings hardcoded)
 - **Responsive completo** para mobile (actualmente desktop-first funcional)
 - **Dark theme** (antd lo soporta fácilmente con `ConfigProvider`)
 
@@ -307,9 +307,10 @@ Fuera del alcance de esta prueba técnica, pero documentados como mejoras natura
 
 ### Backend
 - **Price API real**: el cliente stub se usa por defecto ya que el whitelist de IP al momento de entrega estaba pendiente de activación. Cambiar `PRICE_CLIENT=real` cuando el acceso esté habilitado.
-- **Rate limiting** en endpoints de auth
-- **Observabilidad**: logs estructurados, métricas, tracing
+- **Observabilidad**: logs estructurados (Lograge), métricas, tracing
 - **Background jobs** (Sidekiq) para procesamiento asíncrono si el exchange evoluciona a integración con un exchange real
+- **Rate limiting detrás de proxy**: `rack-attack` ya throttlea `/auth/login` (5/min), `/auth/register` (3/min) y un safety net global de 300/5min. En producción, validar que el reverse proxy/load balancer envíe `X-Forwarded-For` y que `ActionDispatch::RemoteIp` esté antes de `Rack::Attack` en el middleware stack para que el throttle por IP no agrupe a todos los clientes detrás de la IP del proxy.
+- **Endpoint de logout**: `JwtService.invalidate_tokens!` y la columna `tokens_valid_after` están listos; falta exponer un `POST /auth/logout` que los invoque.
 
 ### Arquitectura
 - **Event sourcing** para transacciones (audit log inmutable)

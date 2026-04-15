@@ -4,6 +4,10 @@ import { apiEnvelopeSchema } from "./common";
 export const authUserSchema = z.object({
   id: z.number(),
   email: z.string().email(),
+  // Backend includes `created_at` in user responses; the frontend does not
+  // currently consume it, but we declare it so the contract is explicit and
+  // Zod does not silently strip a field that is part of the API surface.
+  created_at: z.string().optional(),
 });
 
 export const authResponseSchema = apiEnvelopeSchema(
