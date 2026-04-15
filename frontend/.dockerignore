@@ -1,0 +1,20 @@
+node_modules
+dist
+coverage
+
+# Logs / editor / OS
+*.log
+.DS_Store
+.vscode
+.idea
+
+# Local env (the container does not need them — VITE_API_URL is unused since
+# nginx proxies /api/* to the backend service inside the compose network)
+.env
+.env.local
+.env.*.local
+
+# Source control / docs not needed at build time
+.git
+.gitignore
+README.md

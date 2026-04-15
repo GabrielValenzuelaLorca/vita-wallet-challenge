@@ -1,0 +1,33 @@
+# Version control
+.git
+.gitignore
+
+# Bundler / local tooling
+.bundle
+vendor/bundle
+
+# Test artefacts
+coverage
+spec/examples.txt
+
+# Logs / tmp / cache (recreated by Rails on first boot)
+log/*
+!log/.keep
+tmp/*
+!tmp/.keep
+storage/*
+!storage/.keep
+
+# Local secrets — Docker injects them through env vars
+config/master.key
+.env
+.env.local
+.env.*.local
+
+# Editor / OS
+.DS_Store
+.vscode
+.idea
+
+# Documentation that is not needed inside the container
+README.md

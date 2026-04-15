@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: vita_wallet_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: "true"
+      DATABASE_HOST: postgres
+      DATABASE_PORT: "5432"
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: vita_wallet_development
+      PRICE_CLIENT: stub
+      CORS_ORIGINS: http://localhost:8080
+      # Stable secret so JWTs survive container restarts in local dev.
+      # In production this should come from a real secrets store and never
+      # be committed.
+      SECRET_KEY_BASE: dev-only-secret-key-base-do-not-use-in-production-32+chars
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount the app source for live edits in dev. Comment this block out
+      # to run a fully baked image.
+      - ./backend:/app
+      # Anonymous volume to keep the container's bundle out of the host mount.
+      - bundle_cache:/usr/local/bundle
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  postgres_data:
+  bundle_cache:

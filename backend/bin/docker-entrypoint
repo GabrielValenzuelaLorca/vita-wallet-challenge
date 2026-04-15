@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Container entrypoint for the backend service.
+#
+# Responsibilities:
+#   1. Wait until the postgres service accepts connections.
+#   2. Run db:prepare, which creates the database if missing, applies any
+#      pending migrations and runs db:seed when the schema is empty. This
+#      makes `docker compose up` a one-shot: clone, run, app is ready.
+#   3. Remove a stale `tmp/pids/server.pid` left over from a previous run
+#      (Puma refuses to start otherwise).
+#   4. Exec whatever command was passed (defaults to puma).
+set -euo pipefail
+
+DB_HOST="${DATABASE_HOST:-postgres}"
+DB_PORT="${DATABASE_PORT:-5432}"
+DB_USER="${DATABASE_USERNAME:-postgres}"
+
+echo "==> waiting for postgres at ${DB_HOST}:${DB_PORT}"
+until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -q; do
+  sleep 1
+done
+echo "==> postgres is up"
+
+echo "==> preparing database"
+bundle exec rails db:prepare
+
+if [ -f tmp/pids/server.pid ]; then
+  rm -f tmp/pids/server.pid
+fi
+
+exec "$@"
