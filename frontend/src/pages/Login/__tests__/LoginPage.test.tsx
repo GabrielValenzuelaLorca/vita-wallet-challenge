@@ -86,11 +86,11 @@ describe("LoginPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders Vita Wallet title and subtitle", () => {
+  it("renders Vita Wallet branding and welcome heading", () => {
     renderLoginPage();
 
     expect(screen.getByText("Vita Wallet")).toBeInTheDocument();
-    expect(screen.getByText("Log in to your account")).toBeInTheDocument();
+    expect(screen.getByText(/welcome back/i)).toBeInTheDocument();
   });
 
   it("shows error Alert when errorMessage is provided", () => {

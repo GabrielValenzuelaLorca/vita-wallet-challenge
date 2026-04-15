@@ -1,0 +1,67 @@
+/* Vita Wallet design tokens, sourced from the Figma color palette. */
+:root {
+  /* Brand colors (from Figma) */
+  --vw-blue-1: #167287; /* dark teal */
+  --vw-blue-2: #05BCB9; /* bright teal */
+  --vw-black: #010E11;
+  --vw-white: #F9F9FA;
+  --vw-gray-1: #B9C1C2;
+  --vw-gray-2: #DEE0E0;
+  --vw-gray-3: #F5F6F7;
+  --vw-red: #CE3434;
+  --vw-brand-gradient: linear-gradient(90deg, #05BCB9 0%, #167287 100%);
+
+  /* Semantic mapping */
+  --vw-primary: var(--vw-blue-2);
+  --vw-primary-hover: #04A09D; /* darker shade of blue-2 */
+  --vw-primary-active: #038380;
+  --vw-sidebar-bg: var(--vw-blue-1);
+  --vw-sidebar-fg: rgba(255, 255, 255, 0.92);
+
+  /* Surfaces */
+  --vw-bg: var(--vw-gray-3);
+  --vw-card-bg: var(--vw-white);
+  --vw-border: var(--vw-gray-2);
+
+  /* Text */
+  --vw-text-primary: var(--vw-black);
+  --vw-text-secondary: #5A6B7B;
+  --vw-text-muted: var(--vw-gray-1);
+
+  /* Status */
+  --vw-success: #12B886;
+  --vw-warning: #F5A524;
+  --vw-error: var(--vw-red);
+
+  /* Shape */
+  --vw-radius-sm: 6px;
+  --vw-radius-md: 10px;
+  --vw-radius-lg: 16px;
+
+  /* Shadows */
+  --vw-shadow-card: 0 2px 8px rgba(1, 14, 17, 0.06);
+  --vw-shadow-elevated: 0 8px 24px rgba(1, 14, 17, 0.10);
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--vw-text-primary);
+  background: var(--vw-bg);
+}
+
+/* antd Sider menu items: primary teal hover/active to match design */
+.ant-layout-sider .ant-menu-dark.ant-menu-inline .ant-menu-item-selected {
+  background: rgba(5, 188, 185, 0.18) !important;
+  color: #fff !important;
+}
+.ant-layout-sider .ant-menu-dark.ant-menu-inline .ant-menu-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.ant-layout-sider .ant-menu-dark .ant-menu-item-selected::after {
+  border-right: 3px solid var(--vw-primary) !important;
+}

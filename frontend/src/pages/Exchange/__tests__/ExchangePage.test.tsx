@@ -114,18 +114,33 @@ const rejectedTransaction: TransactionResponseSchema = {
   },
 };
 
-async function selectCurrencyPair(user: ReturnType<typeof userEvent.setup>) {
-  // antd Select renders 2 comboboxes inside the form, in DOM order:
-  //   [0] source currency, [1] target currency.
-  const comboboxes = screen.getAllByRole("combobox");
-
-  await user.click(comboboxes[0]);
+// Walks the wizard through all 3 steps with USD -> BTC and the given
+// amount, ending on the Review step where a "Confirm Exchange" button is
+// visible. Caller is responsible for clicking that button.
+async function walkWizardToReview(
+  user: ReturnType<typeof userEvent.setup>,
+  amount: string,
+) {
+  // Step 1: pick source currency (the only combobox visible) + amount
+  const sourceSelect = (await screen.findAllByRole("combobox"))[0];
+  await user.click(sourceSelect);
   const usdOptions = await screen.findAllByText("USD");
   await user.click(usdOptions[usdOptions.length - 1]);
 
-  await user.click(comboboxes[1]);
+  const amountInput = await screen.findByRole("spinbutton");
+  await user.clear(amountInput);
+  await user.type(amountInput, amount);
+  await user.click(screen.getByRole("button", { name: /continue/i }));
+
+  // Step 2: pick target currency
+  const targetSelect = (await screen.findAllByRole("combobox"))[0];
+  await user.click(targetSelect);
   const btcOptions = await screen.findAllByText("BTC");
   await user.click(btcOptions[btcOptions.length - 1]);
+  await user.click(screen.getByRole("button", { name: /review/i }));
+
+  // Step 3: review screen with Confirm Exchange button
+  await screen.findByRole("button", { name: /confirm exchange/i });
 }
 
 describe("ExchangePage", () => {
@@ -142,24 +157,21 @@ describe("ExchangePage", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows the exchange form after data loads", async () => {
+  it("shows the source step (Continue button) after data loads", async () => {
     render(<ExchangePage />);
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /confirm exchange/i }),
+        screen.getByRole("button", { name: /continue/i }),
       ).toBeInTheDocument();
     });
   });
 
-  it("submits the exchange and shows the success result", async () => {
+  it("walks through the wizard and shows the success result", async () => {
     submitExchangeMock.mockResolvedValueOnce(completedTransaction);
     const user = userEvent.setup();
     render(<ExchangePage />);
 
-    const amountInput = await screen.findByRole("spinbutton");
-    await selectCurrencyPair(user);
-    await user.clear(amountInput);
-    await user.type(amountInput, "10");
+    await walkWizardToReview(user, "10");
     await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
 
     await waitFor(() => {
@@ -175,10 +187,7 @@ describe("ExchangePage", () => {
     const user = userEvent.setup();
     render(<ExchangePage />);
 
-    const amountInput = await screen.findByRole("spinbutton");
-    await selectCurrencyPair(user);
-    await user.clear(amountInput);
-    await user.type(amountInput, "9999");
+    await walkWizardToReview(user, "10");
     await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
 
     await waitFor(() => {
@@ -192,10 +201,7 @@ describe("ExchangePage", () => {
     const user = userEvent.setup();
     render(<ExchangePage />);
 
-    const amountInput = await screen.findByRole("spinbutton");
-    await selectCurrencyPair(user);
-    await user.clear(amountInput);
-    await user.type(amountInput, "9999");
+    await walkWizardToReview(user, "10");
     await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
 
     await waitFor(() => {
@@ -204,14 +210,12 @@ describe("ExchangePage", () => {
     expect(screen.getByText(/insufficient_balance/i)).toBeInTheDocument();
   });
 
-  it("returns to the form view when clicking New Exchange", async () => {
+  it("returns to the source step when clicking New Exchange", async () => {
     submitExchangeMock.mockResolvedValueOnce(completedTransaction);
     const user = userEvent.setup();
     render(<ExchangePage />);
 
-    const amountInput = await screen.findByRole("spinbutton");
-    await selectCurrencyPair(user);
-    await user.type(amountInput, "10");
+    await walkWizardToReview(user, "10");
     await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
 
     await waitFor(() =>
@@ -222,7 +226,7 @@ describe("ExchangePage", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: /confirm exchange/i }),
+        screen.getByRole("button", { name: /continue/i }),
       ).toBeInTheDocument(),
     );
   });

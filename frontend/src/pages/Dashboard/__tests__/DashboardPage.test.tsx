@@ -23,6 +23,22 @@ vi.mock("@/hooks/useBalances", () => ({
   useBalances: (): UseBalancesReturn => mockBalancesState,
 }));
 
+vi.mock("@/hooks/useAuth", () => ({
+  useAuthContext: () => ({
+    user: {
+      id: 1,
+      email: "demo@vitawallet.com",
+      created_at: "2026-04-14T00:00:00Z",
+      updated_at: "2026-04-14T00:00:00Z",
+    },
+    token: "test-token",
+    isAuthenticated: true,
+    isLoading: false,
+    login: vi.fn(),
+    logout: vi.fn(),
+  }),
+}));
+
 function createTestQueryClient(): QueryClient {
   return new QueryClient({
     defaultOptions: {
@@ -54,9 +70,9 @@ describe("DashboardPage", () => {
     };
   });
 
-  it("renders the Dashboard title", () => {
+  it("renders the Dashboard greeting with the user name", () => {
     renderDashboard();
-    expect(screen.getByText("Dashboard")).toBeInTheDocument();
+    expect(screen.getByText(/Welcome back, demo/i)).toBeInTheDocument();
   });
 
   it("shows loading spinner when isLoading is true", () => {
@@ -118,7 +134,7 @@ describe("DashboardPage", () => {
     expect(screen.getByText("$1,000.50")).toBeInTheDocument();
   });
 
-  it("formats CLP balance with dollar sign and 0 decimals", () => {
+  it("formats CLP balance with es-CL locale and 0 decimals", () => {
     mockBalancesState = {
       balances: [{ id: 1, currency: "CLP", balance: "500000" }],
       isLoading: false,
@@ -127,7 +143,8 @@ describe("DashboardPage", () => {
     };
 
     renderDashboard();
-    expect(screen.getByText("$500,000")).toBeInTheDocument();
+    // es-CL formats CLP as "$500.000" with dot as thousands separator
+    expect(screen.getByText(/\$500[.,]000/)).toBeInTheDocument();
   });
 
   it("formats BTC balance with up to 8 decimals and BTC suffix", () => {
@@ -142,7 +159,7 @@ describe("DashboardPage", () => {
     expect(screen.getByText("0.05 BTC")).toBeInTheDocument();
   });
 
-  it("formats USDC balance with dollar sign and 2 decimals", () => {
+  it("formats USDC balance with USDC suffix and 2 decimals", () => {
     mockBalancesState = {
       balances: [{ id: 1, currency: "USDC", balance: "500.00" }],
       isLoading: false,
@@ -151,7 +168,7 @@ describe("DashboardPage", () => {
     };
 
     renderDashboard();
-    expect(screen.getByText("$500.00")).toBeInTheDocument();
+    expect(screen.getByText("500.00 USDC")).toBeInTheDocument();
   });
 
   it("does not show spinner or alert on success state", () => {

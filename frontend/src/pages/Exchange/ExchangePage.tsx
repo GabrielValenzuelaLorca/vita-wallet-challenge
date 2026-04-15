@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
-import { Typography, Spin, Card, Space } from "antd";
+import { Card, Space, Spin, Steps, Typography } from "antd";
 import { useExchange } from "@/hooks/useExchange";
-import { ExchangeForm } from "./components/ExchangeForm";
+import { SourceStep } from "./components/SourceStep";
+import { TargetStep } from "./components/TargetStep";
+import { ReviewStep } from "./components/ReviewStep";
 import { ExchangeResult } from "./components/ExchangeResult";
 import type { Currency } from "@/types/wallet";
 
@@ -13,9 +15,12 @@ const CURRENCIES: readonly Currency[] = [
   "USDT",
 ] as const;
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
+
+type WizardStep = 0 | 1 | 2;
 
 export function ExchangePage() {
+  const [step, setStep] = useState<WizardStep>(0);
   const [sourceCurrency, setSourceCurrency] = useState<Currency | null>(null);
   const [targetCurrency, setTargetCurrency] = useState<Currency | null>(null);
   const [amount, setAmount] = useState<string>("");
@@ -37,11 +42,9 @@ export function ExchangePage() {
     [calculateEstimate, sourceCurrency, targetCurrency, amount],
   );
 
-  // When the user picks a source equal to the current target (or vice
-  // versa), swap the two so any currency is always pickable on either side.
   const handleSourceCurrencyChange = (next: Currency) => {
     if (next === targetCurrency) {
-      setTargetCurrency(sourceCurrency);
+      setTargetCurrency(null);
     }
     setSourceCurrency(next);
   };
@@ -53,10 +56,8 @@ export function ExchangePage() {
     setTargetCurrency(next);
   };
 
-  const handleSubmit = () => {
-    if (!sourceCurrency || !targetCurrency) {
-      return;
-    }
+  const handleConfirm = () => {
+    if (!sourceCurrency || !targetCurrency) return;
     submitExchange({
       source_currency: sourceCurrency,
       target_currency: targetCurrency,
@@ -69,47 +70,115 @@ export function ExchangePage() {
     setSourceCurrency(null);
     setTargetCurrency(null);
     setAmount("");
+    setStep(0);
   };
 
   const showResult = result !== null || error !== null;
   const isDataLoading = isPricesLoading || isBalancesLoading;
 
-  return (
-    <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-      <Title level={2}>Exchange</Title>
-      {isDataLoading && !showResult && (
-        <div style={{ textAlign: "center", padding: 24 }}>
-          <Spin size="large" />
-        </div>
-      )}
-      {showResult ? (
-        <Card>
+  if (showResult) {
+    return (
+      <Space direction="vertical" size={24} style={{ width: "100%" }}>
+        <PageHeader />
+        <Card style={{ maxWidth: 640, margin: "0 auto", width: "100%" }}>
           <ExchangeResult
             transaction={result}
             error={error}
             onNewExchange={handleNewExchange}
           />
         </Card>
-      ) : (
-        !isDataLoading && (
-          <Card>
-            <ExchangeForm
-              currencies={CURRENCIES}
-              balances={balances}
-              sourceCurrency={sourceCurrency}
-              targetCurrency={targetCurrency}
-              amount={amount}
-              estimate={estimate}
-              isPricesLoading={isPricesLoading}
-              isSubmitting={isSubmitting}
-              onSourceCurrencyChange={handleSourceCurrencyChange}
-              onTargetCurrencyChange={handleTargetCurrencyChange}
-              onAmountChange={setAmount}
-              onSubmit={handleSubmit}
-            />
-          </Card>
-        )
-      )}
+      </Space>
+    );
+  }
+
+  return (
+    <Space direction="vertical" size={24} style={{ width: "100%" }}>
+      <PageHeader />
+
+      <Card
+        style={{ maxWidth: 640, margin: "0 auto", width: "100%" }}
+        styles={{ body: { padding: 32 } }}
+      >
+        <Steps
+          current={step}
+          size="small"
+          style={{ marginBottom: 32 }}
+          items={[
+            { title: "Source" },
+            { title: "Target" },
+            { title: "Review" },
+          ]}
+        />
+
+        {isDataLoading && step === 0 && (
+          <div style={{ textAlign: "center", padding: 24 }}>
+            <Spin size="large" />
+          </div>
+        )}
+
+        {!isDataLoading && step === 0 && (
+          <SourceStep
+            currencies={CURRENCIES}
+            balances={balances}
+            sourceCurrency={sourceCurrency}
+            amount={amount}
+            onSourceCurrencyChange={handleSourceCurrencyChange}
+            onAmountChange={setAmount}
+            onNext={() => setStep(1)}
+          />
+        )}
+
+        {step === 1 && sourceCurrency && (
+          <TargetStep
+            currencies={CURRENCIES}
+            sourceCurrency={sourceCurrency}
+            amount={amount}
+            targetCurrency={targetCurrency}
+            estimate={estimate}
+            isPricesLoading={isPricesLoading}
+            onTargetCurrencyChange={handleTargetCurrencyChange}
+            onBack={() => setStep(0)}
+            onNext={() => setStep(2)}
+          />
+        )}
+
+        {step === 2 && sourceCurrency && targetCurrency && estimate && (
+          <ReviewStep
+            sourceCurrency={sourceCurrency}
+            targetCurrency={targetCurrency}
+            amount={amount}
+            estimate={estimate}
+            isSubmitting={isSubmitting}
+            onBack={() => setStep(1)}
+            onConfirm={handleConfirm}
+          />
+        )}
+      </Card>
     </Space>
+  );
+}
+
+function PageHeader() {
+  return (
+    <div>
+      <Title
+        level={2}
+        style={{
+          margin: 0,
+          color: "var(--vw-text-primary, #1A2B3C)",
+          fontWeight: 700,
+        }}
+      >
+        Exchange
+      </Title>
+      <Text
+        style={{
+          color: "var(--vw-text-secondary, #5A6B7B)",
+          fontSize: 15,
+        }}
+      >
+        Convert between fiat and crypto using live market prices.
+      </Text>
+    </div>
   );
 }
