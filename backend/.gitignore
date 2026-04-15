@@ -30,5 +30,8 @@
 .env.local
 .env.*.local
 
+# Rails master key (NEVER commit — secrets decryption key)
+/config/master.key
+
 # OS files
 .DS_Store

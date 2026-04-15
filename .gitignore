@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Environment files at monorepo root
+.env
+.env.local
+.env.*.local
+
+# Serena MCP state (tool-local)
+.serena/
+
+# Planning scratchpads not meant for the main branch
+.planning/HANDOFF.md
+
+# Editor/IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Logs (generic safety net on top of per-subproject rules)
+*.log
