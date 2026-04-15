@@ -16,6 +16,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isAuthenticated = token !== null && user !== null;
 
   const logout = useCallback(() => {
+    // Best-effort server-side invalidation: the backend bumps
+    // `tokens_valid_after` so any leaked copy of this JWT becomes useless.
+    // Failure (offline, already-invalid token) must not block the local
+    // cleanup, so we discard the promise.
+    authApi.logout().catch(() => {});
     setUser(null);
     setToken(null);
     removeAuthToken();

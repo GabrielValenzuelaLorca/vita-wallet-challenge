@@ -11,6 +11,7 @@ vi.mock("@/services/api", () => ({
     login: vi.fn(),
     me: vi.fn(),
     register: vi.fn(),
+    logout: vi.fn().mockResolvedValue(undefined),
   },
 }));
 

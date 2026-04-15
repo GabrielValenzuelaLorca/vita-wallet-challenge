@@ -26,4 +26,8 @@ export const authApi = {
     const raw = await httpClient.get<MeResponseSchema>("/auth/me");
     return meResponseSchema.parse(raw);
   },
+
+  async logout(): Promise<void> {
+    await httpClient.delete<void>("/auth/logout");
+  },
 };

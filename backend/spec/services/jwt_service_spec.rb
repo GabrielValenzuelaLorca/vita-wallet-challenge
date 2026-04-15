@@ -79,6 +79,16 @@ RSpec.describe JwtService do
         expect(described_class.token_valid_for_user?(payload, user)).to be true
       end
     end
+
+    context "when token was issued in the exact same second as invalidation" do
+      it "rejects the token (strict greater-than)" do
+        freeze_time do
+          user.update!(tokens_valid_after: Time.current)
+          payload = { "iat" => Time.current.to_i }
+          expect(described_class.token_valid_for_user?(payload, user)).to be false
+        end
+      end
+    end
   end
 
   describe ".invalidate_tokens!" do

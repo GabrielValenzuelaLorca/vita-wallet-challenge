@@ -310,7 +310,7 @@ Fuera del alcance de esta prueba técnica, pero documentados como mejoras natura
 - **Observabilidad**: logs estructurados (Lograge), métricas, tracing
 - **Background jobs** (Sidekiq) para procesamiento asíncrono si el exchange evoluciona a integración con un exchange real
 - **Rate limiting detrás de proxy**: `rack-attack` ya throttlea `/auth/login` (5/min), `/auth/register` (3/min) y un safety net global de 300/5min. En producción, validar que el reverse proxy/load balancer envíe `X-Forwarded-For` y que `ActionDispatch::RemoteIp` esté antes de `Rack::Attack` en el middleware stack para que el throttle por IP no agrupe a todos los clientes detrás de la IP del proxy.
-- **Endpoint de logout**: `JwtService.invalidate_tokens!` y la columna `tokens_valid_after` están listos; falta exponer un `POST /auth/logout` que los invoque.
+- **Endpoint de logout**: implementado como `DELETE /auth/logout` (autenticado) — el frontend lo llama desde `AuthContext.logout()` como best-effort y limpia el token local pase lo que pase. La invalidación server-side deja inservibles las copias filtradas del JWT antes de su expiración natural.
 
 ### Arquitectura
 - **Event sourcing** para transacciones (audit log inmutable)

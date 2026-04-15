@@ -131,4 +131,39 @@ RSpec.describe "Auth endpoints", type: :request do
       end
     end
   end
+
+  describe "DELETE /auth/logout" do
+    let(:user) { create(:user) }
+    let(:token) { JwtService.encode(user_id: user.id) }
+
+    context "with valid token" do
+      it "returns 204 and bumps tokens_valid_after on the user" do
+        freeze_time do
+          delete "/auth/logout", headers: { "Authorization" => "Bearer #{token}" }
+
+          expect(response).to have_http_status(:no_content)
+          expect(user.reload.tokens_valid_after).to eq(Time.current)
+        end
+      end
+
+      it "invalidates the token used to log out (next request returns 401)" do
+        delete "/auth/logout", headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:no_content)
+
+        # Travel forward 1s so the new tokens_valid_after is strictly later
+        # than the iat embedded in the original token.
+        travel_to 1.second.from_now do
+          get "/auth/me", headers: { "Authorization" => "Bearer #{token}" }
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+
+    context "without authorization header" do
+      it "returns 401" do
+        delete "/auth/logout"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

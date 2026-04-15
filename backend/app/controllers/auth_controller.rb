@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  before_action :authenticate_user!, only: [:me]
+  before_action :authenticate_user!, only: [:me, :logout]
 
   def register
     result = AuthService.register(email: auth_params[:email], password: auth_params[:password])
@@ -20,6 +20,15 @@ class AuthController < ApplicationController
 
   def me
     render_success(data: { user: UserSerializer.new(current_user).as_json })
+  end
+
+  # Invalidates every JWT issued for the current user up to this point in
+  # time by bumping `tokens_valid_after`. The client should also discard the
+  # token locally; this just makes it impossible for stolen copies to keep
+  # working until the natural 24h expiration.
+  def logout
+    JwtService.invalidate_tokens!(current_user)
+    head :no_content
   end
 
   private

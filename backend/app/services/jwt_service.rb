@@ -22,8 +22,12 @@ class JwtService
     def token_valid_for_user?(payload, user)
       return true if user.tokens_valid_after.nil?
 
+      # Strict greater-than: a token issued in the same second as the
+      # invalidation must be considered expired. Otherwise calling
+      # invalidate_tokens! and the JWT it was meant to revoke could share
+      # a wall-clock second and the revocation would be a no-op.
       issued_at = payload["iat"].to_i
-      issued_at >= user.tokens_valid_after.to_i
+      issued_at > user.tokens_valid_after.to_i
     end
 
     def invalidate_tokens!(user)
