@@ -63,12 +63,10 @@ function findBalance(
 
 function buildCurrencyOptions(
   currencies: readonly Currency[],
-  disabledCurrency: Currency | null,
-): { label: Currency; value: Currency; disabled: boolean }[] {
+): { label: Currency; value: Currency }[] {
   return currencies.map((currency) => ({
     label: currency,
     value: currency,
-    disabled: currency === disabledCurrency,
   }));
 }
 
@@ -118,7 +116,7 @@ export function ExchangeForm({
             placeholder="Select source currency"
             value={sourceCurrency ?? undefined}
             onChange={onSourceCurrencyChange}
-            options={buildCurrencyOptions(currencies, targetCurrency)}
+            options={buildCurrencyOptions(currencies)}
           />
         </Form.Item>
 
@@ -127,7 +125,7 @@ export function ExchangeForm({
             placeholder="Select target currency"
             value={targetCurrency ?? undefined}
             onChange={onTargetCurrencyChange}
-            options={buildCurrencyOptions(currencies, sourceCurrency)}
+            options={buildCurrencyOptions(currencies)}
           />
         </Form.Item>
 

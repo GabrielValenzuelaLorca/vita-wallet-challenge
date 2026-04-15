@@ -114,6 +114,20 @@ const rejectedTransaction: TransactionResponseSchema = {
   },
 };
 
+async function selectCurrencyPair(user: ReturnType<typeof userEvent.setup>) {
+  // antd Select renders 2 comboboxes inside the form, in DOM order:
+  //   [0] source currency, [1] target currency.
+  const comboboxes = screen.getAllByRole("combobox");
+
+  await user.click(comboboxes[0]);
+  const usdOptions = await screen.findAllByText("USD");
+  await user.click(usdOptions[usdOptions.length - 1]);
+
+  await user.click(comboboxes[1]);
+  const btcOptions = await screen.findAllByText("BTC");
+  await user.click(btcOptions[btcOptions.length - 1]);
+}
+
 describe("ExchangePage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -143,6 +157,7 @@ describe("ExchangePage", () => {
     render(<ExchangePage />);
 
     const amountInput = await screen.findByRole("spinbutton");
+    await selectCurrencyPair(user);
     await user.clear(amountInput);
     await user.type(amountInput, "10");
     await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
@@ -161,6 +176,7 @@ describe("ExchangePage", () => {
     render(<ExchangePage />);
 
     const amountInput = await screen.findByRole("spinbutton");
+    await selectCurrencyPair(user);
     await user.clear(amountInput);
     await user.type(amountInput, "9999");
     await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
@@ -177,6 +193,7 @@ describe("ExchangePage", () => {
     render(<ExchangePage />);
 
     const amountInput = await screen.findByRole("spinbutton");
+    await selectCurrencyPair(user);
     await user.clear(amountInput);
     await user.type(amountInput, "9999");
     await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
@@ -193,6 +210,7 @@ describe("ExchangePage", () => {
     render(<ExchangePage />);
 
     const amountInput = await screen.findByRole("spinbutton");
+    await selectCurrencyPair(user);
     await user.type(amountInput, "10");
     await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
 

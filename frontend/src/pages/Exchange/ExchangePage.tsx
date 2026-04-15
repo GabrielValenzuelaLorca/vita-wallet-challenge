@@ -16,8 +16,8 @@ const CURRENCIES: readonly Currency[] = [
 const { Title } = Typography;
 
 export function ExchangePage() {
-  const [sourceCurrency, setSourceCurrency] = useState<Currency | null>("USD");
-  const [targetCurrency, setTargetCurrency] = useState<Currency | null>("BTC");
+  const [sourceCurrency, setSourceCurrency] = useState<Currency | null>(null);
+  const [targetCurrency, setTargetCurrency] = useState<Currency | null>(null);
   const [amount, setAmount] = useState<string>("");
 
   const {
@@ -37,6 +37,22 @@ export function ExchangePage() {
     [calculateEstimate, sourceCurrency, targetCurrency, amount],
   );
 
+  // When the user picks a source equal to the current target (or vice
+  // versa), swap the two so any currency is always pickable on either side.
+  const handleSourceCurrencyChange = (next: Currency) => {
+    if (next === targetCurrency) {
+      setTargetCurrency(sourceCurrency);
+    }
+    setSourceCurrency(next);
+  };
+
+  const handleTargetCurrencyChange = (next: Currency) => {
+    if (next === sourceCurrency) {
+      setSourceCurrency(targetCurrency);
+    }
+    setTargetCurrency(next);
+  };
+
   const handleSubmit = () => {
     if (!sourceCurrency || !targetCurrency) {
       return;
@@ -50,6 +66,8 @@ export function ExchangePage() {
 
   const handleNewExchange = () => {
     reset();
+    setSourceCurrency(null);
+    setTargetCurrency(null);
     setAmount("");
   };
 
@@ -84,8 +102,8 @@ export function ExchangePage() {
               estimate={estimate}
               isPricesLoading={isPricesLoading}
               isSubmitting={isSubmitting}
-              onSourceCurrencyChange={setSourceCurrency}
-              onTargetCurrencyChange={setTargetCurrency}
+              onSourceCurrencyChange={handleSourceCurrencyChange}
+              onTargetCurrencyChange={handleTargetCurrencyChange}
               onAmountChange={setAmount}
               onSubmit={handleSubmit}
             />
