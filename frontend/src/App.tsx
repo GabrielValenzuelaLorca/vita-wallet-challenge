@@ -35,7 +35,7 @@ const vitaTheme = {
     borderRadiusLG: 16,
     borderRadiusSM: 6,
     fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     fontSize: 14,
   },
   components: {
