@@ -1,8 +1,26 @@
-import { Form, InputNumber, Typography, Space } from "antd";
+import { Form, Typography, Space } from "antd";
 import type { Currency, Wallet } from "@/types/wallet";
 import { formatCurrency } from "../utils/formatCurrency";
 import { VitaButton } from "@/components/VitaButton";
 import { VitaSelector } from "@/components/VitaSelector";
+import { VitaTextField } from "@/components/VitaTextField";
+
+import dollarSignIcon from "@/assets/illustrations/dollar-sign.png";
+
+const CURRENCIES_WITH_DOLLAR_SYMBOL: Currency[] = ["USD", "CLP", "USDC", "USDT"];
+
+function currencyPrefix(currency: Currency | null): React.ReactNode {
+  if (!currency || !CURRENCIES_WITH_DOLLAR_SYMBOL.includes(currency)) {
+    return undefined;
+  }
+  return (
+    <img
+      src={dollarSignIcon}
+      alt=""
+      style={{ width: 20, height: 20, filter: "brightness(0)" }}
+    />
+  );
+}
 
 const { Title, Text } = Typography;
 
@@ -59,82 +77,84 @@ export function ExchangeFormStep({
     estimate !== null;
 
   return (
-    <div style={{ width: "100%" }}>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+      }}
+    >
       <Title
         level={3}
         style={{
           margin: 0,
-          marginBottom: 8,
-          color: "var(--vw-text-primary, #010E11)",
-          fontWeight: 700,
-          fontSize: 26,
+          marginBottom: 40,
+          fontFamily: "'Open Sans', sans-serif",
+          color: "var(--vw-black, #010E11)",
+          fontWeight: 600,
+          fontSize: 28,
+          lineHeight: "38px",
         }}
       >
         ¿Qué deseas intercambiar?
       </Title>
-      {sourceBalance && (
-        <Text
-          style={{
-            display: "block",
-            marginBottom: 32,
-            color: "var(--vw-primary, #05BCB9)",
-            fontSize: 14,
-            fontWeight: 500,
-          }}
-        >
-          Saldo disponible:{" "}
-          {formatCurrency(sourceBalance.balance, sourceBalance.currency)}
-        </Text>
-      )}
-      {!sourceBalance && (
-        <Text
-          style={{
-            display: "block",
-            marginBottom: 32,
-            color: "var(--vw-text-muted, #B9C1C2)",
-            fontSize: 14,
-          }}
-        >
-          Selecciona una moneda para ver el saldo disponible
-        </Text>
-      )}
+      <div
+        style={{
+          height: 22,
+          marginBottom: 48,
+        }}
+      >
+        {sourceBalance && (
+          <Text
+            style={{
+              fontFamily: "'Open Sans', sans-serif",
+              color: "var(--vw-blue-2, #05BCB9)",
+              fontSize: 16,
+              fontWeight: 600,
+              lineHeight: "22px",
+            }}
+          >
+            Saldo disponible:{" "}
+            {formatCurrency(sourceBalance.balance, sourceBalance.currency)}
+          </Text>
+        )}
+      </div>
 
       <Form layout="vertical" requiredMark={false}>
         <Form.Item
           label={
             <Text
               style={{
-                color: "var(--vw-text-secondary, #5A6B7B)",
-                fontSize: 13,
-                fontWeight: 500,
+                fontFamily: "'Open Sans', sans-serif",
+                color: "var(--vw-black, #010E11)",
+                fontSize: 16,
+                fontWeight: 400,
+                lineHeight: "22px",
               }}
             >
               Monto a intercambiar
             </Text>
           }
+          style={{ marginBottom: 48 }}
         >
-          <Space.Compact style={{ width: "100%" }}>
+          <div style={{ display: "flex", gap: 16, width: "100%" }}>
             <VitaSelector
               value={sourceCurrency ?? undefined}
               onChange={onSourceCurrencyChange}
               currencies={currencies}
             />
-            <InputNumber
-              style={{ width: "100%" }}
-              min={0}
-              step={0.01}
-              stringMode
-              size="large"
-              placeholder="0,00"
-              value={amount === "" ? null : amount}
-              onChange={(value) =>
-                onAmountChange(
-                  value === null || value === undefined ? "" : String(value),
-                )
-              }
-              status={exceedsBalance ? "error" : undefined}
-            />
-          </Space.Compact>
+            <div style={{ flex: 1 }}>
+              <VitaTextField
+                variant="amount"
+                placeholder="0,00"
+                value={amount}
+                onChange={onAmountChange}
+                prefix={currencyPrefix(sourceCurrency)}
+                error={exceedsBalance ? "Saldo insuficiente" : undefined}
+              />
+            </div>
+          </div>
           {exceedsBalance && (
             <Text
               type="danger"
@@ -149,9 +169,11 @@ export function ExchangeFormStep({
           label={
             <Text
               style={{
-                color: "var(--vw-text-secondary, #5A6B7B)",
-                fontSize: 13,
-                fontWeight: 500,
+                fontFamily: "'Open Sans', sans-serif",
+                color: "var(--vw-black, #010E11)",
+                fontSize: 16,
+                fontWeight: 400,
+                lineHeight: "22px",
               }}
             >
               Quiero recibir
@@ -161,48 +183,47 @@ export function ExchangeFormStep({
           help={
             isSameCurrency ? "Debe ser distinta a la moneda de origen" : undefined
           }
+          style={{ marginBottom: 48 }}
         >
-          <Space.Compact style={{ width: "100%" }}>
+          <div style={{ display: "flex", gap: 16, width: "100%" }}>
             <VitaSelector
               value={targetCurrency ?? undefined}
               onChange={onTargetCurrencyChange}
               currencies={currencies}
             />
-            <InputNumber
-              style={{ width: "100%" }}
-              size="large"
-              placeholder="0,00"
-              value={isPricesLoading ? null : estimate}
-              readOnly
-              disabled={!targetCurrency}
-              stringMode
-            />
-          </Space.Compact>
+            <div style={{ flex: 1 }}>
+              <VitaTextField
+                variant="amount"
+                placeholder="0,00"
+                value={isPricesLoading ? "" : estimate ?? ""}
+                disabled={!targetCurrency}
+                prefix={currencyPrefix(targetCurrency)}
+                inputProps={{ readOnly: true }}
+              />
+            </div>
+          </div>
         </Form.Item>
+      </Form>
 
-        <Space
-          style={{
-            width: "100%",
-            justifyContent: "space-between",
-            marginTop: 8,
-          }}
-        >
-          <VitaButton
-            variant="secondary"
-            vitaSize="compact"
-            onClick={onBack}
-          >
+      <Space
+        style={{
+          width: "100%",
+          justifyContent: "space-between",
+          marginTop: "auto",
+          paddingTop: 48,
+        }}
+      >
+        <div style={{ width: 183 }}>
+          <VitaButton variant="secondary" block onClick={onBack}>
             Atrás
           </VitaButton>
-          <VitaButton
-            vitaSize="compact"
-            disabled={!canContinue}
-            onClick={onContinue}
-          >
+        </div>
+        <div style={{ width: 183 }}>
+          <VitaButton block disabled={!canContinue} onClick={onContinue}>
             Continuar
           </VitaButton>
-        </Space>
-      </Form>
+        </div>
+      </Space>
     </div>
   );
 }

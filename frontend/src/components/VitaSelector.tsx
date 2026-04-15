@@ -34,7 +34,7 @@ const CURRENCY_LABELS: Record<Currency, string> = {
 const HEIGHT = 56;
 const RADIUS = 6;
 const BORDER_COLOR = "var(--vw-gray-1, #B9C1C2)";
-const SELECTOR_WIDTH = 110;
+const SELECTOR_WIDTH = 80;
 
 function CurrencyIcon({ currency }: { currency: Currency }) {
   return (
@@ -90,6 +90,8 @@ export function VitaSelector({
         return renderSelectedLabel(selectedCurrency);
       }}
       popupMatchSelectWidth={false}
+      variant="outlined"
+      className="vita-selector"
       style={{
         width: SELECTOR_WIDTH,
         height: HEIGHT,

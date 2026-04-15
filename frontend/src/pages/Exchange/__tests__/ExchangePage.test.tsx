@@ -133,9 +133,9 @@ async function fillFormAndContinue(
   const btcOptions = await screen.findAllByText("BTC");
   await user.click(btcOptions[btcOptions.length - 1]);
 
-  // Two spinbuttons render too: [0] is the editable source amount,
+  // Two textbox inputs render too: [0] is the editable source amount,
   // [1] is the read-only estimate. Type the amount into the first.
-  const amountInputs = await screen.findAllByRole("spinbutton");
+  const amountInputs = await screen.findAllByPlaceholderText("0,00");
   await user.clear(amountInputs[0]);
   await user.type(amountInputs[0], amount);
 
@@ -151,10 +151,13 @@ describe("ExchangePage", () => {
     getBalancesMock.mockResolvedValue(balancesResponse);
   });
 
-  it("renders the Intercambiar title", async () => {
+  it("renders the Exchange form prompt", async () => {
     render(<ExchangePage />);
     expect(
-      await screen.findByRole("heading", { name: /intercambiar/i, level: 2 }),
+      await screen.findByRole("heading", {
+        name: /¿qué deseas intercambiar\?/i,
+        level: 3,
+      }),
     ).toBeInTheDocument();
   });
 

@@ -71,12 +71,15 @@ function getStyles(
     };
   }
 
-  // secondary
+  // secondary — gradient border using background-clip technique
   return {
     ...base,
-    background: "transparent",
+    background: `
+      linear-gradient(#ffffff, #ffffff) padding-box,
+      ${PRIMARY_GRADIENT} border-box
+    `,
     color: TEXT_BLUE1,
-    border: `1px solid ${BORDER_BLUE1}`,
+    border: "1px solid transparent",
   };
 }
 

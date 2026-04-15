@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, Space, Spin, Typography, Alert } from "antd";
+import { Spin, Alert } from "antd";
 import { useExchange } from "@/hooks/useExchange";
 import { ExchangeFormStep } from "./components/ExchangeFormStep";
 import { ExchangeSummary } from "./components/ExchangeSummary";
@@ -14,8 +14,6 @@ const CURRENCIES: readonly Currency[] = [
   "USDC",
   "USDT",
 ] as const;
-
-const { Title, Text } = Typography;
 
 type View = "form" | "summary";
 
@@ -44,9 +42,6 @@ export function ExchangePage() {
     [calculateEstimate, sourceCurrency, targetCurrency, amount],
   );
 
-  // Open success modal when the mutation resolves with a completed
-  // transaction. Rejected/error responses stay on the summary view so the
-  // user can read the alert and retry.
   useEffect(() => {
     if (result && result.status === "completed") {
       setShowSuccess(true);
@@ -95,93 +90,69 @@ export function ExchangePage() {
     result && result.status !== "completed" ? result : null;
 
   return (
-    <Space direction="vertical" size={24} style={{ width: "100%" }}>
-      <div>
-        <Title
-          level={2}
-          style={{
-            margin: 0,
-            color: "var(--vw-text-primary, #010E11)",
-            fontWeight: 700,
-          }}
-        >
-          Intercambiar
-        </Title>
-        <Text
-          style={{
-            color: "var(--vw-text-secondary, #5A6B7B)",
-            fontSize: 15,
-          }}
-        >
-          Convierte entre fiat y crypto usando precios de mercado en tiempo real.
-        </Text>
-      </div>
+    <div
+      style={{
+        maxWidth: 483,
+        width: "100%",
+        minHeight: "calc(100vh - 160px)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {(apiError || rejectedTransaction) && (
+        <Alert
+          type="error"
+          showIcon
+          style={{ borderRadius: 12, marginBottom: 24 }}
+          message={
+            rejectedTransaction
+              ? "Intercambio rechazado"
+              : "Error en el intercambio"
+          }
+          description={
+            rejectedTransaction
+              ? rejectedTransaction.rejection_reason ?? "Rechazado por el servidor"
+              : apiError
+          }
+          closable
+          onClose={() => reset()}
+        />
+      )}
 
-      <Card
-        style={{
-          maxWidth: 640,
-          margin: "0 auto",
-          width: "100%",
-          borderRadius: 16,
-          border: "1px solid var(--vw-border, #DEE0E0)",
-        }}
-        styles={{ body: { padding: 40 } }}
-      >
-        {(apiError || rejectedTransaction) && (
-          <Alert
-            type="error"
-            showIcon
-            style={{ marginBottom: 24, borderRadius: 12 }}
-            message={
-              rejectedTransaction
-                ? "Intercambio rechazado"
-                : "Error en el intercambio"
-            }
-            description={
-              rejectedTransaction
-                ? rejectedTransaction.rejection_reason ?? "Rechazado por el servidor"
-                : apiError
-            }
-            closable
-            onClose={() => reset()}
-          />
-        )}
+      {isDataLoading && view === "form" && (
+        <div style={{ textAlign: "center", padding: 24 }}>
+          <Spin size="large" />
+        </div>
+      )}
 
-        {isDataLoading && view === "form" && (
-          <div style={{ textAlign: "center", padding: 24 }}>
-            <Spin size="large" />
-          </div>
-        )}
+      {!isDataLoading && view === "form" && (
+        <ExchangeFormStep
+          currencies={CURRENCIES}
+          balances={balances}
+          sourceCurrency={sourceCurrency}
+          targetCurrency={targetCurrency}
+          amount={amount}
+          estimate={estimate}
+          isPricesLoading={isPricesLoading}
+          onSourceCurrencyChange={handleSourceCurrencyChange}
+          onTargetCurrencyChange={handleTargetCurrencyChange}
+          onAmountChange={setAmount}
+          onBack={() => navigate("/")}
+          onContinue={() => setView("summary")}
+        />
+      )}
 
-        {!isDataLoading && view === "form" && (
-          <ExchangeFormStep
-            currencies={CURRENCIES}
-            balances={balances}
-            sourceCurrency={sourceCurrency}
-            targetCurrency={targetCurrency}
-            amount={amount}
-            estimate={estimate}
-            isPricesLoading={isPricesLoading}
-            onSourceCurrencyChange={handleSourceCurrencyChange}
-            onTargetCurrencyChange={handleTargetCurrencyChange}
-            onAmountChange={setAmount}
-            onBack={() => navigate("/")}
-            onContinue={() => setView("summary")}
-          />
-        )}
-
-        {view === "summary" && sourceCurrency && targetCurrency && estimate && (
-          <ExchangeSummary
-            sourceCurrency={sourceCurrency}
-            targetCurrency={targetCurrency}
-            amount={amount}
-            estimate={estimate}
-            isSubmitting={isSubmitting}
-            onBack={() => setView("form")}
-            onConfirm={handleConfirm}
-          />
-        )}
-      </Card>
+      {view === "summary" && sourceCurrency && targetCurrency && estimate && (
+        <ExchangeSummary
+          sourceCurrency={sourceCurrency}
+          targetCurrency={targetCurrency}
+          amount={amount}
+          estimate={estimate}
+          isSubmitting={isSubmitting}
+          onBack={() => setView("form")}
+          onConfirm={handleConfirm}
+        />
+      )}
 
       <ExchangeSuccessModal
         open={showSuccess}
@@ -189,6 +160,6 @@ export function ExchangePage() {
         targetAmount={result?.target_amount ?? "0"}
         onClose={handleSuccessClose}
       />
-    </Space>
+    </div>
   );
 }

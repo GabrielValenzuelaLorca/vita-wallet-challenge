@@ -1,8 +1,9 @@
-import { Typography, Space } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
 import type { Currency } from "@/types/wallet";
 import { formatCurrency } from "../utils/formatCurrency";
 import { VitaButton } from "@/components/VitaButton";
+
+import arrowLeftIcon from "@/assets/illustrations/arrow-left.png";
 
 const { Text, Title } = Typography;
 
@@ -28,31 +29,70 @@ function SummaryRow({ label, value, highlight }: SummaryRowProps) {
       style={{
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "baseline",
-        padding: "12px 0",
+        alignItems: "center",
+        padding: "4px 0",
       }}
     >
       <Text
         style={{
-          color: "var(--vw-text-secondary, #5A6B7B)",
+          fontFamily: "'Open Sans', sans-serif",
+          fontWeight: 400,
           fontSize: 14,
+          lineHeight: "19px",
+          color: "var(--vw-black, #010E11)",
         }}
       >
         {label}
       </Text>
       <Text
-        strong
         style={{
-          fontSize: highlight ? 20 : 15,
+          fontFamily: "'Open Sans', sans-serif",
+          fontWeight: 600,
+          fontSize: 16,
+          lineHeight: "22px",
+          textAlign: "right",
           color: highlight
-            ? "var(--vw-primary, #05BCB9)"
-            : "var(--vw-text-primary, #010E11)",
-          fontWeight: highlight ? 700 : 600,
+            ? "var(--vw-blue-1, #167287)"
+            : "var(--vw-black, #010E11)",
         }}
       >
         {value}
       </Text>
     </div>
+  );
+}
+
+function BackIconButton({
+  onClick,
+  disabled,
+}: {
+  onClick: () => void;
+  disabled?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label="Volver"
+      style={{
+        width: 48,
+        height: 48,
+        border: "none",
+        background: "transparent",
+        padding: 0,
+        cursor: disabled ? "not-allowed" : "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <img
+        src={arrowLeftIcon}
+        alt=""
+        style={{ width: 28, height: 28 }}
+      />
+    </button>
   );
 }
 
@@ -74,31 +114,33 @@ export function ExchangeSummary({
   const rateLine = `1 ${targetCurrency} = ${formatCurrency(rateTargetToSource, sourceCurrency)}`;
 
   return (
-    <div style={{ width: "100%" }}>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+      }}
+    >
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 12,
-          marginBottom: 32,
+          gap: 16,
+          marginBottom: 80,
+          marginLeft: -64,
         }}
       >
-        <VitaButton
-          variant="secondary"
-          vitaSize="compact"
-          onClick={onBack}
-          disabled={isSubmitting}
-          icon={<ArrowLeftOutlined />}
-        >
-          {""}
-        </VitaButton>
+        <BackIconButton onClick={onBack} disabled={isSubmitting} />
         <Title
           level={3}
           style={{
             margin: 0,
-            color: "var(--vw-text-primary, #010E11)",
-            fontWeight: 700,
-            fontSize: 24,
+            fontFamily: "'Open Sans', sans-serif",
+            color: "var(--vw-black, #010E11)",
+            fontWeight: 600,
+            fontSize: 28,
+            lineHeight: "38px",
           }}
         >
           Resumen de transacción
@@ -107,9 +149,12 @@ export function ExchangeSummary({
 
       <div
         style={{
-          padding: "8px 4px 24px",
-          marginBottom: 32,
-          borderBottom: "1px solid var(--vw-border, #DEE0E0)",
+          background: "#F9F9F9",
+          borderRadius: 6,
+          padding: "11px 24px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
         }}
       >
         <SummaryRow
@@ -124,23 +169,30 @@ export function ExchangeSummary({
         />
       </div>
 
-      <Space style={{ width: "100%", justifyContent: "space-between" }}>
-        <VitaButton
-          variant="secondary"
-          vitaSize="compact"
-          onClick={onBack}
-          disabled={isSubmitting}
-        >
-          Atrás
-        </VitaButton>
-        <VitaButton
-          vitaSize="compact"
-          loading={isSubmitting}
-          onClick={onConfirm}
-        >
-          Intercambiar
-        </VitaButton>
-      </Space>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "auto",
+          paddingTop: 48,
+        }}
+      >
+        <div style={{ width: 183 }}>
+          <VitaButton
+            variant="secondary"
+            block
+            onClick={onBack}
+            disabled={isSubmitting}
+          >
+            Atrás
+          </VitaButton>
+        </div>
+        <div style={{ width: 183 }}>
+          <VitaButton block loading={isSubmitting} onClick={onConfirm}>
+            Intercambiar
+          </VitaButton>
+        </div>
+      </div>
     </div>
   );
 }

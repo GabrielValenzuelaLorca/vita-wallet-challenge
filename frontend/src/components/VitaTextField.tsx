@@ -116,13 +116,13 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
   ) {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const hasValue = value !== undefined && value !== "";
-    const showCheck = type === "text" && hasValue && !error;
+    const showCheck =
+      variant === "default" && type === "text" && hasValue && !error;
     const borderColor = error ? ERROR_COLOR : BORDER_COLOR;
 
     const mergedInputStyle: React.CSSProperties = {
       ...inputStyle,
       borderColor,
-      ...(variant === "amount" ? { paddingLeft: prefix ? 48 : 16 } : {}),
     };
 
     const suffix = type === "password"
@@ -130,6 +130,9 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
       : showCheck
         ? <CheckSuffix />
         : undefined;
+
+    const extraInputProps =
+      variant === "amount" ? { inputMode: "decimal" as const } : {};
 
     const inputElement = (
       <Input
@@ -141,6 +144,7 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
         prefix={prefix}
         suffix={suffix}
         disabled={disabled}
+        readOnly={inputProps?.readOnly}
         style={mergedInputStyle}
         styles={{
           input: {
@@ -150,6 +154,7 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
             background: "transparent",
           },
         }}
+        {...extraInputProps}
         {...inputProps}
       />
     );

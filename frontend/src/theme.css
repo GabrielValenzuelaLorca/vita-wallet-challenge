@@ -75,6 +75,19 @@ html, body, #root {
   position: relative;
 }
 
+.vita-selector.ant-select .ant-select-selector,
+.vita-selector.ant-select {
+  background: transparent !important;
+  border: 1px solid var(--vw-gray-1, #B9C1C2) !important;
+  border-radius: var(--vw-radius-sm, 6px) !important;
+  height: 56px !important;
+}
+.vita-selector.ant-select .ant-select-content,
+.vita-selector.ant-select .ant-select-selection-item,
+.vita-selector.ant-select .ant-select-selection-placeholder {
+  line-height: 54px !important;
+}
+
 .ant-layout-sider .ant-menu-dark.ant-menu-inline {
   padding: 0;
 }
