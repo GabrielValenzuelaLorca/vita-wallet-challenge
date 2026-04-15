@@ -1,48 +1,29 @@
-import { Layout, Menu, Button, Typography, Avatar } from "antd";
-import {
-  DashboardOutlined,
-  SwapOutlined,
-  UnorderedListOutlined,
-  LogoutOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { Layout, Menu } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuth";
+import { SidebarPattern } from "./SidebarPattern";
 import type { ReactNode } from "react";
 
-import coinLogo from "@/assets/illustrations/coin-logo.png";
-
 const { Sider, Content } = Layout;
-const { Text } = Typography;
 
 interface MenuItem {
   key: string;
   label: ReactNode;
-  icon: ReactNode;
 }
 
 const menuItems: MenuItem[] = [
-  {
-    key: "/",
-    icon: <DashboardOutlined />,
-    label: <Link to="/">Inicio</Link>,
-  },
-  {
-    key: "/exchange",
-    icon: <SwapOutlined />,
-    label: <Link to="/exchange">Intercambiar</Link>,
-  },
-  {
-    key: "/history",
-    icon: <UnorderedListOutlined />,
-    label: <Link to="/history">Historial</Link>,
-  },
+  { key: "/", label: <Link to="/">Inicio</Link> },
+  { key: "/transfer", label: <Link to="/">Transferir</Link> },
+  { key: "/recharge", label: <Link to="/">Recargar</Link> },
+  { key: "/exchange", label: <Link to="/exchange">Intercambiar</Link> },
+  { key: "/profile", label: <Link to="/">Perfil</Link> },
+  { key: "/help", label: <Link to="/">Ayuda</Link> },
 ];
 
 export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuthContext();
+  const { logout } = useAuthContext();
 
   const handleLogout = () => {
     logout();
@@ -52,7 +33,7 @@ export function AppLayout() {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-        width={280}
+        width={372}
         breakpoint="lg"
         collapsedWidth={72}
         className="vw-sidebar"
@@ -65,35 +46,17 @@ export function AppLayout() {
           height: "100vh",
         }}
       >
+        <SidebarPattern />
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             height: "100%",
             justifyContent: "space-between",
+            position: "relative",
           }}
         >
-          <div>
-            <div
-              style={{
-                padding: "24px 16px",
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-              }}
-            >
-              <img
-                src={coinLogo}
-                alt="Vita Wallet"
-                style={{ width: 36, height: 36 }}
-              />
-              <Text
-                strong
-                style={{ color: "#fff", fontSize: 18, whiteSpace: "nowrap" }}
-              >
-                Vita Wallet
-              </Text>
-            </div>
+          <div style={{ paddingTop: 120 }}>
             <Menu
               theme="dark"
               mode="inline"
@@ -102,54 +65,26 @@ export function AppLayout() {
               style={{
                 background: "transparent",
                 borderRight: 0,
-                fontSize: 15,
               }}
             />
           </div>
-          <div
-            style={{
-              padding: 16,
-              borderTop: "1px solid rgba(255,255,255,0.08)",
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-            }}
-          >
-            {user && (
-              <div
-                style={{ display: "flex", alignItems: "center", gap: 10 }}
-              >
-                <Avatar
-                  size={36}
-                  icon={<UserOutlined />}
-                  style={{
-                    background: "var(--vw-primary, #07A5A7)",
-                  }}
-                />
-                <Text
-                  style={{
-                    color: "rgba(255,255,255,0.92)",
-                    fontSize: 13,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {user.email}
-                </Text>
-              </div>
-            )}
-            <Button
-              block
-              icon={<LogoutOutlined />}
-              onClick={handleLogout}
+          <div style={{ padding: "0 0 24px" }}>
+            <Menu
+              theme="dark"
+              mode="inline"
+              selectable={false}
+              items={[
+                {
+                  key: "logout",
+                  label: "Cerrar sesión",
+                  onClick: handleLogout,
+                },
+              ]}
               style={{
                 background: "transparent",
-                color: "rgba(255,255,255,0.92)",
-                borderColor: "rgba(255,255,255,0.24)",
+                borderRight: 0,
               }}
-            >
-              Logout
-            </Button>
+            />
           </div>
         </div>
       </Sider>

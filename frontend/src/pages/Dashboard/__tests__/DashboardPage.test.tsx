@@ -23,6 +23,21 @@ vi.mock("@/hooks/useBalances", () => ({
   useBalances: (): UseBalancesReturn => mockBalancesState,
 }));
 
+vi.mock("@/hooks/useTransactions", () => ({
+  useTransactions: () => ({
+    transactions: [],
+    page: 1,
+    perPage: 10,
+    total: 0,
+    statusFilter: undefined,
+    setPage: vi.fn(),
+    setStatusFilter: vi.fn(),
+    isLoading: false,
+    isError: false,
+    error: null,
+  }),
+}));
+
 vi.mock("@/hooks/useAuth", () => ({
   useAuthContext: () => ({
     user: {
@@ -180,8 +195,8 @@ describe("DashboardPage", () => {
     };
 
     const { container } = renderDashboard();
-    const spinner = container.querySelector(".ant-spin");
-    expect(spinner).not.toBeInTheDocument();
+    const spinningSpinner = container.querySelector(".ant-spin-spinning");
+    expect(spinningSpinner).not.toBeInTheDocument();
     expect(screen.queryByText("Error loading balances")).not.toBeInTheDocument();
   });
 });

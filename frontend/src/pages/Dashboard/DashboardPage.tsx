@@ -2,6 +2,7 @@ import { Typography, Spin, Alert, Space } from "antd";
 import { useBalances } from "@/hooks/useBalances";
 import { useAuthContext } from "@/hooks/useAuth";
 import { BalanceList } from "./components/BalanceList";
+import { TransactionHistory } from "./components/TransactionHistory";
 
 const { Title, Text } = Typography;
 
@@ -48,6 +49,8 @@ export function DashboardPage() {
         />
       )}
       {!isLoading && !isError && <BalanceList wallets={balances} />}
+
+      <TransactionHistory />
     </Space>
   );
 }

@@ -69,15 +69,10 @@ html, body, #root {
  * - Pill-shaped menu items with primary-teal active state
  * - Larger items with more vertical breathing room
  */
-.vw-sidebar {
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0) 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ctext x='10' y='40' font-family='Arial,sans-serif' font-size='32' fill='%23ffffff' fill-opacity='0.05'%3E%24%3C/text%3E%3Ctext x='45' y='65' font-family='Arial,sans-serif' font-size='32' fill='%23ffffff' fill-opacity='0.05'%3E%24%3C/text%3E%3C/svg%3E") !important;
-  background-size: auto, 80px 80px !important;
-}
 
 .vw-sidebar .ant-layout-sider-children {
   background: transparent !important;
+  position: relative;
 }
 
 .ant-layout-sider .ant-menu-dark.ant-menu-inline {
@@ -85,12 +80,14 @@ html, body, #root {
 }
 
 .ant-layout-sider .ant-menu-dark.ant-menu-inline .ant-menu-item {
-  height: 52px;
-  line-height: 52px;
-  margin: 6px 0;
-  padding: 0 24px !important;
+  height: 65px;
+  line-height: 33px;
+  margin: 8px 0;
+  padding: 16px 0 16px 80px !important;
+  width: 75.27% !important;
   border-radius: 0 32.5px 32.5px 0 !important;
-  font-size: 18px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
   font-weight: 400;
 }
 
@@ -109,5 +106,5 @@ html, body, #root {
   display: none !important;
 }
 .ant-layout-sider .ant-menu-dark .ant-menu-item .ant-menu-item-icon {
-  font-size: 20px;
+  display: none;
 }
