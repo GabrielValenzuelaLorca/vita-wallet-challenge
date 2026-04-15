@@ -42,8 +42,8 @@ export function LoginPage() {
               margin: "0 0 32px 0",
               fontFamily: "'Open Sans', sans-serif",
               fontWeight: 600,
-              fontSize: 28,
-              lineHeight: "38px",
+              fontSize: 48,
+              lineHeight: "65px",
               color: "var(--vw-black, #010E11)",
             }}
           >

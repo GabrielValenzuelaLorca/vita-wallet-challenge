@@ -73,7 +73,15 @@ const iconButton: React.CSSProperties = {
 
 function CheckSuffix() {
   return (
-    <img src={checkIcon} alt="" style={{ width: 18, height: 18 }} />
+    <img
+      src={checkIcon}
+      alt=""
+      style={{
+        width: 18,
+        height: 18,
+        filter: "invert(62%) sepia(63%) saturate(1200%) hue-rotate(137deg) brightness(95%) contrast(96%)",
+      }}
+    />
   );
 }
 

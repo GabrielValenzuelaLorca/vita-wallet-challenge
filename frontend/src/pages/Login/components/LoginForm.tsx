@@ -52,8 +52,8 @@ export function LoginForm({
         <Form.Item
           name="email"
           rules={[
-            { required: true, message: "Please enter your email" },
-            { type: "email", message: "Please enter a valid email" },
+            { required: true, message: "Ingresa tu correo electrónico" },
+            { type: "email", message: "Ingresa un correo válido" },
           ]}
         >
           <VitaTextField
@@ -65,8 +65,8 @@ export function LoginForm({
         <Form.Item
           name="password"
           rules={[
-            { required: true, message: "Please enter your password" },
-            { min: 6, message: "Password must be at least 6 characters" },
+            { required: true, message: "Ingresa tu contraseña" },
+            { min: 6, message: "La contraseña debe tener al menos 6 caracteres" },
           ]}
         >
           <VitaTextField
