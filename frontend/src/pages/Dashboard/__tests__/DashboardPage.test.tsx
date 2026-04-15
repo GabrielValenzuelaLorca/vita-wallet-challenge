@@ -110,7 +110,7 @@ describe("DashboardPage", () => {
 
     renderDashboard();
 
-    expect(screen.getByText("Error loading balances")).toBeInTheDocument();
+    expect(screen.getByText("Error al cargar los saldos")).toBeInTheDocument();
     expect(screen.getByText("Network error")).toBeInTheDocument();
   });
 
@@ -185,6 +185,6 @@ describe("DashboardPage", () => {
     const { container } = renderDashboard();
     const spinningSpinner = container.querySelector(".ant-spin-spinning");
     expect(spinningSpinner).not.toBeInTheDocument();
-    expect(screen.queryByText("Error loading balances")).not.toBeInTheDocument();
+    expect(screen.queryByText("Error al cargar los saldos")).not.toBeInTheDocument();
   });
 });

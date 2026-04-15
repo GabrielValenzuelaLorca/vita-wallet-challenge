@@ -35,7 +35,7 @@ export function LoginForm({
       {errorMessage !== null && (
         <Alert
           type="error"
-          title={errorMessage}
+          message={errorMessage}
           showIcon
           closable={false}
           style={{ marginBottom: 16 }}
@@ -78,7 +78,8 @@ export function LoginForm({
         <button
           type="button"
           className={styles.forgotPassword}
-          onClick={() => {}}
+          disabled
+          title="Próximamente"
         >
           ¿Olvidaste tu contraseña?
         </button>

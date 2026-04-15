@@ -8,7 +8,12 @@ interface VitaSelectOption<T extends string | number> {
 interface VitaSelectProps<T extends string | number = string> {
   options: VitaSelectOption<T>[];
   value?: T;
-  onChange?: (value: T) => void;
+  /**
+   * Called when the user picks an option. When `allowClear` is true and the
+   * user clears the selection, antd dispatches `undefined` so the signature
+   * must include it.
+   */
+  onChange?: (value: T | undefined) => void;
   placeholder?: string;
   allowClear?: boolean;
   disabled?: boolean;

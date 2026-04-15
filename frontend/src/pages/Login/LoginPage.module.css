@@ -16,7 +16,6 @@
 }
 
 .title {
-  font-family: 'Open Sans', sans-serif;
   font-weight: 600;
   font-size: 48px;
   line-height: 65px;
@@ -44,7 +43,6 @@
   text-align: right;
   margin-top: var(--vw-space-xs);
   margin-bottom: var(--vw-space-lg);
-  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   color: var(--vw-black, #010E11);
   background: none;
@@ -52,6 +50,11 @@
   padding: 0;
   cursor: pointer;
   text-decoration: none;
+}
+
+.forgotPassword:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .forgotPassword:hover {

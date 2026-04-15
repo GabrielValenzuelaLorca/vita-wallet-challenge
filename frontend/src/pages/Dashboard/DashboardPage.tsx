@@ -40,8 +40,8 @@ export function DashboardPage() {
       {isError && (
         <Alert
           type="error"
-          message="Error loading balances"
-          description={error?.message ?? "An unexpected error occurred"}
+          message="Error al cargar los saldos"
+          description={error?.message ?? "Ocurrió un error inesperado"}
           showIcon
         />
       )}
