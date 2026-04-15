@@ -1,11 +1,10 @@
 import { Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import type { TransactionSchema } from "@/schemas/transaction";
-import type { TransactionStatus } from "@/types/transaction";
+import type { Transaction, TransactionStatus } from "@/types/transaction";
 import { formatCurrency } from "@/utils/formatCurrency";
 
 interface TransactionTableProps {
-  transactions: TransactionSchema[];
+  transactions: Transaction[];
   page: number;
   perPage: number;
   total: number;
@@ -19,21 +18,27 @@ const STATUS_COLORS: Record<TransactionStatus, string> = {
   rejected: "red",
 };
 
-const columns: ColumnsType<TransactionSchema> = [
+const STATUS_LABELS: Record<TransactionStatus, string> = {
+  pending: "Pendiente",
+  completed: "Completada",
+  rejected: "Rechazada",
+};
+
+const columns: ColumnsType<Transaction> = [
   {
-    title: "Date",
+    title: "Fecha",
     dataIndex: "created_at",
     key: "created_at",
-    render: (value: string) => new Date(value).toLocaleString(),
+    render: (value: string) => new Date(value).toLocaleString("es-CL"),
   },
   {
-    title: "From",
+    title: "Desde",
     key: "from",
     render: (_value, record) =>
       formatCurrency(record.source_amount, record.source_currency),
   },
   {
-    title: "To",
+    title: "Hacia",
     key: "to",
     render: (_value, record) =>
       record.status === "rejected"
@@ -41,21 +46,21 @@ const columns: ColumnsType<TransactionSchema> = [
         : formatCurrency(record.target_amount, record.target_currency),
   },
   {
-    title: "Rate",
+    title: "Tasa",
     dataIndex: "exchange_rate",
     key: "exchange_rate",
     render: (value: string) => parseFloat(value).toString(),
   },
   {
-    title: "Status",
+    title: "Estado",
     dataIndex: "status",
     key: "status",
     render: (value: TransactionStatus) => (
-      <Tag color={STATUS_COLORS[value]}>{value.toUpperCase()}</Tag>
+      <Tag color={STATUS_COLORS[value]}>{STATUS_LABELS[value]}</Tag>
     ),
   },
   {
-    title: "Reason",
+    title: "Motivo",
     dataIndex: "rejection_reason",
     key: "rejection_reason",
     render: (value: string | null) => value ?? "--",
@@ -71,7 +76,7 @@ export function TransactionTable({
   isLoading,
 }: TransactionTableProps) {
   return (
-    <Table<TransactionSchema>
+    <Table<Transaction>
       rowKey="id"
       loading={isLoading}
       dataSource={transactions}
@@ -82,7 +87,7 @@ export function TransactionTable({
         total,
         showSizeChanger: false,
         onChange: onPageChange,
-        showTotal: (count) => `Total: ${count} transactions`,
+        showTotal: (count) => `Total: ${count} transacciones`,
       }}
     />
   );

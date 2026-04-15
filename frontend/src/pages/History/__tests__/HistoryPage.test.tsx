@@ -96,8 +96,8 @@ describe("HistoryPage", () => {
     getTransactionsMock.mockResolvedValue(sampleData);
     render(<HistoryPage />);
     await waitFor(() => {
-      expect(screen.getByText("COMPLETED")).toBeInTheDocument();
-      expect(screen.getByText("REJECTED")).toBeInTheDocument();
+      expect(screen.getByText("Completada")).toBeInTheDocument();
+      expect(screen.getByText("Rechazada")).toBeInTheDocument();
     });
   });
 
@@ -117,7 +117,7 @@ describe("HistoryPage", () => {
 
     const filter = screen.getByRole("combobox");
     await user.click(filter);
-    const option = await screen.findByText("Completada");
+    const option = await screen.findByText("Completadas");
     await user.click(option);
 
     await waitFor(() =>
@@ -133,7 +133,7 @@ describe("HistoryPage", () => {
     getTransactionsMock.mockResolvedValue(sampleData);
     render(<HistoryPage />);
     await waitFor(() => {
-      expect(screen.getByText(/Total: 2 transactions/i)).toBeInTheDocument();
+      expect(screen.getByText(/Total: 2 transacciones/i)).toBeInTheDocument();
     });
   });
 

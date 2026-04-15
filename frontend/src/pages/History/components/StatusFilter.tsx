@@ -7,9 +7,9 @@ interface StatusFilterProps {
 }
 
 const OPTIONS: { label: string; value: TransactionStatus }[] = [
-  { label: "Pendiente", value: "pending" },
-  { label: "Completada", value: "completed" },
-  { label: "Rechazada", value: "rejected" },
+  { label: "Pendientes", value: "pending" },
+  { label: "Completadas", value: "completed" },
+  { label: "Rechazadas", value: "rejected" },
 ];
 
 export function StatusFilter({ value, onChange }: StatusFilterProps) {

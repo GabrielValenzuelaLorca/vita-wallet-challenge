@@ -1,6 +1,6 @@
 import { Typography, Alert, Spin } from "antd";
 import { useTransactions } from "@/hooks/useTransactions";
-import type { TransactionSchema } from "@/schemas/transaction";
+import type { Transaction } from "@/types/transaction";
 import { formatCurrency } from "@/utils/formatCurrency";
 
 const { Title, Text } = Typography;
@@ -39,7 +39,7 @@ function getTransactionDisplay(
   }
 }
 
-function describeTransaction(transaction: TransactionSchema): {
+function describeTransaction(transaction: Transaction): {
   kind: TransactionKind;
   action: string;
   amount: string;
@@ -84,7 +84,7 @@ function describeTransaction(transaction: TransactionSchema): {
   }
 }
 
-function TransactionRow({ transaction }: { transaction: TransactionSchema }) {
+function TransactionRow({ transaction }: { transaction: Transaction }) {
   const { kind, action, amount } = describeTransaction(transaction);
   const display = getTransactionDisplay(kind, action);
 
@@ -148,8 +148,8 @@ export function TransactionHistory() {
       {isError && (
         <Alert
           type="error"
-          message="Error loading transactions"
-          description={error?.message ?? "An unexpected error occurred"}
+          message="Error al cargar las transacciones"
+          description={error?.message ?? "Ocurrió un error inesperado"}
           showIcon
           style={{ marginBottom: 16 }}
         />
