@@ -3,7 +3,7 @@ import { useTransactions } from "@/hooks/useTransactions";
 import { StatusFilter } from "./components/StatusFilter";
 import { TransactionTable } from "./components/TransactionTable";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export function HistoryPage() {
   const {
@@ -21,10 +21,39 @@ export function HistoryPage() {
 
   return (
     <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-      <Title level={2}>Historial de transacciones</Title>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          gap: 24,
+          flexWrap: "wrap",
+        }}
+      >
+        <Title level={2} style={{ margin: 0 }}>
+          Historial de transacciones
+        </Title>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: 4,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 13,
+              color: "var(--vw-text-secondary, #5A6B7B)",
+            }}
+          >
+            Filtrar por estado
+          </Text>
+          <StatusFilter value={statusFilter} onChange={setStatusFilter} />
+        </div>
+      </div>
       <Card>
         <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-          <StatusFilter value={statusFilter} onChange={setStatusFilter} />
           {isError && (
             <Alert
               type="error"
