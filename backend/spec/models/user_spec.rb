@@ -3,7 +3,17 @@ require "rails_helper"
 RSpec.describe User, type: :model do
   describe "associations" do
     it { is_expected.to have_many(:wallets).dependent(:destroy) }
-    it { is_expected.to have_many(:transactions).dependent(:destroy) }
+    it { is_expected.to have_many(:transactions).dependent(:restrict_with_error) }
+  end
+
+  describe "destruction" do
+    it "prevents deletion when user has transactions" do
+      user = create(:user, :with_wallets)
+      create(:transaction, user: user)
+
+      expect(user.destroy).to be false
+      expect(user.errors[:base]).to be_present
+    end
   end
 
   describe "validations" do

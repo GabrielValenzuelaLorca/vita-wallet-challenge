@@ -1,10 +1,6 @@
 class ExchangeController < ApplicationController
   before_action :authenticate_user!
 
-  rescue_from ActionController::ParameterMissing do |exception|
-    render_error(code: "invalid_params", message: exception.message)
-  end
-
   def create
     permitted = exchange_params
 

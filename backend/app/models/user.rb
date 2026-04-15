@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :wallets, dependent: :destroy
-  has_many :transactions, dependent: :destroy
+  has_many :transactions, dependent: :restrict_with_error
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },

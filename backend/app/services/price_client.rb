@@ -1,5 +1,6 @@
 require "net/http"
 require "json"
+require "openssl"
 
 # Fetches crypto/fiat exchange rates from the Vita Wallet stage API.
 #
@@ -52,6 +53,11 @@ class PriceClient
     raise ApiError.new(
       "Price API timeout: #{error.message}",
       code: :timeout
+    )
+  rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, OpenSSL::SSL::SSLError => error
+    raise ApiError.new(
+      "Price API connection error: #{error.message}",
+      code: :connection_error
     )
   end
 

@@ -9,6 +9,13 @@ RSpec.describe JwtService do
       expect(token).to be_a(String)
       expect(token).not_to be_empty
     end
+
+    it "includes iat in the payload" do
+      token = described_class.encode(user_id: user_id)
+      payload = described_class.decode(token: token)
+      expect(payload).to have_key("iat")
+      expect(payload["iat"]).to be_within(2).of(Time.now.to_i)
+    end
   end
 
   describe ".decode" do
@@ -42,6 +49,64 @@ RSpec.describe JwtService do
       token = described_class.encode(user_id: 99)
       payload = described_class.decode(token: token)
       expect(payload["user_id"]).to eq(99)
+    end
+  end
+
+  describe ".token_valid_for_user?" do
+    let(:user) { create(:user) }
+
+    context "when tokens_valid_after is nil" do
+      it "considers any token valid" do
+        payload = { "iat" => 1.hour.ago.to_i }
+        expect(described_class.token_valid_for_user?(payload, user)).to be true
+      end
+    end
+
+    context "when token was issued before tokens_valid_after" do
+      it "rejects the token" do
+        user.update!(tokens_valid_after: Time.current)
+        payload = { "iat" => 1.hour.ago.to_i }
+        expect(described_class.token_valid_for_user?(payload, user)).to be false
+      end
+    end
+
+    context "when token was issued after tokens_valid_after" do
+      it "accepts the token" do
+        user.update!(tokens_valid_after: 2.hours.ago)
+        payload = { "iat" => 1.hour.ago.to_i }
+        expect(described_class.token_valid_for_user?(payload, user)).to be true
+      end
+    end
+  end
+
+  describe ".invalidate_tokens!" do
+    let(:user) { create(:user) }
+
+    it "sets tokens_valid_after to current time" do
+      freeze_time do
+        described_class.invalidate_tokens!(user)
+        expect(user.reload.tokens_valid_after).to eq(Time.current)
+      end
+    end
+
+    it "causes previously issued tokens to become invalid" do
+      token = described_class.encode(user_id: user.id)
+      payload = described_class.decode(token: token)
+
+      travel_to 1.second.from_now do
+        described_class.invalidate_tokens!(user)
+        expect(described_class.token_valid_for_user?(payload, user.reload)).to be false
+      end
+    end
+
+    it "allows tokens issued after invalidation" do
+      described_class.invalidate_tokens!(user)
+
+      travel_to 1.second.from_now do
+        token = described_class.encode(user_id: user.id)
+        payload = described_class.decode(token: token)
+        expect(described_class.token_valid_for_user?(payload, user.reload)).to be true
+      end
     end
   end
 end

@@ -191,5 +191,55 @@ RSpec.describe PriceClient do
         end
       end
     end
+
+    context "when a SocketError occurs" do
+      before do
+        stub_request(:get, api_url).to_raise(SocketError.new("getaddrinfo: Name or service not known"))
+      end
+
+      it "raises ApiError with connection_error code" do
+        expect { client.fetch_prices }.to raise_error(PriceClient::ApiError) do |error|
+          expect(error.code).to eq(:connection_error)
+          expect(error.message).to include("connection error")
+        end
+      end
+    end
+
+    context "when connection is refused" do
+      before do
+        stub_request(:get, api_url).to_raise(Errno::ECONNREFUSED.new("Connection refused"))
+      end
+
+      it "raises ApiError with connection_error code" do
+        expect { client.fetch_prices }.to raise_error(PriceClient::ApiError) do |error|
+          expect(error.code).to eq(:connection_error)
+        end
+      end
+    end
+
+    context "when host is unreachable" do
+      before do
+        stub_request(:get, api_url).to_raise(Errno::EHOSTUNREACH.new("No route to host"))
+      end
+
+      it "raises ApiError with connection_error code" do
+        expect { client.fetch_prices }.to raise_error(PriceClient::ApiError) do |error|
+          expect(error.code).to eq(:connection_error)
+        end
+      end
+    end
+
+    context "when SSL error occurs" do
+      before do
+        stub_request(:get, api_url).to_raise(OpenSSL::SSL::SSLError.new("SSL_connect returned=1"))
+      end
+
+      it "raises ApiError with connection_error code" do
+        expect { client.fetch_prices }.to raise_error(PriceClient::ApiError) do |error|
+          expect(error.code).to eq(:connection_error)
+          expect(error.message).to include("connection error")
+        end
+      end
+    end
   end
 end

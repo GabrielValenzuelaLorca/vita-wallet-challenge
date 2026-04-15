@@ -82,7 +82,12 @@ GEM
     bigdecimal (4.1.1)
     bootsnap (1.23.0)
       msgpack (~> 1.2)
+    brakeman (8.0.4)
+      racc
     builder (3.3.0)
+    bundler-audit (0.9.3)
+      bundler (>= 1.2.0)
+      thor (~> 1.0)
     concurrent-ruby (1.3.6)
     crack (1.0.1)
       bigdecimal
@@ -160,6 +165,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.23)
+    rack-attack (6.8.0)
+      rack (>= 1.0, < 4)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
     rack-test (2.2.0)
@@ -248,12 +255,15 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap
+  brakeman
+  bundler-audit
   debug
   factory_bot_rails
   faker
   jwt (~> 2.7)
   pg (~> 1.1)
   puma (>= 5.0)
+  rack-attack
   rack-cors
   rails (~> 7.0.10)
   rspec-rails (~> 7.0)
