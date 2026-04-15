@@ -42,12 +42,26 @@ Mini aplicación fullstack tipo Vita Wallet: una wallet multi-moneda que permite
 
 ## Setup
 
-### Requisitos previos
+### Opción A — Docker (recomendado, 1 comando)
 
-- **Ruby** 3.4.x (ver `backend/.ruby-version`)
-- **Node.js** 20+ y **npm**
-- **PostgreSQL** 14+ corriendo localmente
-- **Bundler** (`gem install bundler`)
+Requisitos: Docker 20+ con `docker compose` v2.
+
+```bash
+docker compose up --build
+```
+
+Esto levanta tres contenedores:
+- `postgres` (Postgres 16) con volumen persistente
+- `backend` (Rails 7 API) — espera a postgres, corre `db:prepare` (crea + migra + seedea si la DB está vacía) y arranca Puma
+- `frontend` (Vite build servido por nginx) — proxea `/api/*` al backend en la red interna del compose, así que no hay CORS ni que configurar `VITE_API_URL`
+
+La app queda en **http://localhost:8080** y el backend en **http://localhost:3000**. El usuario demo de los seeds es `demo@vitawallet.com` / `password123`.
+
+Para resetear la DB: `docker compose down -v` (borra el volumen `postgres_data`).
+
+### Opción B — Setup local (sin Docker)
+
+Requisitos: **Ruby 3.2.2** (ver `backend/.ruby-version`), **Node.js 20+**, **PostgreSQL 14+** corriendo localmente, **Bundler**.
 
 ### Backend (`/backend`)
 
@@ -224,17 +238,39 @@ La tabla `wallets` tiene un registro por moneda por usuario (con `currency` como
 - **`DECIMAL(30,18)`** para el `exchange_rate` — rates extremos como CLP→BTC (`0.00000000016…`) o BTC→CLP (`~60_000_000_000`) necesitan más precisión.
 - **`BigDecimal`** en Ruby para todos los cálculos — jamás `Float`. Cero riesgo de errores de redondeo IEEE 754.
 
-### 5. Exchange Engine atómico con pessimistic locking
-El `ExchangeService` ejecuta toda la operación dentro de `ActiveRecord::Base.transaction`:
-1. Lock pessimista sobre ambas wallets (`lock!`).
-2. Valida saldo suficiente.
-3. Crea `Transaction` en estado `pending`.
-4. Calcula monto destino con `BigDecimal` (fetch price desde `PriceService`).
-5. Debita source wallet, credita target wallet.
-6. Marca `Transaction` como `completed` y persiste el `exchange_rate` usado.
-7. **En cualquier falla**: rollback automático + marca `rejected` con `rejection_reason` (`insufficient_balance`, `price_fetch_failed`, etc.).
+### 5. Exchange Engine: two-phase commit con estado `pending` real
 
-El pessimistic lock previene race conditions cuando dos requests concurrentes intentan debitar la misma wallet.
+El spec lista tres estados (`pending` / `completed` / `rejected`) sin indicar cuándo se usa cada uno. Consulté al equipo y la respuesta fue:
+
+> "en esencia, la transaccion en estado pending, debe asegurar que el usuario se le descuente el balance de inmediato, para evitar condiciones de carrera."
+
+Eso me llevó al patrón **two-phase commit** dentro de `ExchangeService.execute`:
+
+**Phase 1 — reservar (commit DB):**
+1. Lock pessimista de la source wallet (`SELECT FOR UPDATE`).
+2. Valida saldo. Si insuficiente → crea `Transaction(status: "rejected", rejection_reason: "insufficient_balance")` y termina.
+3. Debita la source wallet.
+4. Persiste `Transaction(status: "pending", target_amount: 0, exchange_rate: 0)`.
+5. **Commit.** A partir de acá el balance está descontado y otro request concurrente no puede gastar el mismo dinero.
+
+**Phase 2 — completar:**
+1. `PriceService.fetch_prices` (fuera del lock, no bloquea otras wallets).
+2. `RateCalculator.call` calcula `target_amount` y `exchange_rate`.
+3. Lock + credit de la target wallet.
+4. `Transaction#update(status: "completed", target_amount:, exchange_rate:)`.
+
+**Compensación:**
+- Si Phase 2 falla con `PriceClient::ApiError` (timeout, conexión, 5xx), se ejecuta **refund automático**: la source wallet recupera el balance descontado y la `Transaction` pasa a `rejected` con `rejection_reason: "price_fetch_failed"`.
+- Si Phase 2 falla por una razón no rescatada (DB error, crash del proceso, conexión perdida), la `Transaction` queda intencionalmente en `pending` con el balance descontado. Eso preserva el audit trail y un job de recuperación (fuera del scope de esta prueba) podría reintentar el credit o ejecutar el refund. No queda inconsistencia: el balance descontado está respaldado por una `Transaction(status: "pending")` visible para el usuario.
+
+El endpoint `POST /exchange` sigue siendo síncrono (devuelve `completed` o `rejected` al cliente). El estado `pending` vive como puente interno y como red de seguridad ante fallas.
+
+**Cómo evolucionaría a un flujo verdaderamente async** (settlement contra un exchange real):
+- Phase 1 se mantiene igual.
+- Phase 2 se encola en Sidekiq y se ejecuta en background.
+- `POST /exchange` devuelve `202 Accepted` con el `transaction.id` en estado `pending`.
+- El frontend hace polling sobre `GET /transactions/:id` (o un canal SSE) hasta ver `completed` / `rejected`.
+- El job además puede reintentar idempotentemente y agregar timeouts duros (ej. "si lleva 30min en pending, refund").
 
 ### 6. `PriceService` con cache y cliente swappable
 - **`PriceClient`**: HTTP client real contra `https://api.stage.vitawallet.io/api/prices_quote`.

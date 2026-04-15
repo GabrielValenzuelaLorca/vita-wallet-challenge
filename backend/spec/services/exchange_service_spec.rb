@@ -325,63 +325,82 @@ RSpec.describe ExchangeService do
       end
     end
 
-    context "atomicity / rollback on DB error" do
-      it "rolls back source wallet debit if target wallet save fails" do
-        # Ensure user and wallets are created before stubbing
-        user_record = user
-        target_wallet = user_record.wallets.find_by!(currency: "BTC")
-        save_call_count = 0
-
-        allow(target_wallet).to receive(:save!).and_wrap_original do |method, *args|
-          save_call_count += 1
-          raise ActiveRecord::RecordInvalid.new(target_wallet) if save_call_count >= 1
-          method.call(*args)
-        end
-
-        # Stub the lock query to return our instrumented target wallet
+    # When Phase 2 fails for an UN-rescued reason (DB error, crash, etc.) the
+    # transaction is intentionally left in :pending with the source funds
+    # already debited. This is the recoverable state the team asked for: the
+    # debit prevents a concurrent caller from double-spending the same balance,
+    # and a recovery job (out of scope for this challenge) would later either
+    # retry the credit or refund.
+    context "Phase 2 DB failure (recoverable pending state)" do
+      def stub_target_save_to_fail(user_record, currency)
+        target_wallet = user_record.wallets.find_by!(currency: currency)
+        allow(target_wallet).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(target_wallet))
         allow(user_record.wallets).to receive(:lock).and_return(user_record.wallets)
         original_find_by = user_record.wallets.method(:find_by!)
         allow(user_record.wallets).to receive(:find_by!) do |**args|
-          if args[:currency] == "BTC"
-            target_wallet
-          else
-            original_find_by.call(**args)
-          end
+          args[:currency] == currency ? target_wallet : original_find_by.call(**args)
         end
+      end
+
+      it "leaves the source wallet debited so the pending transaction can be recovered" do
+        stub_target_save_to_fail(user, "BTC")
 
         expect {
           described_class.execute(
-            user: user_record, source_currency: "USD", target_currency: "BTC", source_amount: "10"
+            user: user, source_currency: "USD", target_currency: "BTC", source_amount: "10"
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
-        source_wallet = user_record.wallets.reload.find_by!(currency: "USD")
-        expect(source_wallet.balance).to eq(BigDecimal("100"))
+        source_wallet = user.wallets.reload.find_by!(currency: "USD")
+        expect(source_wallet.balance).to eq(BigDecimal("90"))
       end
 
-      it "does not create a completed Transaction on DB error" do
-        user_record = user
-        target_wallet = user_record.wallets.find_by!(currency: "BTC")
-
-        allow(target_wallet).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(target_wallet))
-
-        allow(user_record.wallets).to receive(:lock).and_return(user_record.wallets)
-        original_find_by = user_record.wallets.method(:find_by!)
-        allow(user_record.wallets).to receive(:find_by!) do |**args|
-          if args[:currency] == "BTC"
-            target_wallet
-          else
-            original_find_by.call(**args)
-          end
-        end
+      it "leaves the transaction in :pending status (not completed, not rejected)" do
+        stub_target_save_to_fail(user, "BTC")
 
         expect {
           described_class.execute(
-            user: user_record, source_currency: "USD", target_currency: "BTC", source_amount: "10"
+            user: user, source_currency: "USD", target_currency: "BTC", source_amount: "10"
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect(Transaction.where(status: "completed").count).to eq(0)
+        pending = Transaction.where(status: "pending").last
+        expect(pending).not_to be_nil
+        expect(pending.source_currency).to eq("USD")
+        expect(pending.source_amount).to eq(BigDecimal("10"))
+      end
+    end
+
+    # Verifies the two-phase mechanic explicitly: Phase 1 must commit before
+    # Phase 2 runs, so by the time `fetch_prices` is called the source wallet
+    # is already debited and a pending Transaction exists.
+    context "two-phase mechanic" do
+      it "debits and creates a pending transaction before fetching prices, then refunds on price-fetch failure" do
+        source_wallet = user.wallets.find_by!(currency: "USD")
+        observed_balance_during_fetch = nil
+        observed_pending_count = nil
+
+        allow(PriceService).to receive(:fetch_prices) do
+          observed_balance_during_fetch = source_wallet.reload.balance
+          observed_pending_count = Transaction.where(status: "pending").count
+          raise PriceClient::ApiError.new("timeout", code: :timeout)
+        end
+
+        result = described_class.execute(
+          user: user, source_currency: "USD", target_currency: "BTC", source_amount: "10"
+        )
+
+        # Phase 1 had committed by the time Phase 2 reached fetch_prices.
+        expect(observed_balance_during_fetch).to eq(BigDecimal("90"))
+        expect(observed_pending_count).to eq(1)
+
+        # Refund + reject ran after the failure: balance is back to original
+        # and the same Transaction record is now :rejected.
+        expect(source_wallet.reload.balance).to eq(BigDecimal("100"))
+        expect(result[:success]).to be false
+        expect(result[:transaction].reload.status).to eq("rejected")
+        expect(result[:transaction].rejection_reason).to eq("price_fetch_failed")
       end
     end
   end
