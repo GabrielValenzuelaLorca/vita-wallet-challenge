@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Run the full local CI pipeline: backend specs, frontend lint/typecheck/tests/build.
+# Exits non-zero on the first failure so this is safe to wire up as a pre-push hook.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+step() {
+  printf '\n\033[1;36m==>\033[0m %s\n' "$1"
+}
+
+step "backend: rspec"
+(cd "$ROOT/backend" && bundle exec rspec)
+
+step "frontend: lint"
+(cd "$ROOT/frontend" && npm run lint)
+
+step "frontend: typecheck"
+(cd "$ROOT/frontend" && npm run typecheck)
+
+step "frontend: vitest"
+(cd "$ROOT/frontend" && npm test)
+
+step "frontend: build"
+(cd "$ROOT/frontend" && npm run build)
+
+printf '\n\033[1;32mAll checks passed.\033[0m\n'
