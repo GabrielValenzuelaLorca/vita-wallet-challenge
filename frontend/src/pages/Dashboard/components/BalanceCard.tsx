@@ -1,13 +1,11 @@
 import { Card, Typography } from "antd";
-import {
-  DollarOutlined,
-  EuroCircleOutlined,
-  PropertySafetyOutlined,
-  ThunderboltOutlined,
-  WalletOutlined,
-} from "@ant-design/icons";
-import type { ReactNode } from "react";
 import type { Wallet, Currency } from "@/types/wallet";
+
+import bitcoinIcon from "@/assets/illustrations/bitcoin.png";
+import usdcIcon from "@/assets/illustrations/usdc.png";
+import tetherIcon from "@/assets/illustrations/tether.png";
+import dollarIcon from "@/assets/illustrations/dollar-sign.png";
+import chileIcon from "@/assets/illustrations/chile.png";
 
 const { Text, Title } = Typography;
 
@@ -18,7 +16,7 @@ interface BalanceCardProps {
 interface CurrencyMeta {
   label: string;
   symbol: string;
-  icon: ReactNode;
+  icon: string;
   accentBg: string;
   accentFg: string;
 }
@@ -27,35 +25,35 @@ const CURRENCY_META: Record<Currency, CurrencyMeta> = {
   USD: {
     label: "US Dollar",
     symbol: "USD",
-    icon: <DollarOutlined />,
+    icon: dollarIcon,
     accentBg: "rgba(5, 188, 185, 0.12)",
     accentFg: "#05BCB9",
   },
   CLP: {
     label: "Peso Chileno",
     symbol: "CLP",
-    icon: <EuroCircleOutlined />,
+    icon: chileIcon,
     accentBg: "rgba(22, 114, 135, 0.12)",
     accentFg: "#167287",
   },
   BTC: {
     label: "Bitcoin",
     symbol: "BTC",
-    icon: <ThunderboltOutlined />,
+    icon: bitcoinIcon,
     accentBg: "rgba(245, 165, 36, 0.14)",
     accentFg: "#F5A524",
   },
   USDC: {
     label: "USD Coin",
     symbol: "USDC",
-    icon: <PropertySafetyOutlined />,
+    icon: usdcIcon,
     accentBg: "rgba(46, 116, 191, 0.12)",
     accentFg: "#2E74BF",
   },
   USDT: {
     label: "Tether",
     symbol: "USDT",
-    icon: <WalletOutlined />,
+    icon: tetherIcon,
     accentBg: "rgba(38, 161, 123, 0.12)",
     accentFg: "#26A17B",
   },
@@ -143,14 +141,16 @@ export function BalanceCard({ wallet }: BalanceCardProps) {
             height: 44,
             borderRadius: 12,
             background: meta.accentBg,
-            color: meta.accentFg,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: 22,
           }}
         >
-          {meta.icon}
+          <img
+            src={meta.icon}
+            alt={meta.label}
+            style={{ width: 26, height: 26 }}
+          />
         </div>
       </div>
       <Title

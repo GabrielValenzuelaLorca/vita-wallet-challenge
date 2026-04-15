@@ -1,7 +1,8 @@
 import { Modal, Typography, Button } from "antd";
-import { CheckCircleFilled } from "@ant-design/icons";
 import type { Currency } from "@/types/wallet";
 import { formatCurrency } from "../utils/formatCurrency";
+
+import checkIcon from "@/assets/illustrations/check.png";
 
 const { Title, Text } = Typography;
 
@@ -32,9 +33,6 @@ export function ExchangeSuccessModal({
         },
       }}
     >
-      {/* Illustration placeholder — replace with the Figma "Intercambio
-          exitoso" 3D asset once exported to
-          src/assets/illustrations/exchange-success.png */}
       <div
         style={{
           width: 180,
@@ -48,11 +46,10 @@ export function ExchangeSuccessModal({
           justifyContent: "center",
         }}
       >
-        <CheckCircleFilled
-          style={{
-            fontSize: 100,
-            color: "var(--vw-primary, #05BCB9)",
-          }}
+        <img
+          src={checkIcon}
+          alt="Intercambio exitoso"
+          style={{ width: 80, height: 80 }}
         />
       </div>
 
