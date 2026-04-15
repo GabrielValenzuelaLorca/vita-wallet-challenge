@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 import type { Currency } from "@/types/wallet";
-import { formatCurrency } from "../utils/formatCurrency";
+import { formatCurrency } from "@/utils/formatCurrency";
 import { VitaButton } from "@/components/VitaButton";
 
 import arrowLeftIcon from "@/assets/illustrations/arrow-left.png";
@@ -146,7 +146,7 @@ export function ExchangeSummary({
 
       <div
         style={{
-          background: "#F9F9F9",
+          background: "var(--vw-gray-3, #F5F6F7)",
           borderRadius: 6,
           padding: "11px 24px",
           display: "flex",

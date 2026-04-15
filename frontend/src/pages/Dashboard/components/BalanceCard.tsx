@@ -1,12 +1,7 @@
 import { Card, Typography } from "antd";
-import type { Wallet, Currency } from "@/types/wallet";
+import type { Wallet } from "@/types/wallet";
 import { formatCurrency } from "@/utils/formatCurrency";
-
-import bitcoinIcon from "@/assets/illustrations/bitcoin.png";
-import usdcIcon from "@/assets/illustrations/usdc.png";
-import tetherIcon from "@/assets/illustrations/tether.png";
-import dollarIcon from "@/assets/illustrations/dollar-sign.png";
-import chileIcon from "@/assets/illustrations/chile.png";
+import { CURRENCY_ICONS, CURRENCY_NAMES } from "@/constants/currency";
 
 const { Text } = Typography;
 
@@ -14,21 +9,9 @@ interface BalanceCardProps {
   wallet: Wallet;
 }
 
-interface CurrencyMeta {
-  label: string;
-  icon: string;
-}
-
-const CURRENCY_META: Record<Currency, CurrencyMeta> = {
-  USD: { label: "US Dollar", icon: dollarIcon },
-  CLP: { label: "Peso chileno", icon: chileIcon },
-  BTC: { label: "Bitcoin", icon: bitcoinIcon },
-  USDC: { label: "USD Coin", icon: usdcIcon },
-  USDT: { label: "Tether", icon: tetherIcon },
-};
-
 export function BalanceCard({ wallet }: BalanceCardProps) {
-  const meta = CURRENCY_META[wallet.currency];
+  const name = CURRENCY_NAMES[wallet.currency];
+  const icon = CURRENCY_ICONS[wallet.currency];
 
   return (
     <Card
@@ -57,11 +40,11 @@ export function BalanceCard({ wallet }: BalanceCardProps) {
             color: "var(--vw-black, #010E11)",
           }}
         >
-          {meta.label}
+          {name}
         </Text>
         <img
-          src={meta.icon}
-          alt={meta.label}
+          src={icon}
+          alt={name}
           style={{ width: 24, height: 24 }}
         />
       </div>

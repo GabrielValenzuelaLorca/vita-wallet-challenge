@@ -1,6 +1,6 @@
 import { Form, Typography, Space } from "antd";
 import type { Currency, Wallet } from "@/types/wallet";
-import { formatCurrency } from "../utils/formatCurrency";
+import { formatCurrency } from "@/utils/formatCurrency";
 import { VitaButton } from "@/components/VitaButton";
 import { VitaSelector } from "@/components/VitaSelector";
 import { VitaTextField } from "@/components/VitaTextField";

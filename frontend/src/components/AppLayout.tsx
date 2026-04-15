@@ -86,7 +86,7 @@ export function AppLayout() {
         <Content
           style={{
             padding: "80px var(--vw-page-margin, 120px)",
-            background: "#FFFFFF",
+            background: "var(--vw-card-bg, #F9F9FA)",
             minHeight: "100vh",
           }}
         >
