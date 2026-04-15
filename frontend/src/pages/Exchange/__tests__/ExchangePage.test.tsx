@@ -114,33 +114,34 @@ const rejectedTransaction: TransactionResponseSchema = {
   },
 };
 
-// Walks the wizard through all 3 steps with USD -> BTC and the given
-// amount, ending on the Review step where a "Confirm Exchange" button is
-// visible. Caller is responsible for clicking that button.
-async function walkWizardToReview(
+// Fills the single-page Exchange form (source + target + amount) with
+// USD → BTC and the given amount, then clicks "Continuar" to advance to
+// the summary view. The summary view exposes an "Intercambiar" button
+// the caller is expected to click.
+async function fillFormAndContinue(
   user: ReturnType<typeof userEvent.setup>,
   amount: string,
 ) {
-  // Step 1: pick source currency (the only combobox visible) + amount
-  const sourceSelect = (await screen.findAllByRole("combobox"))[0];
-  await user.click(sourceSelect);
+  // Wait for both currency selects to render. There are 2 combobox roles
+  // visible at once: [0] source, [1] target.
+  const comboboxes = await screen.findAllByRole("combobox");
+  await user.click(comboboxes[0]);
   const usdOptions = await screen.findAllByText("USD");
   await user.click(usdOptions[usdOptions.length - 1]);
 
-  const amountInput = await screen.findByRole("spinbutton");
-  await user.clear(amountInput);
-  await user.type(amountInput, amount);
-  await user.click(screen.getByRole("button", { name: /continue/i }));
-
-  // Step 2: pick target currency
-  const targetSelect = (await screen.findAllByRole("combobox"))[0];
-  await user.click(targetSelect);
+  await user.click(comboboxes[1]);
   const btcOptions = await screen.findAllByText("BTC");
   await user.click(btcOptions[btcOptions.length - 1]);
-  await user.click(screen.getByRole("button", { name: /review/i }));
 
-  // Step 3: review screen with Confirm Exchange button
-  await screen.findByRole("button", { name: /confirm exchange/i });
+  // Two spinbuttons render too: [0] is the editable source amount,
+  // [1] is the read-only estimate. Type the amount into the first.
+  const amountInputs = await screen.findAllByRole("spinbutton");
+  await user.clear(amountInputs[0]);
+  await user.type(amountInputs[0], amount);
+
+  await user.click(screen.getByRole("button", { name: /continuar/i }));
+  // Wait for the summary view to render.
+  await screen.findByRole("button", { name: /^intercambiar$/i });
 }
 
 describe("ExchangePage", () => {
@@ -150,83 +151,85 @@ describe("ExchangePage", () => {
     getBalancesMock.mockResolvedValue(balancesResponse);
   });
 
-  it("renders the Exchange title", async () => {
+  it("renders the Intercambiar title", async () => {
     render(<ExchangePage />);
     expect(
-      await screen.findByRole("heading", { name: /exchange/i, level: 2 }),
+      await screen.findByRole("heading", { name: /intercambiar/i, level: 2 }),
     ).toBeInTheDocument();
   });
 
-  it("shows the source step (Continue button) after data loads", async () => {
+  it("shows the form with a Continuar button after data loads", async () => {
     render(<ExchangePage />);
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /continue/i }),
+        screen.getByRole("button", { name: /continuar/i }),
       ).toBeInTheDocument();
     });
   });
 
-  it("walks through the wizard and shows the success result", async () => {
+  it("submits the exchange and shows the success modal", async () => {
     submitExchangeMock.mockResolvedValueOnce(completedTransaction);
     const user = userEvent.setup();
     render(<ExchangePage />);
 
-    await walkWizardToReview(user, "10");
-    await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
+    await fillFormAndContinue(user, "10");
+    await user.click(screen.getByRole("button", { name: /^intercambiar$/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/exchange completed/i)).toBeInTheDocument();
+      expect(screen.getByText(/¡intercambio exitoso!/i)).toBeInTheDocument();
     });
     expect(submitExchangeMock).toHaveBeenCalled();
   });
 
-  it("shows error result when exchange fails with ApiRequestError", async () => {
+  it("shows error alert when exchange fails with ApiRequestError", async () => {
     submitExchangeMock.mockRejectedValueOnce(
       new ApiRequestError(422, "insufficient_balance", "Not enough USD"),
     );
     const user = userEvent.setup();
     render(<ExchangePage />);
 
-    await walkWizardToReview(user, "10");
-    await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
+    await fillFormAndContinue(user, "10");
+    await user.click(screen.getByRole("button", { name: /^intercambiar$/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/exchange failed/i)).toBeInTheDocument();
+      expect(screen.getByText(/error en el intercambio/i)).toBeInTheDocument();
     });
     expect(screen.getByText(/not enough usd/i)).toBeInTheDocument();
   });
 
-  it("shows rejected result when backend returns a rejected transaction", async () => {
+  it("shows rejected alert when backend returns a rejected transaction", async () => {
     submitExchangeMock.mockResolvedValueOnce(rejectedTransaction);
     const user = userEvent.setup();
     render(<ExchangePage />);
 
-    await walkWizardToReview(user, "10");
-    await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
+    await fillFormAndContinue(user, "10");
+    await user.click(screen.getByRole("button", { name: /^intercambiar$/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/exchange rejected/i)).toBeInTheDocument();
+      expect(screen.getByText(/intercambio rechazado/i)).toBeInTheDocument();
     });
     expect(screen.getByText(/insufficient_balance/i)).toBeInTheDocument();
   });
 
-  it("returns to the source step when clicking New Exchange", async () => {
+  it("returns to the form when closing the success modal", async () => {
     submitExchangeMock.mockResolvedValueOnce(completedTransaction);
     const user = userEvent.setup();
     render(<ExchangePage />);
 
-    await walkWizardToReview(user, "10");
-    await user.click(screen.getByRole("button", { name: /confirm exchange/i }));
+    await fillFormAndContinue(user, "10");
+    await user.click(screen.getByRole("button", { name: /^intercambiar$/i }));
 
     await waitFor(() =>
-      expect(screen.getByText(/exchange completed/i)).toBeInTheDocument(),
+      expect(screen.getByText(/¡intercambio exitoso!/i)).toBeInTheDocument(),
     );
 
-    await user.click(screen.getByRole("button", { name: /new exchange/i }));
+    await user.click(
+      screen.getByRole("button", { name: /hacer otro intercambio/i }),
+    );
 
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: /continue/i }),
+        screen.getByRole("button", { name: /continuar/i }),
       ).toBeInTheDocument(),
     );
   });

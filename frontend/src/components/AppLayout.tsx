@@ -23,17 +23,17 @@ const menuItems: MenuItem[] = [
   {
     key: "/",
     icon: <DashboardOutlined />,
-    label: <Link to="/">Dashboard</Link>,
+    label: <Link to="/">Inicio</Link>,
   },
   {
     key: "/exchange",
     icon: <SwapOutlined />,
-    label: <Link to="/exchange">Exchange</Link>,
+    label: <Link to="/exchange">Intercambiar</Link>,
   },
   {
     key: "/history",
     icon: <UnorderedListOutlined />,
-    label: <Link to="/history">History</Link>,
+    label: <Link to="/history">Historial</Link>,
   },
 ];
 
@@ -50,11 +50,12 @@ export function AppLayout() {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-        width={240}
+        width={280}
         breakpoint="lg"
         collapsedWidth={72}
+        className="vw-sidebar"
         style={{
-          background: "var(--vw-sidebar-bg, #003B46)",
+          background: "var(--vw-sidebar-bg, #167287)",
           display: "flex",
           flexDirection: "column",
           position: "sticky",

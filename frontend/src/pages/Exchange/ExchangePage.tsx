@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
-import { Card, Space, Spin, Steps, Typography } from "antd";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, Space, Spin, Typography, Alert } from "antd";
 import { useExchange } from "@/hooks/useExchange";
-import { SourceStep } from "./components/SourceStep";
-import { TargetStep } from "./components/TargetStep";
-import { ReviewStep } from "./components/ReviewStep";
-import { ExchangeResult } from "./components/ExchangeResult";
+import { ExchangeFormStep } from "./components/ExchangeFormStep";
+import { ExchangeSummary } from "./components/ExchangeSummary";
+import { ExchangeSuccessModal } from "./components/ExchangeSuccessModal";
 import type { Currency } from "@/types/wallet";
 
 const CURRENCIES: readonly Currency[] = [
@@ -17,10 +17,12 @@ const CURRENCIES: readonly Currency[] = [
 
 const { Title, Text } = Typography;
 
-type WizardStep = 0 | 1 | 2;
+type View = "form" | "summary";
 
 export function ExchangePage() {
-  const [step, setStep] = useState<WizardStep>(0);
+  const navigate = useNavigate();
+  const [view, setView] = useState<View>("form");
+  const [showSuccess, setShowSuccess] = useState(false);
   const [sourceCurrency, setSourceCurrency] = useState<Currency | null>(null);
   const [targetCurrency, setTargetCurrency] = useState<Currency | null>(null);
   const [amount, setAmount] = useState<string>("");
@@ -41,6 +43,15 @@ export function ExchangePage() {
     () => calculateEstimate(sourceCurrency, targetCurrency, amount),
     [calculateEstimate, sourceCurrency, targetCurrency, amount],
   );
+
+  // Open success modal when the mutation resolves with a completed
+  // transaction. Rejected/error responses stay on the summary view so the
+  // user can read the alert and retry.
+  useEffect(() => {
+    if (result && result.status === "completed") {
+      setShowSuccess(true);
+    }
+  }, [result]);
 
   const handleSourceCurrencyChange = (next: Currency) => {
     if (next === targetCurrency) {
@@ -65,120 +76,119 @@ export function ExchangePage() {
     });
   };
 
-  const handleNewExchange = () => {
+  const resetWizard = () => {
     reset();
     setSourceCurrency(null);
     setTargetCurrency(null);
     setAmount("");
-    setStep(0);
+    setView("form");
   };
 
-  const showResult = result !== null || error !== null;
-  const isDataLoading = isPricesLoading || isBalancesLoading;
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+    resetWizard();
+  };
 
-  if (showResult) {
-    return (
-      <Space direction="vertical" size={24} style={{ width: "100%" }}>
-        <PageHeader />
-        <Card style={{ maxWidth: 640, margin: "0 auto", width: "100%" }}>
-          <ExchangeResult
-            transaction={result}
-            error={error}
-            onNewExchange={handleNewExchange}
-          />
-        </Card>
-      </Space>
-    );
-  }
+  const isDataLoading = isPricesLoading || isBalancesLoading;
+  const apiError = error;
+  const rejectedTransaction =
+    result && result.status !== "completed" ? result : null;
 
   return (
     <Space direction="vertical" size={24} style={{ width: "100%" }}>
-      <PageHeader />
+      <div>
+        <Title
+          level={2}
+          style={{
+            margin: 0,
+            color: "var(--vw-text-primary, #010E11)",
+            fontWeight: 700,
+          }}
+        >
+          Intercambiar
+        </Title>
+        <Text
+          style={{
+            color: "var(--vw-text-secondary, #5A6B7B)",
+            fontSize: 15,
+          }}
+        >
+          Convierte entre fiat y crypto usando precios de mercado en tiempo real.
+        </Text>
+      </div>
 
       <Card
-        style={{ maxWidth: 640, margin: "0 auto", width: "100%" }}
-        styles={{ body: { padding: 32 } }}
+        style={{
+          maxWidth: 640,
+          margin: "0 auto",
+          width: "100%",
+          borderRadius: 16,
+          border: "1px solid var(--vw-border, #DEE0E0)",
+        }}
+        styles={{ body: { padding: 40 } }}
       >
-        <Steps
-          current={step}
-          size="small"
-          style={{ marginBottom: 32 }}
-          items={[
-            { title: "Source" },
-            { title: "Target" },
-            { title: "Review" },
-          ]}
-        />
+        {(apiError || rejectedTransaction) && (
+          <Alert
+            type="error"
+            showIcon
+            style={{ marginBottom: 24, borderRadius: 12 }}
+            message={
+              rejectedTransaction
+                ? "Intercambio rechazado"
+                : "Error en el intercambio"
+            }
+            description={
+              rejectedTransaction
+                ? rejectedTransaction.rejection_reason ?? "Rechazado por el servidor"
+                : apiError
+            }
+            closable
+            onClose={() => reset()}
+          />
+        )}
 
-        {isDataLoading && step === 0 && (
+        {isDataLoading && view === "form" && (
           <div style={{ textAlign: "center", padding: 24 }}>
             <Spin size="large" />
           </div>
         )}
 
-        {!isDataLoading && step === 0 && (
-          <SourceStep
+        {!isDataLoading && view === "form" && (
+          <ExchangeFormStep
             currencies={CURRENCIES}
             balances={balances}
             sourceCurrency={sourceCurrency}
-            amount={amount}
-            onSourceCurrencyChange={handleSourceCurrencyChange}
-            onAmountChange={setAmount}
-            onNext={() => setStep(1)}
-          />
-        )}
-
-        {step === 1 && sourceCurrency && (
-          <TargetStep
-            currencies={CURRENCIES}
-            sourceCurrency={sourceCurrency}
-            amount={amount}
             targetCurrency={targetCurrency}
+            amount={amount}
             estimate={estimate}
             isPricesLoading={isPricesLoading}
+            onSourceCurrencyChange={handleSourceCurrencyChange}
             onTargetCurrencyChange={handleTargetCurrencyChange}
-            onBack={() => setStep(0)}
-            onNext={() => setStep(2)}
+            onAmountChange={setAmount}
+            onBack={() => navigate("/")}
+            onContinue={() => setView("summary")}
           />
         )}
 
-        {step === 2 && sourceCurrency && targetCurrency && estimate && (
-          <ReviewStep
+        {view === "summary" && sourceCurrency && targetCurrency && estimate && (
+          <ExchangeSummary
             sourceCurrency={sourceCurrency}
             targetCurrency={targetCurrency}
             amount={amount}
             estimate={estimate}
             isSubmitting={isSubmitting}
-            onBack={() => setStep(1)}
+            onBack={() => setView("form")}
             onConfirm={handleConfirm}
           />
         )}
       </Card>
-    </Space>
-  );
-}
 
-function PageHeader() {
-  return (
-    <div>
-      <Title
-        level={2}
-        style={{
-          margin: 0,
-          color: "var(--vw-text-primary, #1A2B3C)",
-          fontWeight: 700,
-        }}
-      >
-        Exchange
-      </Title>
-      <Text
-        style={{
-          color: "var(--vw-text-secondary, #5A6B7B)",
-          fontSize: 15,
-        }}
-      >
-        Convert between fiat and crypto using live market prices.
-      </Text>
-    </div>
+      <ExchangeSuccessModal
+        open={showSuccess}
+        targetCurrency={targetCurrency ?? "BTC"}
+        targetAmount={result?.target_amount ?? "0"}
+        onClose={handleSuccessClose}
+      />
+    </Space>
   );
 }
