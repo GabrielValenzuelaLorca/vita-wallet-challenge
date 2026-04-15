@@ -2,7 +2,7 @@ import { Modal, Typography, Button } from "antd";
 import type { Currency } from "@/types/wallet";
 import { formatCurrency } from "../utils/formatCurrency";
 
-import checkIcon from "@/assets/illustrations/check.png";
+import exchangeSuccessIllustration from "@/assets/illustrations/exchange-success.png";
 
 const { Title, Text } = Typography;
 
@@ -33,25 +33,16 @@ export function ExchangeSuccessModal({
         },
       }}
     >
-      <div
+      <img
+        src={exchangeSuccessIllustration}
+        alt="Intercambio exitoso"
         style={{
-          width: 180,
-          height: 180,
+          width: 220,
+          maxWidth: "100%",
           margin: "0 auto 24px",
-          borderRadius: "50%",
-          background:
-            "linear-gradient(135deg, rgba(5,188,185,0.14), rgba(22,114,135,0.14))",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          display: "block",
         }}
-      >
-        <img
-          src={checkIcon}
-          alt="Intercambio exitoso"
-          style={{ width: 80, height: 80 }}
-        />
-      </div>
+      />
 
       <Title
         level={3}

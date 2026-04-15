@@ -1,9 +1,11 @@
 import { Navigate } from "react-router-dom";
 import { Typography } from "antd";
-import { WalletOutlined } from "@ant-design/icons";
 import { useAuthContext } from "@/hooks/useAuth";
 import { useLoginForm } from "@/hooks/useLoginForm";
 import { LoginForm } from "./components/LoginForm";
+
+import coinLogo from "@/assets/illustrations/coin-logo.png";
+import loginHero from "@/assets/illustrations/login-hero.png";
 
 const { Title, Text } = Typography;
 
@@ -43,21 +45,11 @@ export function LoginPage() {
               marginBottom: 32,
             }}
           >
-            <div
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 10,
-                background: "var(--vw-primary, #07A5A7)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#fff",
-                fontSize: 22,
-              }}
-            >
-              <WalletOutlined />
-            </div>
+            <img
+              src={coinLogo}
+              alt="Vita Wallet"
+              style={{ width: 44, height: 44 }}
+            />
             <Title
               level={3}
               style={{
@@ -112,23 +104,16 @@ export function LoginPage() {
         }}
       >
         <div style={{ maxWidth: 440, textAlign: "center" }}>
-          {/* Illustration placeholder — replace with real Figma asset
-              once exported to src/assets/illustrations/login.png */}
-          <div
+          <img
+            src={loginHero}
+            alt="Multi-currency wallet"
             style={{
-              width: 220,
-              height: 220,
-              borderRadius: "50%",
+              width: 320,
+              maxWidth: "100%",
               margin: "0 auto 32px",
-              background: "rgba(255, 255, 255, 0.08)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 100,
+              display: "block",
             }}
-          >
-            <WalletOutlined />
-          </div>
+          />
           <Title
             level={3}
             style={{ color: "#fff", margin: "0 0 12px 0", fontWeight: 700 }}

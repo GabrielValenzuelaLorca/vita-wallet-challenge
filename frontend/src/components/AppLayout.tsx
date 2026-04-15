@@ -10,6 +10,8 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuth";
 import type { ReactNode } from "react";
 
+import coinLogo from "@/assets/illustrations/coin-logo.png";
+
 const { Sider, Content } = Layout;
 const { Text } = Typography;
 
@@ -80,22 +82,11 @@ export function AppLayout() {
                 gap: 12,
               }}
             >
-              <div
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 8,
-                  background: "var(--vw-primary, #07A5A7)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: 18,
-                }}
-              >
-                V
-              </div>
+              <img
+                src={coinLogo}
+                alt="Vita Wallet"
+                style={{ width: 36, height: 36 }}
+              />
               <Text
                 strong
                 style={{ color: "#fff", fontSize: 18, whiteSpace: "nowrap" }}
