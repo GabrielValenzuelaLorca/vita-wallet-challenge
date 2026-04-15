@@ -1,9 +1,7 @@
 import { z } from "zod";
-import { apiEnvelopeSchema } from "./common";
-
-const currencySchema = z.enum(["USD", "CLP", "BTC", "USDC", "USDT"]);
-const transactionStatusSchema = z.enum(["pending", "completed", "rejected"]);
-const transactionKindSchema = z.enum([
+import { apiEnvelopeSchema, currencySchema } from "./common";
+export const transactionStatusSchema = z.enum(["pending", "completed", "rejected"]);
+export const transactionKindSchema = z.enum([
   "exchange",
   "deposit",
   "recharge",
@@ -34,6 +32,8 @@ export const exchangeRequestSchema = z.object({
   amount: z.string(),
 });
 
+export type TransactionStatus = z.infer<typeof transactionStatusSchema>;
+export type TransactionKind = z.infer<typeof transactionKindSchema>;
 export type TransactionSchema = z.infer<typeof transactionSchema>;
 export type TransactionResponseSchema = z.infer<typeof transactionResponseSchema>;
 export type TransactionsResponseSchema = z.infer<

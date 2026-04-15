@@ -89,6 +89,7 @@ const balancesResponse: WalletsResponseSchema = {
 const completedTransaction: TransactionResponseSchema = {
   data: {
     id: 42,
+    kind: "exchange",
     source_currency: "USD",
     target_currency: "BTC",
     source_amount: "10",
@@ -103,6 +104,7 @@ const completedTransaction: TransactionResponseSchema = {
 const rejectedTransaction: TransactionResponseSchema = {
   data: {
     id: 99,
+    kind: "exchange",
     source_currency: "USD",
     target_currency: "BTC",
     source_amount: "9999",

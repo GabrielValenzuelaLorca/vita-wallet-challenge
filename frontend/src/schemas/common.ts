@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+export const currencySchema = z.enum(["USD", "CLP", "BTC", "USDC", "USDT"]);
+export type Currency = z.infer<typeof currencySchema>;
+
 export const apiMetaSchema = z.object({
   page: z.number().optional(),
   per_page: z.number().optional(),

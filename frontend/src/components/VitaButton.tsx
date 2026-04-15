@@ -26,7 +26,6 @@ const PRIMARY_GRADIENT = "linear-gradient(90deg, #05BCB9 0%, #167287 100%)";
 const DISABLED_BG = "var(--vw-gray-2, #DEE0E0)";
 const TEXT_WHITE = "var(--vw-white, #F9F9FA)";
 const TEXT_BLUE1 = "var(--vw-blue-1, #167287)";
-const BORDER_BLUE1 = "var(--vw-blue-1, #167287)";
 
 function getStyles(
   variant: VitaVariant,
@@ -40,7 +39,6 @@ function getStyles(
     padding: `${PADDING_VERTICAL}px ${PADDING_HORIZONTAL}px`,
     fontSize: FONT_SIZE,
     fontWeight: FONT_WEIGHT,
-    fontFamily: "'Open Sans', sans-serif",
     lineHeight: "22px",
     display: "flex",
     alignItems: "center",

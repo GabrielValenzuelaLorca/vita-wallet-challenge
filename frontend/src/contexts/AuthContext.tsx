@@ -1,20 +1,25 @@
 import { useState, useEffect, useCallback, type ReactNode } from "react";
 import type { AuthUser, LoginCredentials } from "@/types/auth";
 import { authApi } from "@/services/api";
+import {
+  getAuthToken,
+  setAuthToken,
+  removeAuthToken,
+} from "@/services/tokenStorage";
 import { AuthContext } from "./authTypes";
-
-const TOKEN_KEY = "auth_token";
-
-function getStoredToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
-}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [token, setToken] = useState<string | null>(getStoredToken);
-  const [isLoading, setIsLoading] = useState<boolean>(getStoredToken() !== null);
+  const [token, setToken] = useState<string | null>(getAuthToken);
+  const [isLoading, setIsLoading] = useState<boolean>(getAuthToken() !== null);
 
   const isAuthenticated = token !== null && user !== null;
+
+  const logout = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    removeAuthToken();
+  }, []);
 
   useEffect(() => {
     if (token === null) {
@@ -34,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!cancelled) {
           setToken(null);
           setUser(null);
-          localStorage.removeItem(TOKEN_KEY);
+          removeAuthToken();
         }
       } finally {
         if (!cancelled) {
@@ -50,22 +55,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Listen for 401 events dispatched by httpClient to force logout
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      logout();
+      window.location.href = "/login";
+    };
+
+    window.addEventListener("auth:unauthorized", handleUnauthorized);
+    return () => {
+      window.removeEventListener("auth:unauthorized", handleUnauthorized);
+    };
+  }, [logout]);
+
   const login = useCallback(
     async (credentials: LoginCredentials): Promise<void> => {
       const response = await authApi.login(credentials);
       const { token: newToken, user: newUser } = response.data;
-      localStorage.setItem(TOKEN_KEY, newToken);
+      setAuthToken(newToken);
       setToken(newToken);
       setUser(newUser);
     },
     [],
   );
-
-  const logout = useCallback(() => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem(TOKEN_KEY);
-  }, []);
 
   return (
     <AuthContext.Provider

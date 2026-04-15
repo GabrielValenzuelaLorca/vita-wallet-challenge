@@ -48,6 +48,7 @@ function makeTransaction(
 ): TransactionSchema {
   return {
     id,
+    kind: "exchange",
     source_currency: "USD",
     target_currency: "BTC",
     source_amount: "10",

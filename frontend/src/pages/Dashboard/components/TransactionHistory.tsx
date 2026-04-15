@@ -1,42 +1,9 @@
 import { Typography, Alert, Spin } from "antd";
 import { useTransactions } from "@/hooks/useTransactions";
 import type { TransactionSchema } from "@/schemas/transaction";
-import type { Currency } from "@/types/wallet";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 const { Title, Text } = Typography;
-
-function formatAmount(amount: string, currency: Currency): string {
-  const numeric = parseFloat(amount);
-  switch (currency) {
-    case "USD":
-      return numeric.toLocaleString("es-CL", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    case "CLP":
-      return numeric.toLocaleString("es-CL", {
-        style: "currency",
-        currency: "CLP",
-        maximumFractionDigits: 0,
-      });
-    case "BTC": {
-      const formatted = numeric
-        .toLocaleString("es-CL", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 8,
-        });
-      return `${formatted} BTC`;
-    }
-    case "USDC":
-    case "USDT":
-      return `${numeric.toLocaleString("es-CL", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })} ${currency}`;
-  }
-}
 
 type TransactionKind = "received" | "deducted" | "exchanged";
 
@@ -82,7 +49,7 @@ function describeTransaction(transaction: TransactionSchema): {
       return {
         kind: "received",
         action: "Recibiste",
-        amount: formatAmount(
+        amount: formatCurrency(
           transaction.target_amount,
           transaction.target_currency,
         ),
@@ -91,7 +58,7 @@ function describeTransaction(transaction: TransactionSchema): {
       return {
         kind: "received",
         action: "Recargaste",
-        amount: formatAmount(
+        amount: formatCurrency(
           transaction.target_amount,
           transaction.target_currency,
         ),
@@ -100,7 +67,7 @@ function describeTransaction(transaction: TransactionSchema): {
       return {
         kind: "deducted",
         action: "Transferiste",
-        amount: formatAmount(
+        amount: formatCurrency(
           transaction.source_amount,
           transaction.source_currency,
         ),
@@ -109,7 +76,7 @@ function describeTransaction(transaction: TransactionSchema): {
       return {
         kind: "exchanged",
         action: "Intercambiaste",
-        amount: formatAmount(
+        amount: formatCurrency(
           transaction.target_amount,
           transaction.target_currency,
         ),

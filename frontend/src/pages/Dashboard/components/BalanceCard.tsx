@@ -1,5 +1,6 @@
 import { Card, Typography } from "antd";
 import type { Wallet, Currency } from "@/types/wallet";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 import bitcoinIcon from "@/assets/illustrations/bitcoin.png";
 import usdcIcon from "@/assets/illustrations/usdc.png";
@@ -26,39 +27,6 @@ const CURRENCY_META: Record<Currency, CurrencyMeta> = {
   USDT: { label: "Tether", icon: tetherIcon },
 };
 
-function formatBalance(balance: string, currency: Currency): string {
-  const numericBalance = parseFloat(balance);
-
-  switch (currency) {
-    case "USD":
-      return numericBalance.toLocaleString("es-CL", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    case "CLP":
-      return numericBalance.toLocaleString("es-CL", {
-        style: "currency",
-        currency: "CLP",
-        maximumFractionDigits: 0,
-      });
-    case "BTC": {
-      const formatted = numericBalance.toLocaleString("es-CL", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 8,
-      });
-      return `${formatted} BTC`;
-    }
-    case "USDC":
-    case "USDT":
-      return `${numericBalance.toLocaleString("es-CL", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })} ${currency}`;
-  }
-}
-
 export function BalanceCard({ wallet }: BalanceCardProps) {
   const meta = CURRENCY_META[wallet.currency];
 
@@ -83,7 +51,6 @@ export function BalanceCard({ wallet }: BalanceCardProps) {
       >
         <Text
           style={{
-            fontFamily: "'Open Sans', sans-serif",
             fontWeight: 400,
             fontSize: 16,
             lineHeight: "22px",
@@ -109,7 +76,7 @@ export function BalanceCard({ wallet }: BalanceCardProps) {
           color: "var(--vw-black, #010E11)",
         }}
       >
-        {formatBalance(wallet.balance, wallet.currency)}
+        {formatCurrency(wallet.balance, wallet.currency)}
       </Text>
     </Card>
   );

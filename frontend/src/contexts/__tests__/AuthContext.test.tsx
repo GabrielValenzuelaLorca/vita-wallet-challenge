@@ -20,8 +20,6 @@ const mockedApi = vi.mocked(authApi);
 const mockUser: AuthUser = {
   id: 1,
   email: "demo@vitawallet.com",
-  created_at: "2026-04-14T00:00:00Z",
-  updated_at: "2026-04-14T00:00:00Z",
 };
 
 function TestConsumer({

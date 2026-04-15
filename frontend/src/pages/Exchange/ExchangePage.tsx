@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spin, Alert } from "antd";
 import { useExchange } from "@/hooks/useExchange";
+import { usePriceEstimate } from "@/hooks/usePriceEstimate";
 import { ExchangeFormStep } from "./components/ExchangeFormStep";
 import { ExchangeSummary } from "./components/ExchangeSummary";
 import { ExchangeSuccessModal } from "./components/ExchangeSuccessModal";
@@ -27,23 +28,24 @@ export function ExchangePage() {
 
   const {
     submitExchange,
-    calculateEstimate,
     reset,
     result,
     error,
     isSubmitting,
-    isPricesLoading,
     balances,
     isBalancesLoading,
   } = useExchange();
 
-  const estimate = useMemo(
-    () => calculateEstimate(sourceCurrency, targetCurrency, amount),
-    [calculateEstimate, sourceCurrency, targetCurrency, amount],
-  );
+  const {
+    estimate: priceEstimate,
+    isLoading: isPricesLoading,
+  } = usePriceEstimate({ sourceCurrency, targetCurrency, amount });
+
+  const estimate = priceEstimate?.estimatedAmount ?? null;
 
   useEffect(() => {
     if (result && result.status === "completed") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot derived trigger from mutation result
       setShowSuccess(true);
     }
   }, [result]);

@@ -34,7 +34,6 @@ const inputStyle: React.CSSProperties = {
   borderColor: BORDER_COLOR,
   padding: 16,
   fontSize: 16,
-  fontFamily: "'Open Sans', sans-serif",
   fontWeight: 400,
   lineHeight: "22px",
   color: TEXT_COLOR,
@@ -42,7 +41,6 @@ const inputStyle: React.CSSProperties = {
 };
 
 const labelStyle: React.CSSProperties = {
-  fontFamily: "'Open Sans', sans-serif",
   fontWeight: 400,
   fontSize: 14,
   lineHeight: "19px",
@@ -52,7 +50,6 @@ const labelStyle: React.CSSProperties = {
 };
 
 const helperStyle: React.CSSProperties = {
-  fontFamily: "'Open Sans', sans-serif",
   fontWeight: 400,
   fontSize: 12,
   lineHeight: "16px",
@@ -149,7 +146,6 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
         styles={{
           input: {
             fontSize: 16,
-            fontFamily: "'Open Sans', sans-serif",
             color: hasValue ? TEXT_COLOR : PLACEHOLDER_COLOR,
             background: "transparent",
           },

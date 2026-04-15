@@ -34,14 +34,10 @@ export function ExchangeSuccessModal({
         </svg>
       }
       styles={{
-        content: {
+        body: {
           background: "var(--vw-white, #F9F9FA)",
           borderRadius: 6,
           height: 566,
-          padding: 0,
-        },
-        body: {
-          height: "100%",
           padding: "80px 64px 32px",
           textAlign: "center",
           display: "flex",

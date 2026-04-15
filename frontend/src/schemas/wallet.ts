@@ -1,7 +1,5 @@
 import { z } from "zod";
-import { apiEnvelopeSchema } from "./common";
-
-const currencySchema = z.enum(["USD", "CLP", "BTC", "USDC", "USDT"]);
+import { apiEnvelopeSchema, currencySchema } from "./common";
 
 export const walletSchema = z.object({
   id: z.number(),

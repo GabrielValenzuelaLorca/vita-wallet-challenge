@@ -47,6 +47,7 @@ vi.mock("@/services/httpClient", () => ({
 
 const completedTransaction: TransactionSchema = {
   id: 1,
+  kind: "exchange",
   source_currency: "USD",
   target_currency: "BTC",
   source_amount: "100.00",
@@ -59,6 +60,7 @@ const completedTransaction: TransactionSchema = {
 
 const rejectedTransaction: TransactionSchema = {
   id: 2,
+  kind: "exchange",
   source_currency: "BTC",
   target_currency: "USD",
   source_amount: "0.01",
@@ -79,12 +81,12 @@ describe("HistoryPage", () => {
     vi.clearAllMocks();
   });
 
-  it("renders the Transaction History title", async () => {
+  it("renders the History title in Spanish", async () => {
     getTransactionsMock.mockResolvedValue(sampleData);
     render(<HistoryPage />);
     expect(
       await screen.findByRole("heading", {
-        name: /transaction history/i,
+        name: /historial de transacciones/i,
         level: 2,
       }),
     ).toBeInTheDocument();
@@ -115,7 +117,7 @@ describe("HistoryPage", () => {
 
     const filter = screen.getByRole("combobox");
     await user.click(filter);
-    const option = await screen.findByText("Completed");
+    const option = await screen.findByText("Completada");
     await user.click(option);
 
     await waitFor(() =>
@@ -141,7 +143,9 @@ describe("HistoryPage", () => {
     );
     render(<HistoryPage />);
     await waitFor(() => {
-      expect(screen.getByText(/error loading transactions/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/error al cargar las transacciones/i),
+      ).toBeInTheDocument();
     });
   });
 

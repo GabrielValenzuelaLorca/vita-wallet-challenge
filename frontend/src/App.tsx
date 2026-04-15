@@ -1,12 +1,29 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ConfigProvider, theme as antdTheme } from "antd";
+import { ConfigProvider, Spin, theme as antdTheme } from "antd";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppLayout } from "@/components/AppLayout";
-import { LoginPage } from "@/pages/Login/LoginPage";
-import { DashboardPage } from "@/pages/Dashboard/DashboardPage";
-import { ExchangePage } from "@/pages/Exchange/ExchangePage";
-import { HistoryPage } from "@/pages/History/HistoryPage";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
+const LoginPage = lazy(() =>
+  import("@/pages/Login/LoginPage").then((m) => ({ default: m.LoginPage })),
+);
+const DashboardPage = lazy(() =>
+  import("@/pages/Dashboard/DashboardPage").then((m) => ({
+    default: m.DashboardPage,
+  })),
+);
+const ExchangePage = lazy(() =>
+  import("@/pages/Exchange/ExchangePage").then((m) => ({
+    default: m.ExchangePage,
+  })),
+);
+const HistoryPage = lazy(() =>
+  import("@/pages/History/HistoryPage").then((m) => ({
+    default: m.HistoryPage,
+  })),
+);
 
 // Vita Wallet brand palette (from Figma):
 //   Blue 1  #167287  → sidebar / dark teal
@@ -84,26 +101,38 @@ const vitaTheme = {
   },
 };
 
+function PageSpinner() {
+  return (
+    <div style={{ display: "flex", justifyContent: "center", padding: 48 }}>
+      <Spin size="large" />
+    </div>
+  );
+}
+
 export function App() {
   return (
-    <ConfigProvider theme={vitaTheme}>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/exchange" element={<ExchangePage />} />
-            <Route path="/history" element={<HistoryPage />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AuthProvider>
-    </ConfigProvider>
+    <ErrorBoundary>
+      <ConfigProvider theme={vitaTheme}>
+        <AuthProvider>
+          <Suspense fallback={<PageSpinner />}>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <AppLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route path="/" element={<DashboardPage />} />
+                <Route path="/exchange" element={<ExchangePage />} />
+                <Route path="/history" element={<HistoryPage />} />
+              </Route>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+        </AuthProvider>
+      </ConfigProvider>
+    </ErrorBoundary>
   );
 }

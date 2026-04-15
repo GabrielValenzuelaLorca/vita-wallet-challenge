@@ -1,14 +1,16 @@
+import { getAuthToken, removeAuthToken } from "@/services/tokenStorage";
+
 const BASE_URL = import.meta.env.VITE_API_URL ?? "/api";
-const TOKEN_KEY = "auth_token";
 
 export class ApiRequestError extends Error {
-  constructor(
-    public statusCode: number,
-    public errorCode: string,
-    message: string,
-  ) {
+  statusCode: number;
+  errorCode: string;
+
+  constructor(statusCode: number, errorCode: string, message: string) {
     super(message);
     this.name = "ApiRequestError";
+    this.statusCode = statusCode;
+    this.errorCode = errorCode;
   }
 }
 
@@ -20,13 +22,13 @@ interface ErrorBody {
 }
 
 interface RequestOptions {
-  body?: Record<string, string | number | boolean | null>;
+  body?: object;
   headers?: Record<string, string>;
   params?: Record<string, string>;
 }
 
-function getAuthToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
+function isAuthPath(path: string): boolean {
+  return path.includes("/auth/");
 }
 
 function buildUrl(path: string, params?: Record<string, string>): string {
@@ -78,6 +80,11 @@ async function request<T>(
       }
     } catch {
       // Response body is not JSON, use defaults
+    }
+
+    if (response.status === 401 && !isAuthPath(path)) {
+      removeAuthToken();
+      window.dispatchEvent(new CustomEvent("auth:unauthorized"));
     }
 
     throw new ApiRequestError(response.status, errorCode, errorMessage);

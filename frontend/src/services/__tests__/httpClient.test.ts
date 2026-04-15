@@ -225,6 +225,67 @@ describe("httpClient", () => {
     });
   });
 
+  describe("401 unauthorized handling", () => {
+    it("dispatches auth:unauthorized and clears token for non-auth 401", async () => {
+      localStorage.setItem(TOKEN_KEY, "stale-token");
+      const dispatchSpy = vi.spyOn(window, "dispatchEvent");
+      mockFetch(
+        jsonResponse(
+          { error: { code: "unauthorized", message: "Token expired" } },
+          401,
+        ),
+      );
+
+      await expect(httpClient.get("/balances")).rejects.toThrow(
+        ApiRequestError,
+      );
+
+      expect(localStorage.getItem(TOKEN_KEY)).toBeNull();
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ type: "auth:unauthorized" }),
+      );
+    });
+
+    it("does NOT dispatch auth:unauthorized for /auth/ paths", async () => {
+      localStorage.setItem(TOKEN_KEY, "some-token");
+      const dispatchSpy = vi.spyOn(window, "dispatchEvent");
+      mockFetch(
+        jsonResponse(
+          { error: { code: "invalid_credentials", message: "Bad password" } },
+          401,
+        ),
+      );
+
+      await expect(
+        httpClient.post("/auth/login", {
+          body: { email: "x@x.com", password: "wrong" },
+        }),
+      ).rejects.toThrow(ApiRequestError);
+
+      // Token should still be present (not cleared)
+      expect(localStorage.getItem(TOKEN_KEY)).toBe("some-token");
+      expect(dispatchSpy).not.toHaveBeenCalledWith(
+        expect.objectContaining({ type: "auth:unauthorized" }),
+      );
+    });
+
+    it("does NOT dispatch auth:unauthorized for non-401 errors", async () => {
+      const dispatchSpy = vi.spyOn(window, "dispatchEvent");
+      mockFetch(
+        jsonResponse(
+          { error: { code: "server_error", message: "Crash" } },
+          500,
+        ),
+      );
+
+      await expect(httpClient.get("/broken")).rejects.toThrow(ApiRequestError);
+
+      expect(dispatchSpy).not.toHaveBeenCalledWith(
+        expect.objectContaining({ type: "auth:unauthorized" }),
+      );
+    });
+  });
+
   describe("ApiRequestError class", () => {
     it("has the correct name", () => {
       const error = new ApiRequestError(400, "BAD_REQUEST", "Invalid");

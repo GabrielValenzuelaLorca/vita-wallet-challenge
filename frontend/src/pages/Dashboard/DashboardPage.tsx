@@ -22,7 +22,6 @@ export function DashboardPage() {
           level={2}
           style={{
             margin: 0,
-            fontFamily: "'Open Sans', sans-serif",
             fontWeight: 600,
             fontSize: 28,
             lineHeight: "38px",
@@ -52,7 +51,6 @@ export function DashboardPage() {
             level={3}
             style={{
               margin: "0 0 16px 0",
-              fontFamily: "'Open Sans', sans-serif",
               fontWeight: 400,
               fontSize: 24,
               lineHeight: "33px",

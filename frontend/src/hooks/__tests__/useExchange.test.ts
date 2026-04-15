@@ -10,17 +10,14 @@ import type {
   ExchangeRequest,
 } from "@/schemas/transaction";
 import type { WalletsResponseSchema } from "@/schemas/wallet";
-import type { PricesResponseSchema } from "@/schemas/price";
 
 type SubmitExchangeFn = (
   request: ExchangeRequest,
 ) => Promise<TransactionResponseSchema>;
 type GetBalancesFn = () => Promise<WalletsResponseSchema>;
-type GetPricesFn = () => Promise<PricesResponseSchema>;
 
 const submitExchangeMock = vi.fn<SubmitExchangeFn>();
 const getBalancesMock = vi.fn<GetBalancesFn>();
-const getPricesMock = vi.fn<GetPricesFn>();
 
 vi.mock("@/services/exchangeApi", () => ({
   exchangeApi: {
@@ -34,14 +31,6 @@ vi.mock("@/services/walletApi", () => ({
   walletApi: {
     get getBalances() {
       return getBalancesMock;
-    },
-  },
-}));
-
-vi.mock("@/services/priceApi", () => ({
-  priceApi: {
-    get getPrices() {
-      return getPricesMock;
     },
   },
 }));
@@ -75,31 +64,6 @@ function createWrapper() {
   };
 }
 
-// Vita Wallet API format: prices[<crypto>]["<fiat>_sell"] = crypto per 1 fiat.
-// Here: 1 USD → 0.00001538461538 BTC (i.e., 1 BTC ≈ 65000 USD).
-const pricesResponse: PricesResponseSchema = {
-  data: {
-    btc: {
-      usd_sell: "0.00001538461538", // 1 / 65000
-      usd_buy: "0.00001538461538",
-      clp_sell: "0.00000001818181818", // 1 / 55000000
-      clp_buy: "0.00000001818181818",
-    },
-    usdc: {
-      usd_sell: "1.0",
-      usd_buy: "1.0",
-      clp_sell: "0.00094339622641",
-      clp_buy: "0.00094339622641",
-    },
-    usdt: {
-      usd_sell: "1.0",
-      usd_buy: "1.0",
-      clp_sell: "0.00094339622641",
-      clp_buy: "0.00094339622641",
-    },
-  },
-};
-
 const balancesResponse: WalletsResponseSchema = {
   data: [
     { id: 1, currency: "USD", balance: "1000.00000000" },
@@ -110,6 +74,7 @@ const balancesResponse: WalletsResponseSchema = {
 const successTransaction: TransactionResponseSchema = {
   data: {
     id: 7,
+    kind: "exchange",
     source_currency: "USD",
     target_currency: "BTC",
     source_amount: "10",
@@ -124,53 +89,7 @@ const successTransaction: TransactionResponseSchema = {
 describe("useExchange", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    getPricesMock.mockResolvedValue(pricesResponse);
     getBalancesMock.mockResolvedValue(balancesResponse);
-  });
-
-  it("calculates estimate USD -> BTC via fiat-to-crypto sell rate", async () => {
-    const { result } = renderHook(() => useExchange(), {
-      wrapper: createWrapper(),
-    });
-    await waitFor(() => expect(result.current.prices).not.toBeNull());
-
-    const estimate = result.current.calculateEstimate("USD", "BTC", "650");
-    expect(estimate).not.toBeNull();
-    const numericEstimate = parseFloat(estimate ?? "0");
-    // 650 USD * (1/65000 BTC per USD) = 0.01 BTC
-    expect(numericEstimate).toBeCloseTo(0.01, 6);
-  });
-
-  it("calculates estimate BTC -> USD via crypto-to-fiat inverse sell rate", async () => {
-    const { result } = renderHook(() => useExchange(), {
-      wrapper: createWrapper(),
-    });
-    await waitFor(() => expect(result.current.prices).not.toBeNull());
-
-    const estimate = result.current.calculateEstimate("BTC", "USD", "0.01");
-    expect(estimate).not.toBeNull();
-    const numericEstimate = parseFloat(estimate ?? "0");
-    // 0.01 BTC / (1/65000 BTC per USD) = 650 USD
-    expect(numericEstimate).toBeCloseTo(650, 2);
-  });
-
-  it("returns null when source equals target", async () => {
-    const { result } = renderHook(() => useExchange(), {
-      wrapper: createWrapper(),
-    });
-    await waitFor(() => expect(result.current.prices).not.toBeNull());
-
-    expect(result.current.calculateEstimate("USD", "USD", "10")).toBeNull();
-  });
-
-  it("returns null when amount is zero or non-numeric", async () => {
-    const { result } = renderHook(() => useExchange(), {
-      wrapper: createWrapper(),
-    });
-    await waitFor(() => expect(result.current.prices).not.toBeNull());
-
-    expect(result.current.calculateEstimate("USD", "BTC", "0")).toBeNull();
-    expect(result.current.calculateEstimate("USD", "BTC", "abc")).toBeNull();
   });
 
   it("sets result on successful submitExchange", async () => {
@@ -178,7 +97,6 @@ describe("useExchange", () => {
     const { result } = renderHook(() => useExchange(), {
       wrapper: createWrapper(),
     });
-    await waitFor(() => expect(result.current.prices).not.toBeNull());
 
     act(() => {
       result.current.submitExchange({
@@ -200,7 +118,6 @@ describe("useExchange", () => {
     const { result } = renderHook(() => useExchange(), {
       wrapper: createWrapper(),
     });
-    await waitFor(() => expect(result.current.prices).not.toBeNull());
 
     act(() => {
       result.current.submitExchange({
@@ -220,7 +137,6 @@ describe("useExchange", () => {
     const { result } = renderHook(() => useExchange(), {
       wrapper: createWrapper(),
     });
-    await waitFor(() => expect(result.current.prices).not.toBeNull());
 
     act(() => {
       result.current.submitExchange({

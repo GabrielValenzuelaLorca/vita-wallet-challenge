@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { VitaSelect } from "@/components/VitaSelect";
 import type { TransactionStatus } from "@/types/transaction";
 
 interface StatusFilterProps {
@@ -7,15 +7,15 @@ interface StatusFilterProps {
 }
 
 const OPTIONS: { label: string; value: TransactionStatus }[] = [
-  { label: "Pending", value: "pending" },
-  { label: "Completed", value: "completed" },
-  { label: "Rejected", value: "rejected" },
+  { label: "Pendiente", value: "pending" },
+  { label: "Completada", value: "completed" },
+  { label: "Rechazada", value: "rejected" },
 ];
 
 export function StatusFilter({ value, onChange }: StatusFilterProps) {
   return (
-    <Select<TransactionStatus>
-      placeholder="Filter by status"
+    <VitaSelect<TransactionStatus>
+      placeholder="Todos"
       allowClear
       style={{ width: 200 }}
       value={value}

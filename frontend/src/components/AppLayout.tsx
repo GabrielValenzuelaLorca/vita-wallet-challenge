@@ -1,17 +1,11 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, type MenuProps } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuth";
 import { SidebarPattern } from "./SidebarPattern";
-import type { ReactNode } from "react";
 
 const { Sider, Content } = Layout;
 
-interface MenuItem {
-  key: string;
-  label: ReactNode;
-}
-
-const menuItems: MenuItem[] = [
+const menuItems: MenuProps["items"] = [
   { key: "/", label: <Link to="/">Inicio</Link> },
   { key: "/transfer", label: <Link to="/">Transferir</Link> },
   { key: "/recharge", label: <Link to="/">Recargar</Link> },

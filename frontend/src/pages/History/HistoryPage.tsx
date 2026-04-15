@@ -21,15 +21,15 @@ export function HistoryPage() {
 
   return (
     <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-      <Title level={2}>Transaction History</Title>
+      <Title level={2}>Historial de transacciones</Title>
       <Card>
         <Space direction="vertical" size="middle" style={{ width: "100%" }}>
           <StatusFilter value={statusFilter} onChange={setStatusFilter} />
           {isError && (
             <Alert
               type="error"
-              message="Error loading transactions"
-              description={error?.message ?? "An unexpected error occurred"}
+              message="Error al cargar las transacciones"
+              description={error?.message ?? "Ocurrió un error inesperado"}
               showIcon
             />
           )}

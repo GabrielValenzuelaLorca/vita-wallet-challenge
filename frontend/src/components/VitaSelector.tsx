@@ -32,8 +32,6 @@ const CURRENCY_LABELS: Record<Currency, string> = {
 };
 
 const HEIGHT = 56;
-const RADIUS = 6;
-const BORDER_COLOR = "var(--vw-gray-1, #B9C1C2)";
 const SELECTOR_WIDTH = 80;
 
 function CurrencyIcon({ currency }: { currency: Currency }) {
@@ -52,7 +50,7 @@ function renderOption(currency: Currency) {
     label: (
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <CurrencyIcon currency={currency} />
-        <span style={{ fontFamily: "'Open Sans', sans-serif", fontSize: 14, fontWeight: 500 }}>
+        <span style={{ fontSize: 14, fontWeight: 500 }}>
           {CURRENCY_LABELS[currency]}
         </span>
       </div>
@@ -95,13 +93,6 @@ export function VitaSelector({
       style={{
         width: SELECTOR_WIDTH,
         height: HEIGHT,
-        fontFamily: "'Open Sans', sans-serif",
-      }}
-      styles={{
-        popup: {
-          borderRadius: RADIUS,
-          border: `1px solid ${BORDER_COLOR}`,
-        },
       }}
     />
   );

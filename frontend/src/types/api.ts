@@ -1,8 +1,6 @@
-export interface ApiMeta {
-  page?: number;
-  per_page?: number;
-  total?: number;
-}
+import type { ApiMeta } from "@/schemas/common";
+
+export type { ApiMeta, ApiError } from "@/schemas/common";
 
 export interface ApiEnvelope<T> {
   data: T;

@@ -1,8 +1,8 @@
 import { Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { TransactionSchema } from "@/schemas/transaction";
-import type { Currency } from "@/types/wallet";
 import type { TransactionStatus } from "@/types/transaction";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface TransactionTableProps {
   transactions: TransactionSchema[];
@@ -11,39 +11,6 @@ interface TransactionTableProps {
   total: number;
   onPageChange: (page: number) => void;
   isLoading: boolean;
-}
-
-function formatAmount(amount: string, currency: Currency): string {
-  const numeric = parseFloat(amount);
-  switch (currency) {
-    case "USD":
-      return numeric.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    case "CLP":
-      return numeric.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      });
-    case "BTC": {
-      const formatted = numeric
-        .toFixed(8)
-        .replace(/0+$/, "")
-        .replace(/\.$/, "");
-      return `${formatted} BTC`;
-    }
-    case "USDC":
-    case "USDT":
-      return `$${numeric.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`;
-  }
 }
 
 const STATUS_COLORS: Record<TransactionStatus, string> = {
@@ -63,7 +30,7 @@ const columns: ColumnsType<TransactionSchema> = [
     title: "From",
     key: "from",
     render: (_value, record) =>
-      formatAmount(record.source_amount, record.source_currency),
+      formatCurrency(record.source_amount, record.source_currency),
   },
   {
     title: "To",
@@ -71,7 +38,7 @@ const columns: ColumnsType<TransactionSchema> = [
     render: (_value, record) =>
       record.status === "rejected"
         ? "--"
-        : formatAmount(record.target_amount, record.target_currency),
+        : formatCurrency(record.target_amount, record.target_currency),
   },
   {
     title: "Rate",
