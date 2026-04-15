@@ -1,7 +1,8 @@
-import { Button, Typography, Space } from "antd";
+import { Typography, Space } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import type { Currency } from "@/types/wallet";
 import { formatCurrency } from "../utils/formatCurrency";
+import { VitaButton } from "@/components/VitaButton";
 
 const { Text, Title } = Typography;
 
@@ -66,9 +67,6 @@ export function ExchangeSummary({
 }: ExchangeSummaryProps) {
   const numericAmount = parseFloat(amount);
   const numericEstimate = parseFloat(estimate);
-  // "Tasa de cambio" expressed as 1 target = X source (so the larger unit
-  // appears on the left of the equation, matching the Figma example
-  // "1 BTC = 62.512.668,43 CLP").
   const rateTargetToSource =
     Number.isFinite(numericEstimate) && numericEstimate > 0
       ? numericAmount / numericEstimate
@@ -85,14 +83,15 @@ export function ExchangeSummary({
           marginBottom: 32,
         }}
       >
-        <Button
-          type="text"
-          icon={<ArrowLeftOutlined />}
+        <VitaButton
+          variant="secondary"
+          vitaSize="compact"
           onClick={onBack}
           disabled={isSubmitting}
-          style={{ padding: 4 }}
-          aria-label="Volver"
-        />
+          icon={<ArrowLeftOutlined />}
+        >
+          {""}
+        </VitaButton>
         <Title
           level={3}
           style={{
@@ -126,23 +125,21 @@ export function ExchangeSummary({
       </div>
 
       <Space style={{ width: "100%", justifyContent: "space-between" }}>
-        <Button
-          size="large"
+        <VitaButton
+          variant="secondary"
+          vitaSize="compact"
           onClick={onBack}
           disabled={isSubmitting}
-          style={{ borderRadius: 999, minWidth: 120 }}
         >
           Atrás
-        </Button>
-        <Button
-          type="primary"
-          size="large"
+        </VitaButton>
+        <VitaButton
+          vitaSize="compact"
           loading={isSubmitting}
           onClick={onConfirm}
-          style={{ borderRadius: 999, minWidth: 160 }}
         >
           Intercambiar
-        </Button>
+        </VitaButton>
       </Space>
     </div>
   );

@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
-import { Form, Input, Button, Alert } from "antd";
+import { Form, Alert } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import { VitaButton } from "@/components/VitaButton";
+import { VitaTextField } from "@/components/VitaTextField";
 import type { LoginCredentials } from "@/types/auth";
 
 interface LoginFormProps {
@@ -40,10 +42,9 @@ export function LoginForm({
             { type: "email", message: "Please enter a valid email" },
           ]}
         >
-          <Input
-            prefix={<MailOutlined />}
+          <VitaTextField
             placeholder="Email"
-            size="large"
+            prefix={<MailOutlined />}
           />
         </Form.Item>
 
@@ -54,23 +55,21 @@ export function LoginForm({
             { min: 6, message: "Password must be at least 6 characters" },
           ]}
         >
-          <Input.Password
-            prefix={<LockOutlined />}
+          <VitaTextField
             placeholder="Password"
-            size="large"
+            prefix={<LockOutlined />}
+            type="password"
           />
         </Form.Item>
 
         <Form.Item>
-          <Button
-            type="primary"
+          <VitaButton
             htmlType="submit"
             loading={isSubmitting}
             block
-            size="large"
           >
             Log in
-          </Button>
+          </VitaButton>
         </Form.Item>
 
         {children}

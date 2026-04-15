@@ -1,6 +1,8 @@
-import { Form, Select, InputNumber, Button, Typography, Space } from "antd";
+import { Form, InputNumber, Typography, Space } from "antd";
 import type { Currency, Wallet } from "@/types/wallet";
 import { formatCurrency } from "../utils/formatCurrency";
+import { VitaButton } from "@/components/VitaButton";
+import { VitaSelector } from "@/components/VitaSelector";
 
 const { Title, Text } = Typography;
 
@@ -55,8 +57,6 @@ export function ExchangeFormStep({
     isAmountValid &&
     !exceedsBalance &&
     estimate !== null;
-
-  const currencyOptions = currencies.map((c) => ({ label: c, value: c }));
 
   return (
     <div style={{ width: "100%" }}>
@@ -114,13 +114,10 @@ export function ExchangeFormStep({
           }
         >
           <Space.Compact style={{ width: "100%" }}>
-            <Select<Currency>
-              placeholder="—"
+            <VitaSelector
               value={sourceCurrency ?? undefined}
               onChange={onSourceCurrencyChange}
-              options={currencyOptions}
-              size="large"
-              style={{ width: 110 }}
+              currencies={currencies}
             />
             <InputNumber
               style={{ width: "100%" }}
@@ -166,13 +163,10 @@ export function ExchangeFormStep({
           }
         >
           <Space.Compact style={{ width: "100%" }}>
-            <Select<Currency>
-              placeholder="—"
+            <VitaSelector
               value={targetCurrency ?? undefined}
               onChange={onTargetCurrencyChange}
-              options={currencyOptions}
-              size="large"
-              style={{ width: 110 }}
+              currencies={currencies}
             />
             <InputNumber
               style={{ width: "100%" }}
@@ -193,22 +187,20 @@ export function ExchangeFormStep({
             marginTop: 8,
           }}
         >
-          <Button
-            size="large"
+          <VitaButton
+            variant="secondary"
+            vitaSize="compact"
             onClick={onBack}
-            style={{ borderRadius: 999, minWidth: 120 }}
           >
             Atrás
-          </Button>
-          <Button
-            type="primary"
-            size="large"
+          </VitaButton>
+          <VitaButton
+            vitaSize="compact"
             disabled={!canContinue}
             onClick={onContinue}
-            style={{ borderRadius: 999, minWidth: 160 }}
           >
             Continuar
-          </Button>
+          </VitaButton>
         </Space>
       </Form>
     </div>

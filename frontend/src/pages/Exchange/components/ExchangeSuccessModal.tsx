@@ -1,6 +1,7 @@
-import { Modal, Typography, Button } from "antd";
+import { Modal, Typography } from "antd";
 import type { Currency } from "@/types/wallet";
 import { formatCurrency } from "../utils/formatCurrency";
+import { VitaButton } from "@/components/VitaButton";
 
 import exchangeSuccessIllustration from "@/assets/illustrations/exchange-success.png";
 
@@ -68,14 +69,9 @@ export function ExchangeSuccessModal({
         tu saldo.
       </Text>
 
-      <Button
-        type="primary"
-        size="large"
-        onClick={onClose}
-        style={{ borderRadius: 999, minWidth: 200 }}
-      >
+      <VitaButton onClick={onClose}>
         Hacer otro intercambio
-      </Button>
+      </VitaButton>
     </Modal>
   );
 }
