@@ -79,18 +79,17 @@ describe("LoginPage", () => {
   it("renders email input, password input, and submit button", () => {
     renderLoginPage();
 
-    expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("juan@gmail.com")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Escribe tu contraseña")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /log in/i }),
+      screen.getByRole("button", { name: /iniciar sesión/i }),
     ).toBeInTheDocument();
   });
 
-  it("renders Vita Wallet branding and welcome heading", () => {
+  it("renders login heading", () => {
     renderLoginPage();
 
-    expect(screen.getByText("Vita Wallet")).toBeInTheDocument();
-    expect(screen.getByText(/welcome back/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /iniciar sesión/i })).toBeInTheDocument();
   });
 
   it("shows error Alert when errorMessage is provided", () => {
@@ -112,7 +111,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    const button = screen.getByRole("button", { name: /log in/i });
+    const button = screen.getByRole("button", { name: /iniciar sesión/i });
     expect(button).toBeInTheDocument();
   });
 
@@ -127,6 +126,6 @@ describe("LoginPage", () => {
     renderLoginPage();
 
     expect(screen.getByText("Dashboard Page")).toBeInTheDocument();
-    expect(screen.queryByPlaceholderText("Email")).not.toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("juan@gmail.com")).not.toBeInTheDocument();
   });
 });

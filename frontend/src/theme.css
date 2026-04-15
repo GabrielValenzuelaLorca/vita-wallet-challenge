@@ -54,6 +54,10 @@ html, body, #root {
   background: var(--vw-bg);
 }
 
+input[type="password"] {
+  -webkit-text-security: square;
+}
+
 /* Sider styling — Vita Wallet design.
  * - Subtle "$" decorative pattern background
  * - Pill-shaped menu items with primary-teal active state

@@ -4,10 +4,9 @@ import { useAuthContext } from "@/hooks/useAuth";
 import { useLoginForm } from "@/hooks/useLoginForm";
 import { LoginForm } from "./components/LoginForm";
 
-import coinLogo from "@/assets/illustrations/coin-logo.png";
 import loginHero from "@/assets/illustrations/login-hero.png";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export function LoginPage() {
   const { isAuthenticated } = useAuthContext();
@@ -36,52 +35,20 @@ export function LoginPage() {
           background: "#FFFFFF",
         }}
       >
-        <div style={{ width: "100%", maxWidth: 380 }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              marginBottom: 32,
-            }}
-          >
-            <img
-              src={coinLogo}
-              alt="Vita Wallet"
-              style={{ width: 44, height: 44 }}
-            />
-            <Title
-              level={3}
-              style={{
-                margin: 0,
-                color: "var(--vw-text-primary, #1A2B3C)",
-                fontWeight: 700,
-              }}
-            >
-              Vita Wallet
-            </Title>
-          </div>
-
+        <div style={{ width: "100%", maxWidth: 387 }}>
           <Title
             level={2}
             style={{
-              margin: "0 0 8px 0",
-              fontWeight: 700,
-              color: "var(--vw-text-primary, #1A2B3C)",
+              margin: "0 0 32px 0",
+              fontFamily: "'Open Sans', sans-serif",
+              fontWeight: 600,
+              fontSize: 28,
+              lineHeight: "38px",
+              color: "var(--vw-black, #010E11)",
             }}
           >
-            Welcome back
+            Iniciar sesión
           </Title>
-          <Text
-            style={{
-              color: "var(--vw-text-secondary, #5A6B7B)",
-              fontSize: 15,
-              display: "block",
-              marginBottom: 32,
-            }}
-          >
-            Log in to access your wallet, prices and exchange.
-          </Text>
 
           <LoginForm
             onSubmit={handleLogin}
@@ -94,37 +61,22 @@ export function LoginPage() {
       {/* Right: hero / illustration */}
       <div
         style={{
-          background:
-            "linear-gradient(135deg, var(--vw-sidebar-bg, #003B46) 0%, var(--vw-primary, #07A5A7) 100%)",
+          background: "#FFFFFF",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           padding: 48,
-          color: "#fff",
         }}
       >
-        <div style={{ maxWidth: 440, textAlign: "center" }}>
-          <img
-            src={loginHero}
-            alt="Multi-currency wallet"
-            style={{
-              width: 320,
-              maxWidth: "100%",
-              margin: "0 auto 32px",
-              display: "block",
-            }}
-          />
-          <Title
-            level={3}
-            style={{ color: "#fff", margin: "0 0 12px 0", fontWeight: 700 }}
-          >
-            Multi-currency wallet
-          </Title>
-          <Text style={{ color: "rgba(255,255,255,0.85)", fontSize: 16 }}>
-            Manage your fiat and crypto balances, get live prices and
-            exchange between currencies — all in one place.
-          </Text>
-        </div>
+        <img
+          src={loginHero}
+          alt="Multi-currency wallet"
+          style={{
+            width: 520,
+            maxWidth: "100%",
+            display: "block",
+          }}
+        />
       </div>
     </div>
   );

@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
-import { Form, Alert } from "antd";
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import { Form, Alert, Typography } from "antd";
 import { VitaButton } from "@/components/VitaButton";
 import { VitaTextField } from "@/components/VitaTextField";
 import type { LoginCredentials } from "@/types/auth";
+
+const { Text } = Typography;
 
 interface LoginFormProps {
   onSubmit: (values: LoginCredentials) => void;
@@ -18,6 +19,18 @@ export function LoginForm({
   errorMessage,
   children,
 }: LoginFormProps) {
+  const [form] = Form.useForm<LoginCredentials>();
+  const emailValue = Form.useWatch("email", form);
+  const passwordValue = Form.useWatch("password", form);
+
+  const isEmailValid =
+    typeof emailValue === "string" &&
+    emailValue.length > 0 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+  const isPasswordValid =
+    typeof passwordValue === "string" && passwordValue.length >= 6;
+  const canSubmit = isEmailValid && isPasswordValid && !isSubmitting;
+
   return (
     <>
       {errorMessage !== null && (
@@ -30,6 +43,7 @@ export function LoginForm({
         />
       )}
       <Form<LoginCredentials>
+        form={form}
         name="login"
         onFinish={onSubmit}
         layout="vertical"
@@ -43,8 +57,8 @@ export function LoginForm({
           ]}
         >
           <VitaTextField
-            placeholder="Email"
-            prefix={<MailOutlined />}
+            label="Correo electrónico"
+            placeholder="juan@gmail.com"
           />
         </Form.Item>
 
@@ -56,19 +70,35 @@ export function LoginForm({
           ]}
         >
           <VitaTextField
-            placeholder="Password"
-            prefix={<LockOutlined />}
+            label="Contraseña"
+            placeholder="Escribe tu contraseña"
             type="password"
           />
         </Form.Item>
+
+        <Text
+          style={{
+            display: "block",
+            textAlign: "right",
+            marginTop: -16,
+            marginBottom: 24,
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: 14,
+            color: "var(--vw-black, #010E11)",
+            cursor: "pointer",
+          }}
+        >
+          ¿Olvidaste tu contraseña?
+        </Text>
 
         <Form.Item>
           <VitaButton
             htmlType="submit"
             loading={isSubmitting}
+            disabled={!canSubmit}
             block
           >
-            Log in
+            Iniciar sesión
           </VitaButton>
         </Form.Item>
 
