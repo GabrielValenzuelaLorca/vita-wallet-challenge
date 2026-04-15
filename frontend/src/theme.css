@@ -33,6 +33,16 @@
   --vw-warning: #F5A524;
   --vw-error: var(--vw-red);
 
+  /* Spacing (derived from Figma 1440×1024 grid) */
+  --vw-space-xs: 8px;
+  --vw-space-sm: 16px;
+  --vw-space-md: 24px;
+  --vw-space-lg: 48px;
+  --vw-space-xl: 80px;
+  --vw-space-2xl: 120px;
+  --vw-page-margin: var(--vw-space-2xl);
+  --vw-gutter: 20px;
+
   /* Shape */
   --vw-radius-sm: 6px;
   --vw-radius-md: 10px;

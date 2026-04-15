@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
-import { Form, Alert, Typography } from "antd";
+import { Form, Alert } from "antd";
 import { VitaButton } from "@/components/VitaButton";
 import { VitaTextField } from "@/components/VitaTextField";
 import type { LoginCredentials } from "@/types/auth";
-
-const { Text } = Typography;
+import styles from "../LoginPage.module.css";
 
 interface LoginFormProps {
   onSubmit: (values: LoginCredentials) => void;
@@ -76,20 +75,13 @@ export function LoginForm({
           />
         </Form.Item>
 
-        <Text
-          style={{
-            display: "block",
-            textAlign: "right",
-            marginTop: -16,
-            marginBottom: 24,
-            fontFamily: "'Open Sans', sans-serif",
-            fontSize: 14,
-            color: "var(--vw-black, #010E11)",
-            cursor: "pointer",
-          }}
+        <button
+          type="button"
+          className={styles.forgotPassword}
+          onClick={() => {}}
         >
           ¿Olvidaste tu contraseña?
-        </Text>
+        </button>
 
         <Form.Item>
           <VitaButton
