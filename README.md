@@ -125,7 +125,7 @@ bundle exec rspec spec/services/exchange_service_spec.rb
 open coverage/index.html
 ```
 
-**Coverage actual**: 94.92% lines / 89.29% branches
+**Coverage actual**: 216 examples / 96.79% lines / 94.44% branches
 
 ### Frontend
 
@@ -148,7 +148,7 @@ npx tsc --noEmit
 npm run lint
 ```
 
-**Coverage actual**: 91.53% lines / 78.72% branches / 97.46% functions
+**Coverage actual**: 166 tests / 87.39% lines / 80.05% branches / 78.83% functions
 
 ---
 
@@ -181,20 +181,28 @@ vita-wallet-challenge/
 │       │   │   └── components/
 │       │   ├── Dashboard/
 │       │   ├── Exchange/
-│       │   └── History/
-│       ├── components/         # Transversal reusable components (ProtectedRoute)
+│       │   ├── History/
+│       │   └── UnderConstruction/  # Placeholder for sidebar items not yet designed
+│       ├── components/         # Shared components (AppLayout, ProtectedRoute, ErrorBoundary,
+│       │                       # VitaButton, VitaSelector, VitaSelect, VitaTextField, SidebarPattern)
 │       ├── hooks/              # Custom hooks — ALL business logic lives here
 │       │   ├── useAuth.ts
 │       │   ├── useLoginForm.ts
 │       │   ├── useBalances.ts
 │       │   ├── usePrices.ts
-│       │   ├── useExchange.ts
+│       │   ├── useExchange.ts          # Thin mutation orchestrator
+│       │   ├── usePriceEstimate.ts     # Extracted from useExchange — quote estimation
 │       │   └── useTransactions.ts
-│       ├── services/           # Typed HTTP clients (httpClient + per-resource APIs)
+│       ├── services/           # Typed HTTP clients (httpClient + per-resource APIs + tokenStorage)
 │       ├── schemas/            # Zod schemas (runtime validation + static inference)
 │       ├── contexts/           # AuthContext
-│       ├── types/              # Shared TS types
+│       ├── types/              # Shared TS types (re-exported from schemas via z.infer)
+│       ├── constants/          # Shared constants (currency icons + names)
+│       ├── utils/              # Shared utilities (formatCurrency)
 │       └── test/               # Test setup and utilities
+├── bin/
+│   └── ci                      # One-command local pipeline: rspec + lint + typecheck + test + build
+├── docker-compose.yml          # 3-service stack: postgres + backend + frontend (nginx reverse proxy)
 └── .planning/                  # GSD planning artifacts (project context, phases, verification)
 ```
 
@@ -297,7 +305,7 @@ Todas las respuestas siguen el mismo shape:
 - `code` en errores es machine-readable (para el frontend), `message` es human-readable.
 
 ### 8. Frontend: antd como design system (sin Tailwind)
-Con ~1.5 días de plazo, antd ofrece componentes pulidos (`Table` con paginación, `Select`, `Form`, `Card`, etc.) que ahorran horas vs hand-crafting con Tailwind. Trade-off: menos "craft" visible pero más pragmatismo y la UX queda más consistente.
+antd ofrece componentes pulidos (`Table` con paginación, `Select`, `Form`, `Card`, etc.) listos para producción sin reinventar ruedas. Sobre esa base se construyó un mini design system propio (`VitaButton`, `VitaTextField`, `VitaSelector`, `VitaSelect`) que encapsula la estética del Figma y mantiene el resto del código libre de imports directos de antd en las páginas.
 
 ### 9. TanStack Query + Zod
 - **TanStack Query**: maneja cache, invalidación, loading/error states out-of-the-box. Evita re-inventar fetch + state management.
@@ -305,8 +313,8 @@ Con ~1.5 días de plazo, antd ofrece componentes pulidos (`Table` con paginació
 
 ### 10. Tests integrados en cada fase (no al final)
 Cada feature se construye junto con sus tests. El objetivo era >=90% line coverage en ambos repos — actualmente:
-- **Backend**: 94.92% lines, 89.29% branches (SimpleCov threshold 90% lines)
-- **Frontend**: 91.53% lines, 78.72% branches, 97.46% functions (Vitest threshold 90% lines, 75% branches)
+- **Backend**: 216 examples, 96.79% lines, 94.44% branches (SimpleCov threshold 90% lines)
+- **Frontend**: 166 tests, 87.39% lines, 80.05% branches, 78.83% functions (Vitest threshold 90% lines, 75% branches)
 
 El threshold de branches en frontend se bajó a 75% porque componentes antd (especialmente `Table` con pagination) generan muchas branches edge que requieren test setup complejo — el ROI de subirlo a 90% no justificaba el tiempo dado el plazo.
 
@@ -316,12 +324,16 @@ El threshold de branches en frontend se bajó a 75% porque componentes antd (esp
 
 Fuera del alcance de esta prueba técnica, pero documentados como mejoras naturales:
 
-### Bonus del PDF (no implementados por tiempo)
-- **Deploy funcional** (Render/Heroku/Vercel)
-- **Docker + docker-compose** para setup 1-click
-- **CI/CD pipeline** (GitHub Actions)
-- **Swagger / OpenAPI docs** del backend
-- **UI pixel-perfect Figma** — estructura antd funcional, estética puede refinarse
+### Bonus del PDF
+
+**Implementados**:
+- ✅ **Docker + docker-compose** para setup 1-click (ver [Opción A](#opción-a--docker-recomendado-1-comando))
+- ✅ **UI alineada con Figma** — se iteraron ~15 commits alineando tipografía, paleta, grid, sidebar, componentes y las ilustraciones exportadas del diseño
+
+**No implementados por scope**:
+- **Deploy funcional** (Render/Heroku/Vercel) — el Docker stack lo deja listo para cualquier runner con compose
+- **CI/CD pipeline formal** (GitHub Actions) — `bin/ci` cubre el flujo local equivalente (rspec + lint + typecheck + vitest + build)
+- **Swagger / OpenAPI docs** — la API está documentada en este README con el envelope y los 8 endpoints; Swagger formal queda como mejora
 
 ### Features de auth
 - **Registro desde UI** (solo existe el endpoint, no hay página de registro en el frontend — se demo con seeds)
@@ -365,3 +377,17 @@ Este proyecto se construyó usando la metodología **GSD (Get Shit Done)**: un w
 - `phases/NN-*/` — por fase: CONTEXT, PLAN(s), SUMMARY, VERIFICATION
 
 Esto hace el proceso completamente auditable y permite al evaluador ver no solo el código final sino cómo se llegó a él.
+
+### Sobre el uso de IA
+
+Esta prueba se desarrolló usando **Claude (LLM de Anthropic) como pair programmer** durante todo el proceso. Específicamente:
+
+- Exploración de opciones técnicas, trade-offs y patrones de dominio (two-phase commit / saga, JWT con `tokens_valid_after`, pessimistic locking, etc.).
+- Generación inicial de código en sesiones colaborativas, revisada y editada en cada paso.
+- Redacción de tests, documentación y commit messages.
+- Code review iterativo del propio output (los reviews internos están reflejados en commits que arreglan issues encontrados durante el proceso).
+- Workflow GSD (los artefactos de `.planning/`) que es un *skill* del propio Claude Code.
+
+Cada decisión técnica del repo está revisada y entendida por mí, y puedo defenderla y modificarla en vivo durante la entrevista técnica. Las preguntas que envié al equipo evaluador (sobre el estado `pending` y la organización del sidebar/historial) son ejemplos del tipo de razonamiento previo que aplico antes de decidir, con o sin asistencia de IA.
+
+Considero que usar IA como herramienta de productividad (igual que un IDE, un linter o un buscador) es legítimo y cada vez más estándar; lo que importa es entender lo que se entrega y poder defenderlo. Si tienen preferencias sobre cómo se evalúa esto, me adapto.
