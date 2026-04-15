@@ -26,8 +26,12 @@ export function ExchangeSuccessModal({
       onCancel={onClose}
       footer={null}
       centered
-      width={480}
+      width={561}
       styles={{
+        content: {
+          background: "var(--vw-white, #F9F9FA)",
+          borderRadius: 6,
+        },
         body: {
           padding: "48px 32px 32px",
           textAlign: "center",
@@ -38,7 +42,7 @@ export function ExchangeSuccessModal({
         src={exchangeSuccessIllustration}
         alt="Intercambio exitoso"
         style={{
-          width: 220,
+          width: 280,
           maxWidth: "100%",
           margin: "0 auto 24px",
           display: "block",
@@ -49,9 +53,11 @@ export function ExchangeSuccessModal({
         level={3}
         style={{
           margin: 0,
-          color: "var(--vw-primary, #05BCB9)",
-          fontWeight: 700,
-          fontSize: 26,
+          fontFamily: "'Open Sans', sans-serif",
+          color: "var(--vw-blue-1, #167287)",
+          fontWeight: 600,
+          fontSize: 28,
+          lineHeight: "38px",
         }}
       >
         ¡Intercambio exitoso!
@@ -61,8 +67,10 @@ export function ExchangeSuccessModal({
           display: "block",
           marginTop: 8,
           marginBottom: 32,
-          color: "var(--vw-text-secondary, #5A6B7B)",
-          fontSize: 15,
+          fontFamily: "'Open Sans', sans-serif",
+          color: "var(--vw-black, #010E11)",
+          fontSize: 16,
+          lineHeight: "22px",
         }}
       >
         Ya cuentas con los {formatCurrency(targetAmount, targetCurrency)} en

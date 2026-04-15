@@ -115,11 +115,11 @@ describe("DashboardPage", () => {
 
     renderDashboard();
 
-    expect(screen.getByText("USD")).toBeInTheDocument();
-    expect(screen.getByText("CLP")).toBeInTheDocument();
-    expect(screen.getByText("BTC")).toBeInTheDocument();
-    expect(screen.getByText("USDC")).toBeInTheDocument();
-    expect(screen.getByText("USDT")).toBeInTheDocument();
+    expect(screen.getByText("US Dollar")).toBeInTheDocument();
+    expect(screen.getByText("Peso chileno")).toBeInTheDocument();
+    expect(screen.getByText("Bitcoin")).toBeInTheDocument();
+    expect(screen.getByText("USD Coin")).toBeInTheDocument();
+    expect(screen.getByText("Tether")).toBeInTheDocument();
   });
 
   it("formats USD balance with dollar sign and 2 decimals", () => {

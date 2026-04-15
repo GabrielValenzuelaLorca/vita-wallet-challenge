@@ -7,7 +7,7 @@ import tetherIcon from "@/assets/illustrations/tether.png";
 import dollarIcon from "@/assets/illustrations/dollar-sign.png";
 import chileIcon from "@/assets/illustrations/chile.png";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 interface BalanceCardProps {
   wallet: Wallet;
@@ -15,48 +15,15 @@ interface BalanceCardProps {
 
 interface CurrencyMeta {
   label: string;
-  symbol: string;
   icon: string;
-  accentBg: string;
-  accentFg: string;
 }
 
 const CURRENCY_META: Record<Currency, CurrencyMeta> = {
-  USD: {
-    label: "US Dollar",
-    symbol: "USD",
-    icon: dollarIcon,
-    accentBg: "rgba(5, 188, 185, 0.12)",
-    accentFg: "#05BCB9",
-  },
-  CLP: {
-    label: "Peso Chileno",
-    symbol: "CLP",
-    icon: chileIcon,
-    accentBg: "rgba(22, 114, 135, 0.12)",
-    accentFg: "#167287",
-  },
-  BTC: {
-    label: "Bitcoin",
-    symbol: "BTC",
-    icon: bitcoinIcon,
-    accentBg: "rgba(245, 165, 36, 0.14)",
-    accentFg: "#F5A524",
-  },
-  USDC: {
-    label: "USD Coin",
-    symbol: "USDC",
-    icon: usdcIcon,
-    accentBg: "rgba(46, 116, 191, 0.12)",
-    accentFg: "#2E74BF",
-  },
-  USDT: {
-    label: "Tether",
-    symbol: "USDT",
-    icon: tetherIcon,
-    accentBg: "rgba(38, 161, 123, 0.12)",
-    accentFg: "#26A17B",
-  },
+  USD: { label: "US Dollar", icon: dollarIcon },
+  CLP: { label: "Peso chileno", icon: chileIcon },
+  BTC: { label: "Bitcoin", icon: bitcoinIcon },
+  USDC: { label: "USD Coin", icon: usdcIcon },
+  USDT: { label: "Tether", icon: tetherIcon },
 };
 
 function formatBalance(balance: string, currency: Currency): string {
@@ -98,73 +65,52 @@ export function BalanceCard({ wallet }: BalanceCardProps) {
   return (
     <Card
       style={{
-        borderRadius: 16,
-        border: "1px solid var(--vw-border, #E5EAEE)",
-        boxShadow: "var(--vw-shadow-card, 0 2px 8px rgba(15,35,50,0.06))",
+        borderRadius: 6,
+        border: "2px solid var(--vw-gray-2, #DEE0E0)",
+        background: "var(--vw-gray-3, #F5F6F7)",
+        boxShadow: "none",
         height: "100%",
       }}
-      styles={{ body: { padding: 24 } }}
+      styles={{ body: { padding: "24px 24px 20px" } }}
     >
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: 20,
+          marginBottom: 16,
         }}
       >
-        <div>
-          <Text
-            style={{
-              color: "var(--vw-text-secondary, #5A6B7B)",
-              fontSize: 13,
-              textTransform: "uppercase",
-              letterSpacing: 0.6,
-              fontWeight: 500,
-            }}
-          >
-            {meta.symbol}
-          </Text>
-          <div
-            style={{
-              color: "var(--vw-text-muted, #8A99A8)",
-              fontSize: 12,
-              marginTop: 2,
-            }}
-          >
-            {meta.label}
-          </div>
-        </div>
-        <div
+        <Text
           style={{
-            width: 44,
-            height: 44,
-            borderRadius: 12,
-            background: meta.accentBg,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            fontFamily: "'Open Sans', sans-serif",
+            fontWeight: 400,
+            fontSize: 16,
+            lineHeight: "22px",
+            color: "var(--vw-black, #010E11)",
           }}
         >
-          <img
-            src={meta.icon}
-            alt={meta.label}
-            style={{ width: 26, height: 26 }}
-          />
-        </div>
+          {meta.label}
+        </Text>
+        <img
+          src={meta.icon}
+          alt={meta.label}
+          style={{ width: 24, height: 24 }}
+        />
       </div>
-      <Title
-        level={3}
+      <Text
         style={{
+          display: "block",
           margin: 0,
-          fontSize: 26,
-          fontWeight: 700,
-          color: "var(--vw-text-primary, #1A2B3C)",
-          letterSpacing: -0.4,
+          fontFamily: "'Open Sans', sans-serif",
+          fontSize: 24,
+          fontWeight: 600,
+          lineHeight: "33px",
+          color: "var(--vw-black, #010E11)",
         }}
       >
         {formatBalance(wallet.balance, wallet.currency)}
-      </Title>
+      </Text>
     </Card>
   );
 }
