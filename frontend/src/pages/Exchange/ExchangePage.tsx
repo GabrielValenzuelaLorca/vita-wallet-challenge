@@ -157,7 +157,6 @@ export function ExchangePage() {
       <ExchangeSuccessModal
         open={showSuccess}
         targetCurrency={targetCurrency ?? "BTC"}
-        targetAmount={result?.target_amount ?? "0"}
         onClose={handleSuccessClose}
       />
     </div>

@@ -226,9 +226,7 @@ describe("ExchangePage", () => {
       expect(screen.getByText(/¡intercambio exitoso!/i)).toBeInTheDocument(),
     );
 
-    await user.click(
-      screen.getByRole("button", { name: /hacer otro intercambio/i }),
-    );
+    await user.click(screen.getByRole("button", { name: /close/i }));
 
     await waitFor(() =>
       expect(
