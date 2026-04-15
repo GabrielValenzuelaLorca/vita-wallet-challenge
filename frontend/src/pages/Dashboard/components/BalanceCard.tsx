@@ -69,7 +69,6 @@ export function BalanceCard({ wallet }: BalanceCardProps) {
         style={{
           display: "block",
           margin: 0,
-          fontFamily: "'Open Sans', sans-serif",
           fontSize: 24,
           fontWeight: 600,
           lineHeight: "33px",

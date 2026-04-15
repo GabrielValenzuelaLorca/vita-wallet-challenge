@@ -61,7 +61,6 @@ export function ExchangeSuccessModal({
         level={3}
         style={{
           margin: 0,
-          fontFamily: "'Open Sans', sans-serif",
           color: "var(--vw-blue-1, #167287)",
           fontWeight: 600,
           fontSize: 28,
@@ -75,7 +74,6 @@ export function ExchangeSuccessModal({
         style={{
           display: "block",
           marginTop: 8,
-          fontFamily: "'Open Sans', sans-serif",
           color: "var(--vw-black, #010E11)",
           fontSize: 16,
           lineHeight: "22px",

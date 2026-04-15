@@ -35,7 +35,6 @@ function SummaryRow({ label, value, highlight }: SummaryRowProps) {
     >
       <Text
         style={{
-          fontFamily: "'Open Sans', sans-serif",
           fontWeight: 400,
           fontSize: 14,
           lineHeight: "19px",
@@ -46,7 +45,6 @@ function SummaryRow({ label, value, highlight }: SummaryRowProps) {
       </Text>
       <Text
         style={{
-          fontFamily: "'Open Sans', sans-serif",
           fontWeight: 600,
           fontSize: 16,
           lineHeight: "22px",
@@ -136,8 +134,7 @@ export function ExchangeSummary({
           level={3}
           style={{
             margin: 0,
-            fontFamily: "'Open Sans', sans-serif",
-            color: "var(--vw-black, #010E11)",
+              color: "var(--vw-black, #010E11)",
             fontWeight: 600,
             fontSize: 28,
             lineHeight: "38px",

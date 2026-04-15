@@ -100,7 +100,6 @@ function TransactionRow({ transaction }: { transaction: Transaction }) {
     >
       <Text
         style={{
-          fontFamily: "'Open Sans', sans-serif",
           fontSize: 16,
           fontWeight: 400,
           lineHeight: "22px",
@@ -111,7 +110,6 @@ function TransactionRow({ transaction }: { transaction: Transaction }) {
       </Text>
       <Text
         style={{
-          fontFamily: "'Open Sans', sans-serif",
           fontSize: 16,
           fontWeight: 600,
           lineHeight: "22px",
@@ -135,7 +133,6 @@ export function TransactionHistory() {
         level={3}
         style={{
           margin: "0 0 16px 0",
-          fontFamily: "'Open Sans', sans-serif",
           fontWeight: 400,
           fontSize: 24,
           lineHeight: "33px",

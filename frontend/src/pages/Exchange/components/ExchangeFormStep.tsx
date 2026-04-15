@@ -90,7 +90,6 @@ export function ExchangeFormStep({
         style={{
           margin: 0,
           marginBottom: 40,
-          fontFamily: "'Open Sans', sans-serif",
           color: "var(--vw-black, #010E11)",
           fontWeight: 600,
           fontSize: 28,
@@ -108,8 +107,7 @@ export function ExchangeFormStep({
         {sourceBalance && (
           <Text
             style={{
-              fontFamily: "'Open Sans', sans-serif",
-              color: "var(--vw-blue-2, #05BCB9)",
+                  color: "var(--vw-blue-2, #05BCB9)",
               fontSize: 16,
               fontWeight: 600,
               lineHeight: "22px",
@@ -126,7 +124,6 @@ export function ExchangeFormStep({
           label={
             <Text
               style={{
-                fontFamily: "'Open Sans', sans-serif",
                 color: "var(--vw-black, #010E11)",
                 fontSize: 16,
                 fontWeight: 400,
@@ -169,7 +166,6 @@ export function ExchangeFormStep({
           label={
             <Text
               style={{
-                fontFamily: "'Open Sans', sans-serif",
                 color: "var(--vw-black, #010E11)",
                 fontSize: 16,
                 fontWeight: 400,
