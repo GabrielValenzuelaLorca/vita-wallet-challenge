@@ -7,11 +7,12 @@ const { Sider, Content } = Layout;
 
 const menuItems: MenuProps["items"] = [
   { key: "/", label: <Link to="/">Inicio</Link> },
-  { key: "/transfer", label: <Link to="/">Transferir</Link> },
-  { key: "/recharge", label: <Link to="/">Recargar</Link> },
+  { key: "/transfer", label: <Link to="/transfer">Transferir</Link> },
+  { key: "/recharge", label: <Link to="/recharge">Recargar</Link> },
   { key: "/exchange", label: <Link to="/exchange">Intercambiar</Link> },
-  { key: "/profile", label: <Link to="/">Perfil</Link> },
-  { key: "/help", label: <Link to="/">Ayuda</Link> },
+  { key: "/history", label: <Link to="/history">Historial</Link> },
+  { key: "/profile", label: <Link to="/profile">Perfil</Link> },
+  { key: "/help", label: <Link to="/help">Ayuda</Link> },
 ];
 
 export function AppLayout() {

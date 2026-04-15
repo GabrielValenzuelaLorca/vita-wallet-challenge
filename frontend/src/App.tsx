@@ -24,6 +24,11 @@ const HistoryPage = lazy(() =>
     default: m.HistoryPage,
   })),
 );
+const UnderConstructionPage = lazy(() =>
+  import("@/pages/UnderConstruction/UnderConstructionPage").then((m) => ({
+    default: m.UnderConstructionPage,
+  })),
+);
 
 // Vita Wallet brand palette (from Figma):
 //   Blue 1  #167287  → sidebar / dark teal
@@ -127,6 +132,10 @@ export function App() {
                 <Route path="/" element={<DashboardPage />} />
                 <Route path="/exchange" element={<ExchangePage />} />
                 <Route path="/history" element={<HistoryPage />} />
+                <Route path="/transfer" element={<UnderConstructionPage />} />
+                <Route path="/recharge" element={<UnderConstructionPage />} />
+                <Route path="/profile" element={<UnderConstructionPage />} />
+                <Route path="/help" element={<UnderConstructionPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
