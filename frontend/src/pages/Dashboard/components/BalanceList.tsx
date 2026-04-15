@@ -8,7 +8,7 @@ interface BalanceListProps {
 
 export function BalanceList({ wallets }: BalanceListProps) {
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[20, 20]}>
       {wallets.map((wallet) => (
         <Col key={wallet.id} sm={24} md={12} lg={8}>
           <BalanceCard wallet={wallet} />

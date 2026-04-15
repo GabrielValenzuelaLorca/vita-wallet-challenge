@@ -156,7 +156,7 @@ export function AppLayout() {
       <Layout>
         <Content
           style={{
-            padding: "32px 40px",
+            padding: "32px 120px",
             background: "var(--vw-bg, #F4F7F9)",
             minHeight: "100vh",
           }}
