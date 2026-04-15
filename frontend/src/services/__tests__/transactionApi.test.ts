@@ -26,6 +26,7 @@ const validResponse: TransactionsResponseSchema = {
   data: [
     {
       id: 1,
+      kind: "exchange",
       source_currency: "USD",
       target_currency: "BTC",
       source_amount: "10",

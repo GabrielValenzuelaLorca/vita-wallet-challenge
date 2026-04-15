@@ -4,7 +4,9 @@ import { useAuthContext } from "@/hooks/useAuth";
 import { BalanceList } from "./components/BalanceList";
 import { TransactionHistory } from "./components/TransactionHistory";
 
-const { Title, Text } = Typography;
+import coinLogo from "@/assets/illustrations/coin-logo.png";
+
+const { Title } = Typography;
 
 export function DashboardPage() {
   const { balances, isLoading, isError, error } = useBalances();
@@ -13,26 +15,22 @@ export function DashboardPage() {
   const greeting = user?.email?.split("@")[0] ?? "there";
 
   return (
-    <Space direction="vertical" size={24} style={{ width: "100%" }}>
-      <div>
+    <Space direction="vertical" size={80} style={{ width: "100%" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <img src={coinLogo} alt="" style={{ width: 36, height: 36 }} />
         <Title
           level={2}
           style={{
             margin: 0,
-            color: "var(--vw-text-primary, #1A2B3C)",
-            fontWeight: 700,
+            fontFamily: "'Open Sans', sans-serif",
+            fontWeight: 600,
+            fontSize: 28,
+            lineHeight: "38px",
+            color: "var(--vw-black, #010E11)",
           }}
         >
-          Welcome back, {greeting}
+          ¡Hola <span style={{ color: "var(--vw-blue-2, #05BCB9)" }}>{greeting}</span>!
         </Title>
-        <Text
-          style={{
-            color: "var(--vw-text-secondary, #5A6B7B)",
-            fontSize: 15,
-          }}
-        >
-          Here is a summary of your wallet balances
-        </Text>
       </div>
 
       {isLoading && (
@@ -48,7 +46,28 @@ export function DashboardPage() {
           showIcon
         />
       )}
-      {!isLoading && !isError && <BalanceList wallets={balances} />}
+      {!isLoading && !isError && (
+        <div>
+          <Title
+            level={3}
+            style={{
+              margin: "0 0 16px 0",
+              fontFamily: "'Open Sans', sans-serif",
+              fontWeight: 400,
+              fontSize: 24,
+              lineHeight: "33px",
+              color: "var(--vw-black, #010E11)",
+            }}
+          >
+            Mis saldos
+          </Title>
+          <BalanceList
+            wallets={balances.filter((w) =>
+              ["CLP", "BTC", "USDT"].includes(w.currency),
+            )}
+          />
+        </div>
+      )}
 
       <TransactionHistory />
     </Space>

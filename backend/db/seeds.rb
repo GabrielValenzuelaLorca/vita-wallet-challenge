@@ -28,4 +28,29 @@ Wallet::CURRENCIES.each do |currency|
   end
 end
 
+sample_transactions = [
+  { kind: "recharge", source_currency: "CLP", target_currency: "CLP",
+    source_amount: BigDecimal("50000"), target_amount: BigDecimal("50000"),
+    exchange_rate: BigDecimal("1") },
+  { kind: "deposit", source_currency: "CLP", target_currency: "CLP",
+    source_amount: BigDecimal("2000"), target_amount: BigDecimal("2000"),
+    exchange_rate: BigDecimal("1") },
+  { kind: "transfer", source_currency: "CLP", target_currency: "CLP",
+    source_amount: BigDecimal("10000"), target_amount: BigDecimal("10000"),
+    exchange_rate: BigDecimal("1") },
+  { kind: "transfer", source_currency: "CLP", target_currency: "CLP",
+    source_amount: BigDecimal("20000"), target_amount: BigDecimal("20000"),
+    exchange_rate: BigDecimal("1") },
+  { kind: "exchange", source_currency: "USD", target_currency: "USDT",
+    source_amount: BigDecimal("2"), target_amount: BigDecimal("2.00"),
+    exchange_rate: BigDecimal("1") }
+]
+
+if demo_user.transactions.where(kind: %w[recharge deposit transfer]).empty?
+  sample_transactions.each do |attrs|
+    demo_user.transactions.create!(attrs.merge(status: "completed"))
+  end
+end
+
 puts "Seeded #{User.count} users with #{Wallet.count / User.count} wallets each"
+puts "Seeded #{demo_user.transactions.count} transactions for demo user"

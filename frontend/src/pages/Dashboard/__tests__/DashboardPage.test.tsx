@@ -87,7 +87,7 @@ describe("DashboardPage", () => {
 
   it("renders the Dashboard greeting with the user name", () => {
     renderDashboard();
-    expect(screen.getByText(/Welcome back, demo/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /hola demo/i })).toBeInTheDocument();
   });
 
   it("shows loading spinner when isLoading is true", () => {
@@ -114,7 +114,7 @@ describe("DashboardPage", () => {
     expect(screen.getByText("Network error")).toBeInTheDocument();
   });
 
-  it("renders 5 balance cards with correct currency labels", () => {
+  it("renders CLP, BTC, and USDT balance cards on dashboard", () => {
     mockBalancesState = {
       balances: [
         { id: 1, currency: "USD", balance: "1000.50" },
@@ -130,23 +130,11 @@ describe("DashboardPage", () => {
 
     renderDashboard();
 
-    expect(screen.getByText("US Dollar")).toBeInTheDocument();
     expect(screen.getByText("Peso chileno")).toBeInTheDocument();
     expect(screen.getByText("Bitcoin")).toBeInTheDocument();
-    expect(screen.getByText("USD Coin")).toBeInTheDocument();
     expect(screen.getByText("Tether")).toBeInTheDocument();
-  });
-
-  it("formats USD balance with dollar sign and 2 decimals", () => {
-    mockBalancesState = {
-      balances: [{ id: 1, currency: "USD", balance: "1000.50" }],
-      isLoading: false,
-      isError: false,
-      error: null,
-    };
-
-    renderDashboard();
-    expect(screen.getByText("$1,000.50")).toBeInTheDocument();
+    expect(screen.queryByText("US Dollar")).not.toBeInTheDocument();
+    expect(screen.queryByText("USD Coin")).not.toBeInTheDocument();
   });
 
   it("formats CLP balance with es-CL locale and 0 decimals", () => {
@@ -171,19 +159,19 @@ describe("DashboardPage", () => {
     };
 
     renderDashboard();
-    expect(screen.getByText("0.05 BTC")).toBeInTheDocument();
+    expect(screen.getByText("0,05 BTC")).toBeInTheDocument();
   });
 
-  it("formats USDC balance with USDC suffix and 2 decimals", () => {
+  it("formats USDT balance with USDT suffix and 2 decimals", () => {
     mockBalancesState = {
-      balances: [{ id: 1, currency: "USDC", balance: "500.00" }],
+      balances: [{ id: 1, currency: "USDT", balance: "500.00" }],
       isLoading: false,
       isError: false,
       error: null,
     };
 
     renderDashboard();
-    expect(screen.getByText("500.00 USDC")).toBeInTheDocument();
+    expect(screen.getByText("500,00 USDT")).toBeInTheDocument();
   });
 
   it("does not show spinner or alert on success state", () => {

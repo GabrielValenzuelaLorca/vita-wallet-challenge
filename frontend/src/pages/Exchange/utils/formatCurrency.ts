@@ -13,7 +13,7 @@ export function formatCurrency(
 
   switch (currency) {
     case "USD":
-      return numericAmount.toLocaleString("en-US", {
+      return numericAmount.toLocaleString("es-CL", {
         style: "currency",
         currency: "USD",
         minimumFractionDigits: 2,
@@ -26,15 +26,15 @@ export function formatCurrency(
         maximumFractionDigits: 0,
       });
     case "BTC": {
-      const formatted = numericAmount
-        .toFixed(8)
-        .replace(/0+$/, "")
-        .replace(/\.$/, "");
-      return `${formatted || "0"} BTC`;
+      const formatted = numericAmount.toLocaleString("es-CL", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 8,
+      });
+      return `${formatted} BTC`;
     }
     case "USDC":
     case "USDT":
-      return `${numericAmount.toLocaleString("en-US", {
+      return `${numericAmount.toLocaleString("es-CL", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })} ${currency}`;

@@ -3,9 +3,16 @@ import { apiEnvelopeSchema } from "./common";
 
 const currencySchema = z.enum(["USD", "CLP", "BTC", "USDC", "USDT"]);
 const transactionStatusSchema = z.enum(["pending", "completed", "rejected"]);
+const transactionKindSchema = z.enum([
+  "exchange",
+  "deposit",
+  "recharge",
+  "transfer",
+]);
 
 export const transactionSchema = z.object({
   id: z.number(),
+  kind: transactionKindSchema,
   source_currency: currencySchema,
   target_currency: currencySchema,
   source_amount: z.string(),

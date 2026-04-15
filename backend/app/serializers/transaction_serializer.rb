@@ -2,6 +2,7 @@ class TransactionSerializer < BaseSerializer
   def as_json
     {
       id: object.id,
+      kind: object.kind,
       source_currency: object.source_currency,
       target_currency: object.target_currency,
       source_amount: object.source_amount.to_s("F"),

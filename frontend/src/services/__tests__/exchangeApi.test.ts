@@ -25,6 +25,7 @@ const mockedPost = vi.mocked(httpClient.post);
 const validResponse: TransactionResponseSchema = {
   data: {
     id: 1,
+    kind: "exchange",
     source_currency: "USD",
     target_currency: "BTC",
     source_amount: "10",

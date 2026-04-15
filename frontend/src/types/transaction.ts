@@ -1,9 +1,11 @@
 import type { Currency } from "./wallet";
 
 export type TransactionStatus = "pending" | "completed" | "rejected";
+export type TransactionKind = "exchange" | "deposit" | "recharge" | "transfer";
 
 export interface Transaction {
   id: number;
+  kind: TransactionKind;
   source_currency: Currency;
   target_currency: Currency;
   source_amount: string;

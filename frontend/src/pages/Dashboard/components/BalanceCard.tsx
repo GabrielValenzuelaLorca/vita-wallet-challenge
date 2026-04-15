@@ -31,7 +31,7 @@ function formatBalance(balance: string, currency: Currency): string {
 
   switch (currency) {
     case "USD":
-      return numericBalance.toLocaleString("en-US", {
+      return numericBalance.toLocaleString("es-CL", {
         style: "currency",
         currency: "USD",
         minimumFractionDigits: 2,
@@ -44,15 +44,15 @@ function formatBalance(balance: string, currency: Currency): string {
         maximumFractionDigits: 0,
       });
     case "BTC": {
-      const formatted = numericBalance
-        .toFixed(8)
-        .replace(/0+$/, "")
-        .replace(/\.$/, "");
-      return `${formatted || "0"} BTC`;
+      const formatted = numericBalance.toLocaleString("es-CL", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 8,
+      });
+      return `${formatted} BTC`;
     }
     case "USDC":
     case "USDT":
-      return `${numericBalance.toLocaleString("en-US", {
+      return `${numericBalance.toLocaleString("es-CL", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })} ${currency}`;
