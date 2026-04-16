@@ -42,12 +42,22 @@ Mini aplicación fullstack tipo Vita Wallet: una wallet multi-moneda que permite
 
 ## Setup
 
+### Rails Master Key
+
+El archivo `config/master.key` no se versiona por seguridad. Es necesario para desencriptar `credentials.yml.enc`. Antes de levantar el proyecto, pedí la key al autor y elegí **una** de estas dos opciones:
+
+1. Crear el archivo manualmente:
+   ```bash
+   echo "<RAILS_MASTER_KEY>" > backend/config/master.key
+   ```
+2. Definir la variable de entorno `RAILS_MASTER_KEY=<RAILS_MASTER_KEY>` (útil para Docker y CI).
+
 ### Opción A — Docker (recomendado, 1 comando)
 
 Requisitos: Docker 20+ con `docker compose` v2.
 
 ```bash
-docker compose up --build
+RAILS_MASTER_KEY=<RAILS_MASTER_KEY> docker compose up --build
 ```
 
 Esto levanta tres contenedores:
