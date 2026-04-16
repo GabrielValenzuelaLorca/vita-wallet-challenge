@@ -1,14 +1,14 @@
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuth";
-import { useLoginForm } from "@/hooks/useLoginForm";
-import { LoginForm } from "./components/LoginForm";
-import styles from "./LoginPage.module.css";
+import { useRegisterForm } from "@/hooks/useRegisterForm";
+import { RegisterForm } from "./components/RegisterForm";
+import styles from "./RegisterPage.module.css";
 
 import loginHero from "@/assets/illustrations/login-hero.png";
 
-export function LoginPage() {
+export function RegisterPage() {
   const { isAuthenticated } = useAuthContext();
-  const { handleLogin, isSubmitting, errorMessage } = useLoginForm();
+  const { handleRegister, isSubmitting, errorMessage } = useRegisterForm();
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -18,16 +18,12 @@ export function LoginPage() {
     <div className={styles.page}>
       <div className={styles.formPanel}>
         <div className={styles.formContainer}>
-          <h2 className={styles.title}>Iniciar sesión</h2>
-          <LoginForm
-            onSubmit={handleLogin}
+          <h2 className={styles.title}>Crear cuenta</h2>
+          <RegisterForm
+            onSubmit={handleRegister}
             isSubmitting={isSubmitting}
             errorMessage={errorMessage}
           />
-          <p className={styles.authLink}>
-            ¿No tienes cuenta?{" "}
-            <Link to="/register">Regístrate</Link>
-          </p>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Spin, Alert } from "antd";
+import { Spin, Alert, Typography } from "antd";
 import { useExchange } from "@/hooks/useExchange";
 import { usePriceEstimate } from "@/hooks/usePriceEstimate";
 import { ExchangeFormStep } from "./components/ExchangeFormStep";
@@ -86,6 +86,8 @@ export function ExchangePage() {
     resetWizard();
   };
 
+  const hasNoBalances =
+    !isBalancesLoading && balances.every((wallet) => parseFloat(wallet.balance) === 0);
   const isDataLoading = isPricesLoading || isBalancesLoading;
   const apiError = error;
   const rejectedTransaction =
@@ -127,7 +129,15 @@ export function ExchangePage() {
         </div>
       )}
 
-      {!isDataLoading && view === "form" && (
+      {!isDataLoading && hasNoBalances && view === "form" && (
+        <div style={{ textAlign: "center", padding: 48 }}>
+          <Typography.Text style={{ color: "var(--vw-gray-1, #B9C1C2)" }}>
+            No tienes saldos disponibles para intercambiar
+          </Typography.Text>
+        </div>
+      )}
+
+      {!isDataLoading && !hasNoBalances && view === "form" && (
         <ExchangeFormStep
           currencies={CURRENCIES}
           balances={balances}

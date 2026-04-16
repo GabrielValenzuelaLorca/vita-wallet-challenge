@@ -24,6 +24,7 @@ let mockAuthState: AuthContextType = {
   isAuthenticated: false,
   isLoading: false,
   login: vi.fn(),
+  register: vi.fn(),
   logout: vi.fn(),
 };
 
@@ -72,6 +73,7 @@ describe("LoginPage", () => {
       isAuthenticated: false,
       isLoading: false,
       login: vi.fn(),
+      register: vi.fn(),
       logout: vi.fn(),
     };
   });

@@ -20,6 +20,7 @@ vi.mock("react-router-dom", async () => {
 vi.mock("@/hooks/useAuth", () => ({
   useAuthContext: (): AuthContextType => ({
     login: mockLogin,
+    register: vi.fn(),
     logout: vi.fn(),
     user: null,
     token: null,

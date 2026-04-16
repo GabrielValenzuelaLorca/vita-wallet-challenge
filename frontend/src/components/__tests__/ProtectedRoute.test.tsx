@@ -11,6 +11,7 @@ let mockAuthState: AuthContextType = {
   isAuthenticated: false,
   isLoading: false,
   login: vi.fn(),
+  register: vi.fn(),
   logout: vi.fn(),
 };
 
@@ -57,6 +58,7 @@ describe("ProtectedRoute", () => {
       isAuthenticated: false,
       isLoading: false,
       login: vi.fn(),
+      register: vi.fn(),
       logout: vi.fn(),
     };
   });

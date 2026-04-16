@@ -84,9 +84,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const register = useCallback(
+    async (credentials: LoginCredentials): Promise<void> => {
+      const response = await authApi.register(credentials);
+      const { token: newToken, user: newUser } = response.data;
+      setAuthToken(newToken);
+      setToken(newToken);
+      setUser(newUser);
+    },
+    [],
+  );
+
   return (
     <AuthContext.Provider
-      value={{ user, token, isAuthenticated, isLoading, login, logout }}
+      value={{ user, token, isAuthenticated, isLoading, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>

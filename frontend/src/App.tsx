@@ -9,6 +9,11 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 const LoginPage = lazy(() =>
   import("@/pages/Login/LoginPage").then((m) => ({ default: m.LoginPage })),
 );
+const RegisterPage = lazy(() =>
+  import("@/pages/Register/RegisterPage").then((m) => ({
+    default: m.RegisterPage,
+  })),
+);
 const DashboardPage = lazy(() =>
   import("@/pages/Dashboard/DashboardPage").then((m) => ({
     default: m.DashboardPage,
@@ -122,6 +127,7 @@ export function App() {
           <Suspense fallback={<PageSpinner />}>
             <Routes>
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
               <Route
                 element={
                   <ProtectedRoute>
