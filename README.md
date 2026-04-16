@@ -108,6 +108,8 @@ El frontend queda disponible en `http://localhost:5173` y hace proxy de `/api` h
 | `demo@vitawallet.com` | `password123` | USD 1000, CLP 500000, BTC 0.05, USDC 500, USDT 500 |
 | `empty@vitawallet.com` | `password123` | Todos en 0 (para probar rechazo por saldo insuficiente) |
 
+También se puede crear una cuenta nueva desde `/register` para probar el flujo de registro y los empty states.
+
 ---
 
 ## Cómo correr los tests
@@ -338,7 +340,7 @@ Fuera del alcance de esta prueba técnica, pero documentados como mejoras natura
 - **Swagger / OpenAPI docs** — la API está documentada en este README con el envelope y los 8 endpoints; Swagger formal queda como mejora
 
 ### Features de auth
-- **Registro desde UI** (solo existe el endpoint, no hay página de registro en el frontend — se demo con seeds)
+- ~~**Registro desde UI**~~ ✅ Implementado — página `/register` con confirmación de contraseña y login automático post-registro
 - **Refresh tokens** y **revocación** de JWT
 - **Email verification** y **password reset**
 - **OAuth** (Google, GitHub)
