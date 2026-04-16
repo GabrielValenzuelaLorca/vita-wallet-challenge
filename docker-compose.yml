@@ -26,7 +26,7 @@ services:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       DATABASE_NAME: vita_wallet_development
-      PRICE_CLIENT: stub
+      PRICE_CLIENT: real
       CORS_ORIGINS: http://localhost:8080
       # Stable secret so JWTs survive container restarts in local dev.
       # In production this should come from a real secrets store and never

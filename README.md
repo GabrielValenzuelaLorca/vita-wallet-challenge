@@ -57,6 +57,8 @@ Esto levanta tres contenedores:
 
 La app queda en **http://localhost:8080** y el backend en **http://localhost:3000**. El usuario demo de los seeds es `demo@vitawallet.com` / `password123`.
 
+> **Nota**: Docker usa `PRICE_CLIENT=real` por defecto (precios en vivo desde la API de Vita Wallet). Si no tenés acceso al endpoint (whitelist de IP), cambiá a `PRICE_CLIENT: stub` en `docker-compose.yml` para usar datos de prueba locales.
+
 Para resetear la DB: `docker compose down -v` (borra el volumen `postgres_data`).
 
 ### Opción B — Setup local (sin Docker)
@@ -81,8 +83,8 @@ bin/rails server
 El backend queda disponible en `http://localhost:3000`.
 
 **Variables de entorno** (opcional):
-- `PRICE_CLIENT=stub` (default) usa datos de prueba para precios crypto — recomendado mientras no se habilite el whitelist del endpoint real
-- `PRICE_CLIENT=real` activa el cliente real contra `https://api.stage.vitawallet.io/api/prices_quote`
+- `PRICE_CLIENT=real` (default en Docker) conecta al endpoint real `https://api.stage.vitawallet.io/api/prices_quote` — requiere whitelist de IP
+- `PRICE_CLIENT=stub` usa datos de prueba locales para desarrollo offline o sin acceso al endpoint
 - Configuración de la base de datos en `config/database.yml`
 
 ### Frontend (`/frontend`)
@@ -354,7 +356,7 @@ Fuera del alcance de esta prueba técnica, pero documentados como mejoras natura
 - **Mutation testing** con Stryker
 
 ### Backend
-- **Price API real**: el cliente stub se usa por defecto ya que el whitelist de IP al momento de entrega estaba pendiente de activación. Cambiar `PRICE_CLIENT=real` cuando el acceso esté habilitado.
+- **Price API fallback**: el cliente real está activo por defecto en Docker. Si el acceso al endpoint se pierde (cambio de IP, caída del stage), cambiar a `PRICE_CLIENT=stub` en `docker-compose.yml` para continuar desarrollo con datos locales.
 - **Observabilidad**: logs estructurados (Lograge), métricas, tracing
 - **Background jobs** (Sidekiq) para procesamiento asíncrono si el exchange evoluciona a integración con un exchange real
 - **Rate limiting detrás de proxy**: `rack-attack` ya throttlea `/auth/login` (5/min), `/auth/register` (3/min) y un safety net global de 300/5min. En producción, validar que el reverse proxy/load balancer envíe `X-Forwarded-For` y que `ActionDispatch::RemoteIp` esté antes de `Rack::Attack` en el middleware stack para que el throttle por IP no agrupe a todos los clientes detrás de la IP del proxy.
