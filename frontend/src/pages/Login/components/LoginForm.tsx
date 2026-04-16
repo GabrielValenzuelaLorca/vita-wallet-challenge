@@ -35,7 +35,7 @@ export function LoginForm({
       {errorMessage !== null && (
         <Alert
           type="error"
-          message={errorMessage}
+          title={errorMessage}
           showIcon
           closable={false}
           style={{ marginBottom: 16 }}
@@ -50,6 +50,7 @@ export function LoginForm({
       >
         <Form.Item
           name="email"
+          validateTrigger="onBlur"
           rules={[
             { required: true, message: "Ingresa tu correo electrónico" },
             { type: "email", message: "Ingresa un correo válido" },
@@ -63,6 +64,7 @@ export function LoginForm({
 
         <Form.Item
           name="password"
+          validateTrigger="onBlur"
           rules={[
             { required: true, message: "Ingresa tu contraseña" },
             { min: 6, message: "La contraseña debe tener al menos 6 caracteres" },

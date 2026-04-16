@@ -124,9 +124,7 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
 
     const suffix = type === "password"
       ? <EyeToggle visible={passwordVisible} onToggle={() => setPasswordVisible((previous) => !previous)} />
-      : showCheck
-        ? <CheckSuffix />
-        : undefined;
+      : <span style={{ visibility: showCheck ? "visible" : "hidden" }}><CheckSuffix /></span>;
 
     const extraInputProps =
       variant === "amount" ? { inputMode: "decimal" as const } : {};

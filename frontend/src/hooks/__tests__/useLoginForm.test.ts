@@ -94,7 +94,7 @@ describe("useLoginForm", () => {
     });
 
     expect(result.current.errorMessage).toBe(
-      "An unexpected error occurred. Please try again.",
+      "Ocurrió un error inesperado. Intenta nuevamente.",
     );
     expect(result.current.isSubmitting).toBe(false);
   });

@@ -28,7 +28,7 @@ export function useLoginForm(): UseLoginFormReturn {
         if (error instanceof ApiRequestError) {
           setErrorMessage(error.message);
         } else {
-          setErrorMessage("An unexpected error occurred. Please try again.");
+          setErrorMessage("Ocurrió un error inesperado. Intenta nuevamente.");
         }
       } finally {
         setIsSubmitting(false);

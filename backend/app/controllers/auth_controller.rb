@@ -11,7 +11,7 @@ class AuthController < ApplicationController
     result = AuthService.authenticate(email: auth_params[:email], password: auth_params[:password])
 
     if result.nil?
-      render_error(code: "invalid_credentials", message: "Invalid email or password", status: :unauthorized)
+      render_error(code: "invalid_credentials", message: "Correo o contraseña incorrectos", status: :unauthorized)
     else
       serialized_user = UserSerializer.new(result[:user]).as_json
       render_success(data: { token: result[:token], user: serialized_user })

@@ -106,7 +106,7 @@ export function ExchangePage() {
           type="error"
           showIcon
           style={{ borderRadius: 12, marginBottom: 24 }}
-          message={
+          title={
             rejectedTransaction
               ? "Intercambio rechazado"
               : "Error en el intercambio"

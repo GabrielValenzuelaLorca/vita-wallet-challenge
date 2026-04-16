@@ -10,7 +10,7 @@ class ApplicationController < ActionController::API
     payload = JwtService.decode(token: token) if token
 
     if payload.nil?
-      render_error(code: "unauthorized", message: "Invalid or expired token", status: :unauthorized)
+      render_error(code: "unauthorized", message: "Token inválido o expirado", status: :unauthorized)
       return
     end
 
@@ -18,7 +18,7 @@ class ApplicationController < ActionController::API
 
     unless @current_user && JwtService.token_valid_for_user?(payload, @current_user)
       @current_user = nil
-      render_error(code: "unauthorized", message: "Invalid or expired token", status: :unauthorized)
+      render_error(code: "unauthorized", message: "Token inválido o expirado", status: :unauthorized)
       return
     end
   end

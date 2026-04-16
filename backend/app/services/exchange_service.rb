@@ -39,7 +39,7 @@ class ExchangeService
       rescue PriceClient::ApiError
         refund_and_reject(user: user, transaction: pending_transaction,
                           reason: "price_fetch_failed",
-                          error_message: "Could not fetch exchange rates")
+                          error_message: "No se pudieron obtener las tasas de cambio")
       end
     end
 
@@ -48,23 +48,23 @@ class ExchangeService
     def validate_input(user:, source_currency:, target_currency:, source_amount:)
       unless Wallet::CURRENCIES.include?(source_currency) && Wallet::CURRENCIES.include?(target_currency)
         return error_result(error_code: "invalid_currencies",
-                            error_message: "Source and target currencies must be valid (#{Wallet::CURRENCIES.join(', ')})")
+                            error_message: "Las monedas de origen y destino deben ser válidas (#{Wallet::CURRENCIES.join(', ')})")
       end
 
       if source_currency == target_currency
         return error_result(error_code: "invalid_currencies",
-                            error_message: "Source and target currencies must differ")
+                            error_message: "Las monedas de origen y destino deben ser distintas")
       end
 
       unless user.wallets.exists?(currency: source_currency) && user.wallets.exists?(currency: target_currency)
         return error_result(error_code: "invalid_currencies",
-                            error_message: "User must have wallets for both currencies")
+                            error_message: "El usuario debe tener billeteras para ambas monedas")
       end
 
       amount_decimal = BigDecimal(source_amount.to_s)
       unless amount_decimal.positive?
         return error_result(error_code: "invalid_amount",
-                            error_message: "Amount must be positive")
+                            error_message: "El monto debe ser mayor a cero")
       end
 
       { success: true }
@@ -83,7 +83,7 @@ class ExchangeService
           )
           next { success: false, transaction: rejected,
                  error_code: "insufficient_balance",
-                 error_message: "Insufficient balance in #{source_currency} wallet" }
+                 error_message: "Saldo insuficiente en billetera #{source_currency.upcase}" }
         end
 
         source_wallet.balance -= source_amount_decimal

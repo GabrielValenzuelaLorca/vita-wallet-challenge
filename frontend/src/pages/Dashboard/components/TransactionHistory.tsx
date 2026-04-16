@@ -145,7 +145,7 @@ export function TransactionHistory() {
       {isError && (
         <Alert
           type="error"
-          message="Error al cargar las transacciones"
+          title="Error al cargar las transacciones"
           description={error?.message ?? "Ocurrió un error inesperado"}
           showIcon
           style={{ marginBottom: 16 }}
