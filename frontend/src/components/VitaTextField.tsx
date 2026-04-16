@@ -14,11 +14,13 @@ interface VitaTextFieldProps {
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   prefix?: React.ReactNode;
   type?: "text" | "password";
   error?: string;
+  valid?: boolean;
   disabled?: boolean;
-  inputProps?: Omit<InputProps, "value" | "onChange" | "placeholder" | "prefix" | "disabled">;
+  inputProps?: Omit<InputProps, "value" | "onChange" | "onBlur" | "placeholder" | "prefix" | "disabled">;
 }
 
 const INPUT_HEIGHT = 56;
@@ -103,9 +105,11 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
       placeholder,
       value,
       onChange,
+      onBlur,
       prefix,
       type = "text",
       error,
+      valid,
       disabled,
       inputProps,
     },
@@ -114,7 +118,7 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
     const [passwordVisible, setPasswordVisible] = useState(false);
     const hasValue = value !== undefined && value !== "";
     const showCheck =
-      variant === "default" && type === "text" && hasValue && !error;
+      variant === "default" && type === "text" && hasValue && !error && valid !== false;
     const borderColor = error ? ERROR_COLOR : BORDER_COLOR;
 
     const mergedInputStyle: React.CSSProperties = {
@@ -136,6 +140,7 @@ export const VitaTextField = forwardRef<InputRef, VitaTextFieldProps>(
         placeholder={placeholder}
         value={value}
         onChange={(event) => onChange?.(event.target.value)}
+        onBlur={onBlur}
         prefix={prefix}
         suffix={suffix}
         disabled={disabled}

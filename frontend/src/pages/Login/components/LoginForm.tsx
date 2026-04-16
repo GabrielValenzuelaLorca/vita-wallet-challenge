@@ -25,7 +25,7 @@ export function LoginForm({
   const isEmailValid =
     typeof emailValue === "string" &&
     emailValue.length > 0 &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+    /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailValue);
   const isPasswordValid =
     typeof passwordValue === "string" && passwordValue.length >= 6;
   const canSubmit = isEmailValid && isPasswordValid && !isSubmitting;
@@ -50,7 +50,6 @@ export function LoginForm({
       >
         <Form.Item
           name="email"
-          validateTrigger="onBlur"
           rules={[
             { required: true, message: "Ingresa tu correo electrónico" },
             { type: "email", message: "Ingresa un correo válido" },
@@ -59,12 +58,12 @@ export function LoginForm({
           <VitaTextField
             label="Correo electrónico"
             placeholder="juan@gmail.com"
+            valid={isEmailValid}
           />
         </Form.Item>
 
         <Form.Item
           name="password"
-          validateTrigger="onBlur"
           rules={[
             { required: true, message: "Ingresa tu contraseña" },
             { min: 6, message: "La contraseña debe tener al menos 6 caracteres" },
